@@ -1,13 +1,17 @@
 (function() {
-  var app, blogPostSchema, blogSchema, express, http, mongoose, routes, userSchema;
+  var app, express, http, mongoconfig, routes, routesBlogs, routesUsers;
 
   express = require("express");
 
   routes = require("./routes");
 
-  http = require("http");
+  routesUsers = require("./routes/users");
 
-  mongoose = require('mongoose');
+  routesBlogs = require("./routes/blogs");
+
+  mongoconfig = require("./utils/mongoconfig");
+
+  http = require("http");
 
   app = express();
 
@@ -27,51 +31,23 @@
     return app.use(express.errorHandler());
   });
 
-  blogSchema = mongoose.Schema({
-    name: 'String',
-    url: 'String',
-    added: 'Date',
-    lastpost: 'Date'
-  });
-
-  blogPostSchema = mongoose.Schema({
-    title: 'String',
-    content: 'String',
-    added: 'Date',
-    hidden: 'Boolean',
-    visits: 'Number',
-    user: 'ObjectId',
-    blog: 'ObjectId'
-  });
-
-  userSchema = mongoose.Schema({
-    email: 'String',
-    password: 'String',
-    salt: 'String',
-    added: 'Date',
-    lastvisit: 'Date',
-    lastpost: 'Date'
-  });
-
-  mongoose.model('blogs', blogSchema);
-
-  mongoose.model('blogposts', blogPostSchema);
-
-  mongoose.model('users', userSchema);
-
-  mongoose.connect('localhost', 'bloggaa');
+  mongoconfig.config();
 
   app.get("/", routes.index);
 
-  app.get("/register", routes.register);
+  app.get("/register", routesUsers.register);
 
-  app.post("/register", routes.createAccount);
+  app.post("/register", routesUsers.createAccount);
 
-  app.get("/blog", routes.blogs);
+  app.get("/settings", routes.settings);
 
-  app.get("/blog/:blog", routes.showblog);
+  app.post("/settings", routes.saveSettings);
 
-  app.get("/blog/:blog/title/:title", routes.showpost);
+  app.get("/blog", routesBlogs.blogs);
+
+  app.get("/blog/:blog", routesBlogs.showblog);
+
+  app.get("/blog/:blog/title/:title", routesBlogs.showpost);
 
   http.createServer(app).listen(app.get("port"), function() {
     return console.log("Express server listening on port " + app.get("port"));

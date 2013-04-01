@@ -1,18 +1,21 @@
 <%= include header.ejs %>
 
     <div class="container">
-      <form class="form-signin" method="post" action="/register">
+      <form class="form-signin" method="post" action="/settings">
         <h2 class="form-signin-heading">Rekisteröinti</h2>
-        <input type="text" name="email" class="input-block-level" placeholder="Email" />
+        <input type="email" name="email" class="input-block-level" placeholder="Email" />
         <input type="password" name="password" class="input-block-level" placeholder="Salasana" />
+        <input type="password" name="password2" class="input-block-level" placeholder="Salasana" />
         
         <div class="input-append">
           <input class="span2" name="blogname" type="text" placeholder="Blogin osoite" />
           <span class="add-on">.bloggaa.fi</span>
         </div>
 
+        <input type="text" name="blogtitle" class="input-block-level" placeholder="Blogin nimi" />
+
         <div class="clearfix"></div>
-        <button class="btn btn-large btn-primary" type="submit">Luo tunnus</button>
+        <button class="btn btn-large btn-primary" type="submit">Tallenna</button>
       </form>
     </div>
 
