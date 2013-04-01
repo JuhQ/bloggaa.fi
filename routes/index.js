@@ -21,11 +21,12 @@
   exports.blogs = function(req, res) {};
 
   exports.showblog = function(req, res) {
-    var Blog;
+    var Blog, blogName;
 
+    blogName = req.params.blog.toLowerCase();
     Blog = mongoose.model('blogs');
     Blog.findOne({
-      url: req.params.blog.toLowerCase()
+      url: blogName
     }).exec(function(err, blogData) {
       var Blogs;
 
@@ -36,14 +37,17 @@
         }).exec(function(err, data) {
           if (data) {
             res.render("blogposts", {
-              data: data
+              title: data.title,
+              data: data,
+              meta: "",
+              blog: blogName
             });
           }
           if (!data) {
             return res.render("nocontent", {
               title: "Bloggaa.fi",
               meta: "",
-              blog: blog
+              blog: blogName
             });
           }
         });
@@ -51,15 +55,17 @@
       if (!blogData) {
         return res.render("blog-not-found", {
           title: "Bloggaa.fi",
-          meta: ""
+          meta: "",
+          blog: blogName
         });
       }
     });
   };
 
   exports.showpost = function(req, res) {
-    var Blog;
+    var Blog, blogName;
 
+    blogName = req.params.blog.toLowerCase();
     Blog = mongoose.model('blogs');
     Blog.findOne({
       url: req.params.blog.toLowerCase()
@@ -76,14 +82,15 @@
             res.render("blogpost", {
               title: "Bloggaa.fi",
               meta: "",
-              data: data
+              data: data,
+              blog: blogName
             });
           }
           if (!data) {
             return res.render("nocontent", {
               title: "Bloggaa.fi",
               meta: "",
-              blog: blog
+              blog: blogName
             });
           }
         });
@@ -91,7 +98,8 @@
       if (!blogData) {
         return res.render("blog-not-found", {
           title: "Bloggaa.fi",
-          meta: ""
+          meta: "",
+          blog: blogName
         });
       }
     });

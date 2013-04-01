@@ -15,9 +15,10 @@ exports.register = (req, res) ->
 exports.blogs = (req, res) ->
 
 exports.showblog = (req, res) ->
+  blogName = req.params.blog.toLowerCase()
   Blog = mongoose.model 'blogs'
   Blog.findOne({
-    url: req.params.blog.toLowerCase()
+    url: blogName
   }).exec (err, blogData) ->
     if blogData
       Blogs = mongoose.model 'blogs'
@@ -26,21 +27,26 @@ exports.showblog = (req, res) ->
       }).exec (err, data) ->
         if data
           res.render "blogposts",
+            title: data.title
             data: data
+            meta: ""
+            blog: blogName
         unless data
           res.render "nocontent",
             title: "Bloggaa.fi"
             meta: ""
-            blog: blog
+            blog: blogName
 
     unless blogData
       res.render "blog-not-found",
         title: "Bloggaa.fi"
         meta: ""
+        blog: blogName
 
   return
 
 exports.showpost = (req, res) ->
+  blogName = req.params.blog.toLowerCase()
   Blog = mongoose.model 'blogs'
   Blog.findOne({
     url: req.params.blog.toLowerCase()
@@ -56,16 +62,18 @@ exports.showpost = (req, res) ->
             title: "Bloggaa.fi"
             meta: ""
             data: data
+            blog: blogName
         unless data
           res.render "nocontent",
             title: "Bloggaa.fi"
             meta: ""
-            blog: blog
+            blog: blogName
 
     unless blogData
       res.render "blog-not-found",
         title: "Bloggaa.fi"
         meta: ""
+        blog: blogName
   return
 
 exports.picture = (req, res) ->
