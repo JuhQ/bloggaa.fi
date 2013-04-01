@@ -21,8 +21,9 @@
   exports.blogs = function(req, res) {};
 
   exports.showblog = function(req, res) {
-    var Blog, blogName;
+    var Blog, blogName, domain;
 
+    domain = req.get('host').replace(req.subdomains[0] + ".", "");
     blogName = req.params.blog.toLowerCase();
     Blog = mongoose.model('blogs');
     Blog.findOne({
@@ -47,7 +48,8 @@
             return res.render("nocontent", {
               title: "Bloggaa.fi",
               meta: "",
-              blog: blogName
+              blog: blogName,
+              domain: domain
             });
           }
         });
@@ -56,15 +58,17 @@
         return res.render("blog-not-found", {
           title: "Bloggaa.fi",
           meta: "",
-          blog: blogName
+          blog: blogName,
+          domain: domain
         });
       }
     });
   };
 
   exports.showpost = function(req, res) {
-    var Blog, blogName;
+    var Blog, blogName, domain;
 
+    domain = req.get('host').replace(req.subdomains[0] + ".", "");
     blogName = req.params.blog.toLowerCase();
     Blog = mongoose.model('blogs');
     Blog.findOne({
@@ -99,7 +103,8 @@
         return res.render("blog-not-found", {
           title: "Bloggaa.fi",
           meta: "",
-          blog: blogName
+          blog: blogName,
+          domain: domain
         });
       }
     });

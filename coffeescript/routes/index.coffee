@@ -15,6 +15,8 @@ exports.register = (req, res) ->
 exports.blogs = (req, res) ->
 
 exports.showblog = (req, res) ->
+  domain = req.get('host').replace(req.subdomains[0] + ".", "")
+  
   blogName = req.params.blog.toLowerCase()
   Blog = mongoose.model 'blogs'
   Blog.findOne({
@@ -36,16 +38,19 @@ exports.showblog = (req, res) ->
             title: "Bloggaa.fi"
             meta: ""
             blog: blogName
+            domain: domain
 
     unless blogData
       res.render "blog-not-found",
         title: "Bloggaa.fi"
         meta: ""
         blog: blogName
+        domain: domain
 
   return
 
 exports.showpost = (req, res) ->
+  domain = req.get('host').replace(req.subdomains[0] + ".", "")
   blogName = req.params.blog.toLowerCase()
   Blog = mongoose.model 'blogs'
   Blog.findOne({
@@ -74,6 +79,7 @@ exports.showpost = (req, res) ->
         title: "Bloggaa.fi"
         meta: ""
         blog: blogName
+        domain: domain
   return
 
 exports.picture = (req, res) ->
