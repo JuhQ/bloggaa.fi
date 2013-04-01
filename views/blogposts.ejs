@@ -1,0 +1,12 @@
+<%= include header.ejs %>
+
+<h1>Multiple posts</h1>
+<%
+for(i in data) {
+%>
+    <%=i%> content=<%=data[i]%> <br />
+<%
+}
+%>
+
+<%= include footer.ejs %>
