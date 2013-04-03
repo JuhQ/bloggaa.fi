@@ -1,5 +1,12 @@
 mongoose = require('mongoose')
 
+exports.index = (req, res) ->
+  console.log req.session
+  res.render "index",
+    title: "Bloggaa.fi"
+    meta: ""
+    blog: ""
+
 exports.settings = (req, res) ->
   unless req.session.user_id
     res.redirect "/"

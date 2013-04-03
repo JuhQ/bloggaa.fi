@@ -3,11 +3,72 @@
 
   mongoose = require('mongoose');
 
-  exports.index = function(req, res) {
-    return res.render("index", {
-      title: "Bloggaa.fi",
+  exports.write = function(req, res) {
+    if (!req.session.user) {
+      return res.redirect("/");
+    }
+    return res.render("blogeditor", {
+      title: "Kirjoita - Bloggaa.fi",
       meta: "",
-      blog: ""
+      blogTitle: "title",
+      blogContent: "content",
+      action: "saveBlog"
+    });
+  };
+
+  exports.saveBlog = function(req, res) {
+    var Blogs, blog;
+
+    if (!req.session.user) {
+      return res.redirect("/");
+    }
+    Blogs = mongoose.model('blogposts');
+    blog = new Blog({
+      title: req.body.title,
+      url: req.body.title.toLowerCase(),
+      content: req.body.content,
+      added: new Date(),
+      hidden: req.body.hidden === 1,
+      visits: 0,
+      user: req.session.user.id,
+      blog: req.body.blogid
+    });
+    return user.save(function(err) {
+      return res.redirect("/");
+    });
+  };
+
+  exports.edit = function(req, res) {
+    if (!req.session.user) {
+      return res.redirect("/");
+    }
+    return res.render("blogeditor", {
+      title: "Muokkaus - Bloggaa.fi",
+      meta: "",
+      blogTitle: "title",
+      blogContent: "content",
+      action: "saveEdit"
+    });
+  };
+
+  exports.saveEdit = function(req, res) {
+    var Blog;
+
+    if (!req.session.user) {
+      return res.redirect("/");
+    }
+    Blog = mongoose.model('blogs');
+    return Blog.update({
+      _id: req.body.id,
+      user: req.session.user.id
+    }, {
+      $set: {
+        edited: new Date(),
+        title: req.body.title,
+        url: req.body.id.toLowerCase(),
+        content: req.body.content,
+        hidden: req.body.hidden === 1
+      }
     });
   };
 
@@ -102,6 +163,14 @@
         });
       }
     });
+  };
+
+  exports.latestBlogs = function(req, res) {
+    return res.send("hello");
+  };
+
+  exports.latestTexts = function(req, res) {
+    return res.send("hello");
   };
 
 }).call(this);

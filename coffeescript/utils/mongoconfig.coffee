@@ -11,6 +11,7 @@ exports.config = () ->
     url: 'String'
     content: 'String'
     added: 'Date'
+    edited: 'Date'
     hidden: 'Boolean'
     visits: 'Number'
     user: 'ObjectId'

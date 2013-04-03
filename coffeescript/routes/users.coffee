@@ -6,6 +6,15 @@ exports.register = (req, res) ->
     meta: ""
     title: "Rekisteröinti - Bloggaa.fi"
 
+
+exports.login = (req, res) ->
+  if req.params.error
+    error = 1
+  res.render "login",
+    meta: ""
+    title: "Kirjautuminen - Bloggaa.fi"
+    error: error
+
 # Authenticate using our plain-object database of doom!
 authenticate = (email, password, callback) ->
   hash = require("../utils/password").hash
@@ -26,15 +35,19 @@ authenticate = (email, password, callback) ->
 
 login = (req, res) ->
   authenticate req.body.email, req.body.password, (err, user) ->
-    if user
-      # Regenerate session when signing in to prevent fixation
-      req.session.regenerate ->
-        req.session.user =
-          email: user.email
-        res.redirect "/"
-        return
+    unless user
+      res.redirect "/login/error"
+      return
 
-exports.login = login
+    # Regenerate session when signing in to prevent fixation
+    req.session.regenerate ->
+      req.session.user =
+        id: user._id
+        email: user.email
+      res.redirect "/"
+      return
+
+exports.handleLogin = login
 exports.logout = (req, res) ->
   delete req.session.user
   res.redirect "/"

@@ -39,15 +39,35 @@
 
   app.post("/register", routesUsers.createAccount);
 
+  app.get("/login", routesUsers.login);
+
+  app.get("/login/:error", routesUsers.login);
+
+  app.post("/login", routesUsers.handleLogin);
+
   app.get("/settings", routes.settings);
 
   app.post("/settings", routes.saveSettings);
+
+  app.get("/write", routesBlogs.write);
+
+  app.get("/edit/:id", routesBlogs.edit);
+
+  app.post("/saveBlog", routesBlogs.saveBlog);
+
+  app.post("/saveEdit/:id", routesBlogs.saveEdit);
 
   app.get("/blog", routesBlogs.blogs);
 
   app.get("/blog/:blog", routesBlogs.showblog);
 
   app.get("/blog/:blog/title/:title", routesBlogs.showpost);
+
+  app.get("/latest", routesBlogs.latestBlogs);
+
+  app.get("/latest/blogs", routesBlogs.latestBlogs);
+
+  app.get("/latest/texts", routesBlogs.latestTexts);
 
   http.createServer(app).listen(app.get("port"), function() {
     return console.log("Express server listening on port " + app.get("port"));

@@ -1,12 +1,49 @@
 mongoose = require('mongoose')
 
-exports.index = (req, res) ->
-  res.render "index",
-    title: "Bloggaa.fi"
+exports.write = (req, res) ->
+  return res.redirect "/" unless req.session.user
+  res.render "blogeditor",
+    title: "Kirjoita - Bloggaa.fi"
     meta: ""
-    blog: ""
+    blogTitle: "title"
+    blogContent: "content"
+    action: "saveBlog"
 
-    
+exports.saveBlog = (req, res) ->
+  return res.redirect "/" unless req.session.user
+  Blogs = mongoose.model 'blogposts'
+  blog = new Blog
+    title: req.body.title
+    url: req.body.title.toLowerCase()
+    content: req.body.content
+    added: new Date()
+    hidden: req.body.hidden is 1
+    visits: 0
+    user: req.session.user.id
+    blog: req.body.blogid
+  user.save (err) ->
+    res.redirect "/"
+
+exports.edit = (req, res) ->
+  return res.redirect "/" unless req.session.user
+  res.render "blogeditor",
+    title: "Muokkaus - Bloggaa.fi"
+    meta: ""
+    blogTitle: "title"
+    blogContent: "content"
+    action: "saveEdit"
+
+exports.saveEdit = (req, res) ->
+  return res.redirect "/" unless req.session.user
+  Blog = mongoose.model 'blogs'
+  Blog.update { _id: req.body.id, user: req.session.user.id },
+    $set:
+      edited: new Date()
+      title: req.body.title
+      url: req.body.id.toLowerCase()
+      content: req.body.content
+      hidden: req.body.hidden is 1
+
 exports.blogs = (req, res) ->
 
 exports.showblog = (req, res) ->
@@ -79,3 +116,8 @@ exports.showpost = (req, res) ->
         blog: blogName
         domain: domain
   return
+
+exports.latestBlogs = (req, res) ->
+  res.send "hello"
+exports.latestTexts = (req, res) ->
+  res.send "hello"

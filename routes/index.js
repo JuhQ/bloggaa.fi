@@ -3,6 +3,15 @@
 
   mongoose = require('mongoose');
 
+  exports.index = function(req, res) {
+    console.log(req.session);
+    return res.render("index", {
+      title: "Bloggaa.fi",
+      meta: "",
+      blog: ""
+    });
+  };
+
   exports.settings = function(req, res) {
     if (!req.session.user_id) {
       res.redirect("/");

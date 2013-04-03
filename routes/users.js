@@ -10,6 +10,19 @@
     });
   };
 
+  exports.login = function(req, res) {
+    var error;
+
+    if (req.params.error) {
+      error = 1;
+    }
+    return res.render("login", {
+      meta: "",
+      title: "Kirjautuminen - Bloggaa.fi",
+      error: error
+    });
+  };
+
   authenticate = function(email, password, callback) {
     var Users, hash;
 
@@ -35,18 +48,21 @@
 
   login = function(req, res) {
     return authenticate(req.body.email, req.body.password, function(err, user) {
-      if (user) {
-        return req.session.regenerate(function() {
-          req.session.user = {
-            email: user.email
-          };
-          res.redirect("/");
-        });
+      if (!user) {
+        res.redirect("/login/error");
+        return;
       }
+      return req.session.regenerate(function() {
+        req.session.user = {
+          id: user._id,
+          email: user.email
+        };
+        res.redirect("/");
+      });
     });
   };
 
-  exports.login = login;
+  exports.handleLogin = login;
 
   exports.logout = function(req, res) {
     delete req.session.user;
