@@ -2,9 +2,13 @@
   define([], function() {
     return Backbone.Router.extend({
       routes: {
-        "": "index"
+        "": "index",
+        "write": "write"
       },
-      index: function() {}
+      index: function() {},
+      write: function() {
+        return console.log("writer");
+      }
     });
   });
 

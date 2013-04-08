@@ -1,12 +1,14 @@
 <%= include header.ejs %>
 
-<h1>Multiple posts</h1>
 <%
-for(i in data) {
+data.forEach(function(data, i) {
 %>
-    <%=i%> content=<%=data[i]%> <br />
+  <h1><a href="/<%=data.url%>"><%=data.title%></a></h1>
+  <p>
+    <%-data.content.replace("\n", "<br />")%>
+  </p>
 <%
-}
+});
 %>
 
 <%= include footer.ejs %>

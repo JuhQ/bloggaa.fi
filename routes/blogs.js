@@ -4,15 +4,26 @@
   mongoose = require('mongoose');
 
   exports.write = function(req, res) {
+    var Blog;
+
     if (!req.session.user) {
       return res.redirect("/");
     }
-    return res.render("blogeditor", {
-      title: "Kirjoita - Bloggaa.fi",
-      meta: "",
-      blogTitle: "title",
-      blogContent: "content",
-      action: "saveBlog"
+    Blog = mongoose.model('blogs');
+    return Blog.findOne({
+      user: req.session.user.id
+    }).exec(function(err, blog) {
+      if (!blog) {
+        return res.redirect("/");
+      }
+      return res.render("blogeditor", {
+        title: "Kirjoita - Bloggaa.fi",
+        meta: "",
+        blogTitle: "title",
+        blogContent: "content",
+        action: "saveBlog",
+        blogid: blog._id
+      });
     });
   };
 
@@ -23,7 +34,7 @@
       return res.redirect("/");
     }
     Blogs = mongoose.model('blogposts');
-    blog = new Blog({
+    blog = new Blogs({
       title: req.body.title,
       url: req.body.title.toLowerCase(),
       content: req.body.content,
@@ -33,7 +44,7 @@
       user: req.session.user.id,
       blog: req.body.blogid
     });
-    return user.save(function(err) {
+    return blog.save(function(err) {
       return res.redirect("/");
     });
   };
@@ -86,13 +97,19 @@
       var Blogs;
 
       if (blogData) {
-        Blogs = mongoose.model('blogs');
+        Blogs = mongoose.model('blogposts');
         Blogs.find({
           blog: blogData._id
         }).exec(function(err, data) {
+          var title;
+
           if (data) {
+            title = "";
+            if (blogData.title) {
+              title = blogData.title + " - ";
+            }
             res.render("blogposts", {
-              title: "Bloggaa.fi",
+              title: title + "Bloggaa.fi",
               data: data,
               meta: "",
               blog: blogName

@@ -4,5 +4,8 @@ define [
   Backbone.Router.extend
     routes:
       "": "index"
+      "write": "write"
 
-    index: () ->
+    index: ->
+    write: ->
+      console.log "writer"

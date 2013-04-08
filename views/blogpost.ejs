@@ -1,12 +1,8 @@
 <%= include header.ejs %>
 
-<h1>Single post</h1>
-<%
-for(i in data) {
-%>
-    <%=i%> content=<%=data[i]%> <br />
-<%
-}
-%>
+  <h1><%=data.title%></h1>
+  <p>
+    <%-data.content.replace("\n", "<br />")%>
+  </p>
 
 <%= include footer.ejs %>

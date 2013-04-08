@@ -3,6 +3,7 @@
     <div class="container writer">
       <form class="form-signin" method="post" action="/<%=action%>">
         <h2 class="form-signin-heading">Sana on vapaa :)</h2>
+        <input type="hidden" name="blogid" value="<%=blogid%>" />
         <input type="text" name="title" class="input-block-level" placeholder="Otsikko" value="<%=blogTitle%>" />
         <textarea name="content" class="input-block-level" placeholder="Viestin sisältö"><%=blogContent%></textarea>
 

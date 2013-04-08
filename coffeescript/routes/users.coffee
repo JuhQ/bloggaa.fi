@@ -102,6 +102,7 @@ exports.createAccount = (req, res) ->
         user.save (err) ->
           Blogs = mongoose.model 'blogs'
           blog = new Blogs
+            user: user._id
             name: req.body.blogname
             url: req.body.blogname.toLowerCase()
             added: new Date()

@@ -9,6 +9,7 @@
     blogSchema = mongoose.Schema({
       name: 'String',
       url: 'String',
+      user: 'ObjectId',
       added: 'Date',
       lastpost: 'Date'
     });

@@ -2,17 +2,25 @@ mongoose = require('mongoose')
 
 exports.write = (req, res) ->
   return res.redirect "/" unless req.session.user
-  res.render "blogeditor",
-    title: "Kirjoita - Bloggaa.fi"
-    meta: ""
-    blogTitle: "title"
-    blogContent: "content"
-    action: "saveBlog"
+
+  Blog = mongoose.model 'blogs'
+  Blog.findOne({
+    user: req.session.user.id
+  }).exec (err, blog) ->
+    return res.redirect "/" unless blog
+
+    res.render "blogeditor",
+      title: "Kirjoita - Bloggaa.fi"
+      meta: ""
+      blogTitle: "title"
+      blogContent: "content"
+      action: "saveBlog"
+      blogid: blog._id
 
 exports.saveBlog = (req, res) ->
   return res.redirect "/" unless req.session.user
   Blogs = mongoose.model 'blogposts'
-  blog = new Blog
+  blog = new Blogs
     title: req.body.title
     url: req.body.title.toLowerCase()
     content: req.body.content
@@ -21,7 +29,7 @@ exports.saveBlog = (req, res) ->
     visits: 0
     user: req.session.user.id
     blog: req.body.blogid
-  user.save (err) ->
+  blog.save (err) ->
     res.redirect "/"
 
 exports.edit = (req, res) ->
@@ -55,13 +63,16 @@ exports.showblog = (req, res) ->
     url: blogName
   }).exec (err, blogData) ->
     if blogData
-      Blogs = mongoose.model 'blogs'
+      Blogs = mongoose.model 'blogposts'
       Blogs.find({
         blog: blogData._id
       }).exec (err, data) ->
         if data
+          title = ""
+          title = blogData.title + " - " if blogData.title
+
           res.render "blogposts",
-            title: "Bloggaa.fi"
+            title: title + "Bloggaa.fi"
             data: data
             meta: ""
             blog: blogName
