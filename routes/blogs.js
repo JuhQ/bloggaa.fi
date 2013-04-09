@@ -19,8 +19,8 @@
       return res.render("blogeditor", {
         title: "Kirjoita - Bloggaa.fi",
         meta: "",
-        blogTitle: "title",
-        blogContent: "content",
+        blogTitle: "",
+        blogContent: "",
         action: "saveBlog",
         blogid: blog._id
       });
@@ -28,15 +28,16 @@
   };
 
   exports.saveBlog = function(req, res) {
-    var Blogs, blog;
+    var Blogs, blog, url;
 
     if (!req.session.user) {
       return res.redirect("/");
     }
+    url = req.body.title.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g, '-');
     Blogs = mongoose.model('blogposts');
     blog = new Blogs({
       title: req.body.title,
-      url: req.body.title.toLowerCase(),
+      url: url,
       content: req.body.content,
       added: new Date(),
       hidden: req.body.hidden === 1,
@@ -63,12 +64,13 @@
   };
 
   exports.saveEdit = function(req, res) {
-    var Blog;
+    var Blog, url;
 
     if (!req.session.user) {
       return res.redirect("/");
     }
     Blog = mongoose.model('blogs');
+    url = req.body.title.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g, '-');
     return Blog.update({
       _id: req.body.id,
       user: req.session.user.id
@@ -76,7 +78,7 @@
       $set: {
         edited: new Date(),
         title: req.body.title,
-        url: req.body.id.toLowerCase(),
+        url: req.body.title.toLowerCase(),
         content: req.body.content,
         hidden: req.body.hidden === 1
       }

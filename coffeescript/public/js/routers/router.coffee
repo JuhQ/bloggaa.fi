@@ -1,5 +1,7 @@
 define [
+  "views/write"
 ], (
+  WriteView
   ) ->
   Backbone.Router.extend
     routes:
@@ -8,4 +10,4 @@ define [
 
     index: ->
     write: ->
-      console.log "writer"
+      new WriteView()

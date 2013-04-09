@@ -1,5 +1,5 @@
 (function() {
-  define([], function() {
+  define(["views/write"], function(WriteView) {
     return Backbone.Router.extend({
       routes: {
         "": "index",
@@ -7,7 +7,7 @@
       },
       index: function() {},
       write: function() {
-        return console.log("writer");
+        return new WriteView();
       }
     });
   });

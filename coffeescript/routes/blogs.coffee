@@ -12,17 +12,18 @@ exports.write = (req, res) ->
     res.render "blogeditor",
       title: "Kirjoita - Bloggaa.fi"
       meta: ""
-      blogTitle: "title"
-      blogContent: "content"
+      blogTitle: ""
+      blogContent: ""
       action: "saveBlog"
       blogid: blog._id
 
 exports.saveBlog = (req, res) ->
   return res.redirect "/" unless req.session.user
+  url = req.body.title.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g,'-')
   Blogs = mongoose.model 'blogposts'
   blog = new Blogs
     title: req.body.title
-    url: req.body.title.toLowerCase()
+    url: url
     content: req.body.content
     added: new Date()
     hidden: req.body.hidden is 1
@@ -44,11 +45,14 @@ exports.edit = (req, res) ->
 exports.saveEdit = (req, res) ->
   return res.redirect "/" unless req.session.user
   Blog = mongoose.model 'blogs'
+
+  url = req.body.title.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g,'-')
+
   Blog.update { _id: req.body.id, user: req.session.user.id },
     $set:
       edited: new Date()
       title: req.body.title
-      url: req.body.id.toLowerCase()
+      url: req.body.title.toLowerCase()
       content: req.body.content
       hidden: req.body.hidden is 1
 
