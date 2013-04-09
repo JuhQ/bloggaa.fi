@@ -71,20 +71,20 @@ exports.showblog = (req, res) ->
           title = ""
           title = blogData.title + " - " if blogData.title
 
-          res.render "blogposts",
+          res.render "themes/default/blogposts",
             title: title + "Bloggaa.fi"
             data: data
             meta: ""
             blog: blogName
         unless data
-          res.render "nocontent",
+          res.render "themes/default/nocontent",
             title: "Bloggaa.fi"
             meta: ""
             blog: blogName
             domain: domain
 
     unless blogData
-      res.render "blog-not-found",
+      res.render "themes/default/blog-not-found",
         title: "Bloggaa.fi"
         meta: ""
         blog: blogName
@@ -108,20 +108,20 @@ exports.showpost = (req, res) ->
         url: req.params.title.toLowerCase()
       }).exec (err, data) ->
         if data
-          res.render "blogpost",
+          res.render "themes/default/blogpost",
             title: data.title + " - Bloggaa.fi"
             meta: ""
             data: data
             blog: blogName
 
         unless data
-          res.render "nocontent",
+          res.render "themes/default/nocontent",
             title: "Bloggaa.fi"
             meta: ""
             blog: blogName
 
     unless blogData
-      res.render "blog-not-found",
+      res.render "themes/default/blog-not-found",
         title: "Bloggaa.fi"
         meta: ""
         blog: blogName
