@@ -1,0 +1,11 @@
+<%= include header.ejs %>
+
+<%
+data.forEach(function(data, i) {
+%>
+  <p><a href="http://<%=data.url%>.<%=domain%>"><%=data.name%></a> - <%=moment(data.added).fromNow()%></p>
+<%
+});
+%>
+
+<%= include footer.ejs %>

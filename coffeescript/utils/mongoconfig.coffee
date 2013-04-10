@@ -3,6 +3,9 @@ exports.config = () ->
   blogSchema = mongoose.Schema {
     name: 'String'
     url: 'String'
+    disqus: 'String'
+    googleanalytics: 'String'
+    sidebar: 'String'
     user: 'ObjectId'
     added: 'Date'
     lastpost: 'Date'

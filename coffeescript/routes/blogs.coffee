@@ -1,4 +1,6 @@
 mongoose = require('mongoose')
+moment = require('moment')
+moment.lang("fi")
 
 exports.write = (req, res) ->
   return res.redirect "/" unless req.session.user
@@ -31,6 +33,12 @@ exports.saveBlog = (req, res) ->
     user: req.session.user.id
     blog: req.body.blogid
   blog.save (err) ->
+
+    Blog = mongoose.model 'blogs'
+    Blog.update { _id: req.body.blogid },
+      $set:
+        lastpost: new Date()
+
     res.redirect "/"
 
 exports.edit = (req, res) ->
@@ -44,7 +52,7 @@ exports.edit = (req, res) ->
 
 exports.saveEdit = (req, res) ->
   return res.redirect "/" unless req.session.user
-  Blog = mongoose.model 'blogs'
+  Blog = mongoose.model 'blogposts'
 
   url = req.body.title.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g,'-')
 
@@ -80,6 +88,7 @@ exports.showblog = (req, res) ->
             data: data
             meta: ""
             blog: blogName
+            moment: moment
         unless data
           res.render "themes/default/nocontent",
             title: "Bloggaa.fi"
@@ -117,6 +126,7 @@ exports.showpost = (req, res) ->
             meta: ""
             data: data
             blog: blogName
+            moment: moment
 
         unless data
           res.render "themes/default/nocontent",
@@ -133,6 +143,31 @@ exports.showpost = (req, res) ->
   return
 
 exports.latestBlogs = (req, res) ->
-  res.send "hello"
+  domain = req.get('host').replace(req.subdomains[0] + ".", "")
+  Blog = mongoose.model 'blogs'
+  Blog.find().sort('added').exec (err, data) ->
+    res.redirect "/" unless data
+
+    if data
+      res.render "latestsblogs",
+        title: "Uusimmat blogit - Bloggaa.fi"
+        data: data
+        meta: ""
+        domain: domain
+        moment: moment
+
 exports.latestTexts = (req, res) ->
-  res.send "hello"
+  domain = req.get('host').replace(req.subdomains[0] + ".", "")
+  Blogs = mongoose.model 'blogposts'
+  Blogs.find().sort('added').exec (err, data) ->
+    res.redirect "/" unless data
+
+    if data
+      res.render "latestsblogposts",
+        title: "Uusimmat kirjoitukset - Bloggaa.fi"
+        data: data
+        meta: ""
+        domain: domain
+        moment: moment
+
+  return

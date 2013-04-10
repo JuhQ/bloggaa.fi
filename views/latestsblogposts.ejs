@@ -3,10 +3,7 @@
 <%
 data.forEach(function(data, i) {
 %>
-  <h1><a href="/<%=data.url%>"><%=data.title%></a></h1>
-  <p>
-    <small class="muted"><%=moment(data.added).fromNow()%></small>
-  </p>
+  <h1><a href="http://<%=data.url%>.<%=domain%>/<%=data.url%>"><%=data.title%></a></h1>
   <p>
     <%-data.content.replace("\n", "<br />")%>
   </p>

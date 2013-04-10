@@ -7,11 +7,15 @@
       },
       initialize: function() {},
       urlname: function(event) {
-        var element;
+        var element, url;
 
         element = $(event.currentTarget);
+        url = element.val().trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g, '-');
+        if (url === "") {
+          return this.$(".url-container").addClass("hidden");
+        }
         this.$(".url-container").removeClass("hidden");
-        return this.$(".url").html(element.val().trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g, '-'));
+        return this.$(".url").html(url);
       }
     });
   });

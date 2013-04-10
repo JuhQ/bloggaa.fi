@@ -1,7 +1,11 @@
 (function() {
-  var mongoose;
+  var moment, mongoose;
 
   mongoose = require('mongoose');
+
+  moment = require('moment');
+
+  moment.lang("fi");
 
   exports.write = function(req, res) {
     var Blog;
@@ -46,6 +50,16 @@
       blog: req.body.blogid
     });
     return blog.save(function(err) {
+      var Blog;
+
+      Blog = mongoose.model('blogs');
+      Blog.update({
+        _id: req.body.blogid
+      }, {
+        $set: {
+          lastpost: new Date()
+        }
+      });
       return res.redirect("/");
     });
   };
@@ -69,7 +83,7 @@
     if (!req.session.user) {
       return res.redirect("/");
     }
-    Blog = mongoose.model('blogs');
+    Blog = mongoose.model('blogposts');
     url = req.body.title.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g, '-');
     return Blog.update({
       _id: req.body.id,
@@ -114,7 +128,8 @@
               title: title + "Bloggaa.fi",
               data: data,
               meta: "",
-              blog: blogName
+              blog: blogName,
+              moment: moment
             });
           }
           if (!data) {
@@ -161,7 +176,8 @@
               title: data.title + " - Bloggaa.fi",
               meta: "",
               data: data,
-              blog: blogName
+              blog: blogName,
+              moment: moment
             });
           }
           if (!data) {
@@ -185,11 +201,45 @@
   };
 
   exports.latestBlogs = function(req, res) {
-    return res.send("hello");
+    var Blog, domain;
+
+    domain = req.get('host').replace(req.subdomains[0] + ".", "");
+    Blog = mongoose.model('blogs');
+    return Blog.find().sort('added').exec(function(err, data) {
+      if (!data) {
+        res.redirect("/");
+      }
+      if (data) {
+        return res.render("latestsblogs", {
+          title: "Uusimmat blogit - Bloggaa.fi",
+          data: data,
+          meta: "",
+          domain: domain,
+          moment: moment
+        });
+      }
+    });
   };
 
   exports.latestTexts = function(req, res) {
-    return res.send("hello");
+    var Blogs, domain;
+
+    domain = req.get('host').replace(req.subdomains[0] + ".", "");
+    Blogs = mongoose.model('blogposts');
+    Blogs.find().sort('added').exec(function(err, data) {
+      if (!data) {
+        res.redirect("/");
+      }
+      if (data) {
+        return res.render("latestsblogposts", {
+          title: "Uusimmat kirjoitukset - Bloggaa.fi",
+          data: data,
+          meta: "",
+          domain: domain,
+          moment: moment
+        });
+      }
+    });
   };
 
 }).call(this);

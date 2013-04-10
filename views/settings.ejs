@@ -2,17 +2,13 @@
 
     <div class="container">
       <form class="form-signin" method="post" action="/settings">
-        <h2 class="form-signin-heading">Rekisteröinti</h2>
+        <h2 class="form-signin-heading">Päivitä tietoja</h2>
         <input type="email" name="email" class="input-block-level" placeholder="Email" />
         <input type="password" name="password" class="input-block-level" placeholder="Salasana" />
         <input type="password" name="password2" class="input-block-level" placeholder="Salasana" />
-        
-        <div class="input-append">
-          <input class="span2" name="blogname" type="text" placeholder="Blogin osoite" />
-          <span class="add-on">.bloggaa.fi</span>
-        </div>
 
         <input type="text" name="blogtitle" class="input-block-level" placeholder="Blogin nimi" />
+        <textarea name="sidebar" placeholder="Voit tähän lisätä vapaasti tekstiä tai html:ää."></textarea>
 
         <div class="clearfix"></div>
         <button class="btn btn-large btn-primary" type="submit">Tallenna</button>

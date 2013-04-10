@@ -17,5 +17,7 @@ define [
 
     urlname: (event) ->
       element = $(event.currentTarget)
+      url = element.val().trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g,'-')
+      return @$(".url-container").addClass("hidden") if url is ""
       @$(".url-container").removeClass("hidden")
-      @$(".url").html element.val().trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g,'-')
+      @$(".url").html url
