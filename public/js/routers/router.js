@@ -3,7 +3,9 @@
     return Backbone.Router.extend({
       routes: {
         "": "index",
-        "write": "write"
+        "write": "write",
+        "edit": "write",
+        "edit/:id": "write"
       },
       index: function() {},
       write: function() {

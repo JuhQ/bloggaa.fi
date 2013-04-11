@@ -6,8 +6,18 @@
           Hello world!
 
           <ul>
+          <%
+          if(!session.user) {
+          %>
           <li><a href="/login">Kirjaudu</a></li>
           <li><a href="/register">Rekisteröidy</a></li>
+          <%
+          } else {
+          %>
+          <li><a href="http://<%=blogUrl%>.<%=domain%>">Oma blogi</a></li>
+          <%
+          }
+          %>
           <li><a href="/write">Kirjoita</a></li>
           </ul>
 

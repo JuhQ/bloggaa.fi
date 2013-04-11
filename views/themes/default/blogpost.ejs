@@ -3,6 +3,14 @@
   <h1><%=data.title%></h1>
   <p>
     <small class="muted"><%=moment(data.added).fromNow()%></small>
+    <%
+    if(session.user && session.user.id == data.user) {
+    %>
+    <a href="http://<%=domain%>/edit/<%=data._id%>">Muokkaa</a>
+    <a href="http://<%=domain%>/delete/<%=data._id%>">Poista</a>
+    <%
+    }
+    %>
   </p>
   <p>
     <%-data.content.replace("\n", "<br />")%>
@@ -10,10 +18,8 @@
 
   <div id="disqus_thread"></div>
   <script type="text/javascript">
-      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-      var disqus_shortname = 'juhabloggaa'; // required: replace example with your forum shortname
+      var disqus_shortname = 'juhabloggaa';
 
-      /* * * DON'T EDIT BELOW THIS LINE * * */
       (function() {
           var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
           dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';

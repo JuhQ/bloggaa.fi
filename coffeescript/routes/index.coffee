@@ -1,24 +1,32 @@
 mongoose = require('mongoose')
 
 exports.index = (req, res) ->
-  console.log req.session
-  res.render "index",
+  domain = req.get('host').replace(req.subdomains[0] + ".", "")
+  options =
     title: "Bloggaa.fi"
     meta: ""
-    blog: ""
+    domain: domain
+    session: req.session
+
+  if req.session.user
+    Blog = mongoose.model 'blogs'
+    Blog.findOne({
+      user: req.session.user.id
+    }).exec (err, blog) ->
+      if blog
+        options.blogUrl = blog.url
+        res.render "index", options
+  else
+    res.render "index", options
 
 exports.settings = (req, res) ->
-  unless req.session.user_id
-    res.redirect "/"
-    return
+  return res.redirect "/" unless req.session.user_id
   res.render "settings",
     meta: ""
     title: "Asetukset - Bloggaa.fi"
 
 exports.saveSettings = (req, res) ->
-  unless req.session.user_id
-    res.redirect "/"
-    return
+  return res.redirect "/" unless req.session.user_id
 
   blogName = req.params.blog.toLowerCase()
   blogtitle = req.params.blog
@@ -36,18 +44,3 @@ exports.saveSettings = (req, res) ->
     res.render "settings",
       meta: ""
       title: "Asetukset tallennettu - Bloggaa.fi"
-
-exports.picture = (req, res) ->
-  id = req.params.id.toLowerCase() + '.' + req.params.type.toLowerCase()
-  pics = mongoose.model 'pics'
-  pics.findOne({
-    filename_lowercase: id
-  }).exec (err, data) ->
-    if data
-      meta = {}
-      meta['og:image'] = 'http://cdn.userpics.com/medium/' + data.filename
-      meta.keywords = data.filename + ', hakusanoja'
-      meta['og:title'] = data.title
-      res.render "index",
-        title: meta['og:title'] + " - Userpics.com"
-        meta: meta

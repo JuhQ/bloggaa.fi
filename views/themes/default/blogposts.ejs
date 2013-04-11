@@ -6,6 +6,14 @@ data.forEach(function(data, i) {
   <h1><a href="/<%=data.url%>"><%=data.title%></a></h1>
   <p>
     <small class="muted"><%=moment(data.added).fromNow()%></small>
+    <%
+    if(session.user && session.user.id == data.user) {
+    %>
+    <a href="http://<%=domain%>/edit/<%=data._id%>">Muokkaa</a>
+    <a href="http://<%=domain%>/delete/<%=data._id%>">Poista</a>
+    <%
+    }
+    %>
   </p>
   <p>
     <%-data.content.replace("\n", "<br />")%>
@@ -14,4 +22,5 @@ data.forEach(function(data, i) {
 });
 %>
 
+<%= include sidebar.ejs %>
 <%= include footer.ejs %>

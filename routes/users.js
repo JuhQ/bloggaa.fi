@@ -52,7 +52,9 @@
         res.redirect("/login/error");
         return;
       }
+      console.log("yayayayayaya login");
       return req.session.regenerate(function() {
+        console.log("user", user);
         req.session.user = {
           id: user._id,
           email: user.email
@@ -65,6 +67,7 @@
   exports.handleLogin = login;
 
   exports.logout = function(req, res) {
+    req.session.destroy();
     delete req.session.user;
     return res.redirect("/");
   };

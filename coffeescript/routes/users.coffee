@@ -6,10 +6,8 @@ exports.register = (req, res) ->
     meta: ""
     title: "Rekisteröinti - Bloggaa.fi"
 
-
 exports.login = (req, res) ->
-  if req.params.error
-    error = 1
+  error = 1 if req.params.error
   res.render "login",
     meta: ""
     title: "Kirjautuminen - Bloggaa.fi"
@@ -39,8 +37,10 @@ login = (req, res) ->
       res.redirect "/login/error"
       return
 
+    console.log "yayayayayaya login"
     # Regenerate session when signing in to prevent fixation
     req.session.regenerate ->
+      console.log "user", user
       req.session.user =
         id: user._id
         email: user.email
@@ -49,6 +49,7 @@ login = (req, res) ->
 
 exports.handleLogin = login
 exports.logout = (req, res) ->
+  req.session.destroy()
   delete req.session.user
   res.redirect "/"
 

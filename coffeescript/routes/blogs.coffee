@@ -43,32 +43,39 @@ exports.saveBlog = (req, res) ->
 
 exports.edit = (req, res) ->
   return res.redirect "/" unless req.session.user
-  res.render "blogeditor",
-    title: "Muokkaus - Bloggaa.fi"
-    meta: ""
-    blogTitle: "title"
-    blogContent: "content"
-    action: "saveEdit"
+  Blogs = mongoose.model 'blogposts'
+  Blogs.findOne({
+    _id: req.params.id
+    user: req.session.user.id
+  }).exec (err, data) ->
+    return res.redirect "/" unless data
+    if data
+      res.render "blogeditor",
+        title: "Muokkaus - Bloggaa.fi"
+        meta: ""
+        blogid: data._id
+        blogTitle: data.title
+        blogContent: data.content
+        action: "saveEdit/" + data._id
 
 exports.saveEdit = (req, res) ->
   return res.redirect "/" unless req.session.user
   Blog = mongoose.model 'blogposts'
 
-  url = req.body.title.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g,'-')
+  title = req.body.title
+  url = title.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g,'-')
 
   Blog.update { _id: req.body.id, user: req.session.user.id },
     $set:
       edited: new Date()
-      title: req.body.title
-      url: req.body.title.toLowerCase()
+      title: title
+      url: url
       content: req.body.content
       hidden: req.body.hidden is 1
-
-exports.blogs = (req, res) ->
+  res.redirect "/"
 
 exports.showblog = (req, res) ->
   domain = req.get('host').replace(req.subdomains[0] + ".", "")
-  
   blogName = req.params.blog.toLowerCase()
   Blog = mongoose.model 'blogs'
   Blog.findOne({
@@ -78,7 +85,8 @@ exports.showblog = (req, res) ->
       Blogs = mongoose.model 'blogposts'
       Blogs.find({
         blog: blogData._id
-      }).exec (err, data) ->
+        hidden: false
+      }).sort('-added').exec (err, data) ->
         if data
           title = ""
           title = blogData.title + " - " if blogData.title
@@ -89,6 +97,8 @@ exports.showblog = (req, res) ->
             meta: ""
             blog: blogName
             moment: moment
+            domain: domain
+            session: req.session
         unless data
           res.render "themes/default/nocontent",
             title: "Bloggaa.fi"
@@ -102,8 +112,6 @@ exports.showblog = (req, res) ->
         meta: ""
         blog: blogName
         domain: domain
-
-  return
 
 exports.showpost = (req, res) ->
   domain = req.get('host').replace(req.subdomains[0] + ".", "")
@@ -127,6 +135,8 @@ exports.showpost = (req, res) ->
             data: data
             blog: blogName
             moment: moment
+            domain: domain
+            session: req.session
 
         unless data
           res.render "themes/default/nocontent",
@@ -140,34 +150,27 @@ exports.showpost = (req, res) ->
         meta: ""
         blog: blogName
         domain: domain
-  return
 
 exports.latestBlogs = (req, res) ->
   domain = req.get('host').replace(req.subdomains[0] + ".", "")
   Blog = mongoose.model 'blogs'
-  Blog.find().sort('added').exec (err, data) ->
-    res.redirect "/" unless data
-
-    if data
-      res.render "latestsblogs",
-        title: "Uusimmat blogit - Bloggaa.fi"
-        data: data
-        meta: ""
-        domain: domain
-        moment: moment
+  Blog.find().sort('-added').exec (err, data) ->
+    return res.redirect "/" unless data
+    res.render "latestsblogs",
+      title: "Uusimmat blogit - Bloggaa.fi"
+      data: data
+      meta: ""
+      domain: domain
+      moment: moment
 
 exports.latestTexts = (req, res) ->
   domain = req.get('host').replace(req.subdomains[0] + ".", "")
   Blogs = mongoose.model 'blogposts'
-  Blogs.find().sort('added').exec (err, data) ->
-    res.redirect "/" unless data
-
-    if data
-      res.render "latestsblogposts",
-        title: "Uusimmat kirjoitukset - Bloggaa.fi"
-        data: data
-        meta: ""
-        domain: domain
-        moment: moment
-
-  return
+  Blogs.find().sort('-added').exec (err, data) ->
+    return res.redirect "/" unless data
+    res.render "latestsblogposts",
+      title: "Uusimmat kirjoitukset - Bloggaa.fi"
+      data: data
+      meta: ""
+      domain: domain
+      moment: moment

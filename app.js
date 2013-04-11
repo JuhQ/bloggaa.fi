@@ -23,7 +23,11 @@
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(express.cookieParser("bloggaa.fi is awesome"));
-    app.use(express.session());
+    app.use(express.session({
+      cookie: {
+        domain: "yoshi.local"
+      }
+    }));
     return app.use(app.router);
   });
 
@@ -43,6 +47,8 @@
 
   app.get("/login/:error", routesUsers.login);
 
+  app.get("/logout", routesUsers.logout);
+
   app.post("/login", routesUsers.handleLogin);
 
   app.get("/settings", routes.settings);
@@ -57,7 +63,7 @@
 
   app.post("/saveEdit/:id", routesBlogs.saveEdit);
 
-  app.get("/blog", routesBlogs.blogs);
+  app.get("/blog", routesBlogs.latestBlogs);
 
   app.get("/blog/:blog", routesBlogs.showblog);
 

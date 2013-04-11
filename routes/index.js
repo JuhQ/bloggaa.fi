@@ -4,18 +4,33 @@
   mongoose = require('mongoose');
 
   exports.index = function(req, res) {
-    console.log(req.session);
-    return res.render("index", {
+    var Blog, domain, options;
+
+    domain = req.get('host').replace(req.subdomains[0] + ".", "");
+    options = {
       title: "Bloggaa.fi",
       meta: "",
-      blog: ""
-    });
+      domain: domain,
+      session: req.session
+    };
+    if (req.session.user) {
+      Blog = mongoose.model('blogs');
+      return Blog.findOne({
+        user: req.session.user.id
+      }).exec(function(err, blog) {
+        if (blog) {
+          options.blogUrl = blog.url;
+          return res.render("index", options);
+        }
+      });
+    } else {
+      return res.render("index", options);
+    }
   };
 
   exports.settings = function(req, res) {
     if (!req.session.user_id) {
-      res.redirect("/");
-      return;
+      return res.redirect("/");
     }
     return res.render("settings", {
       meta: "",
@@ -27,8 +42,7 @@
     var Blog, blogName, blogtitle;
 
     if (!req.session.user_id) {
-      res.redirect("/");
-      return;
+      return res.redirect("/");
     }
     blogName = req.params.blog.toLowerCase();
     blogtitle = req.params.blog;
@@ -51,29 +65,6 @@
         meta: "",
         title: "Asetukset tallennettu - Bloggaa.fi"
       });
-    });
-  };
-
-  exports.picture = function(req, res) {
-    var id, pics;
-
-    id = req.params.id.toLowerCase() + '.' + req.params.type.toLowerCase();
-    pics = mongoose.model('pics');
-    return pics.findOne({
-      filename_lowercase: id
-    }).exec(function(err, data) {
-      var meta;
-
-      if (data) {
-        meta = {};
-        meta['og:image'] = 'http://cdn.userpics.com/medium/' + data.filename;
-        meta.keywords = data.filename + ', hakusanoja';
-        meta['og:title'] = data.title;
-        return res.render("index", {
-          title: meta['og:title'] + " - Userpics.com",
-          meta: meta
-        });
-      }
     });
   };
 
