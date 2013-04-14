@@ -7,8 +7,7 @@ define [
     routes:
       "": "index"
       "write": "write"
-      "edit": "write"
-      "edit/:id": "write"
+      "edit(/:id)": "write"
 
     index: ->
     write: ->
