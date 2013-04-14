@@ -6,7 +6,8 @@
   exports.register = function(req, res) {
     return res.render("register", {
       meta: "",
-      title: "Rekisteröinti - Bloggaa.fi"
+      title: "Rekisteröinti - Bloggaa.fi",
+      session: req.session
     });
   };
 
@@ -19,7 +20,8 @@
     return res.render("login", {
       meta: "",
       title: "Kirjautuminen - Bloggaa.fi",
-      error: error
+      error: error,
+      session: req.session
     });
   };
 
@@ -49,12 +51,9 @@
   login = function(req, res) {
     return authenticate(req.body.email, req.body.password, function(err, user) {
       if (!user) {
-        res.redirect("/login/error");
-        return;
+        return res.redirect("/login/error");
       }
-      console.log("yayayayayaya login");
       return req.session.regenerate(function() {
-        console.log("user", user);
         req.session.user = {
           id: user._id,
           email: user.email
@@ -140,7 +139,8 @@
               user: user._id,
               name: req.body.blogname,
               url: req.body.blogname.toLowerCase(),
-              added: new Date()
+              added: new Date(),
+              theme: "default"
             });
             blog.save();
             return login(req, res);

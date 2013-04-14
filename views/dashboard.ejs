@@ -1,0 +1,24 @@
+<%= include header.ejs %>
+
+<%
+data.forEach(function(data, i) {
+%>
+  <h1><a href="/<%=data.url%>"><%=data.title%></a></h1>
+  <p>
+    <%
+    if(session.user && session.user.id == data.user) {
+    %>
+    <a href="/dashboard/edit/<%=data._id%>">Muokkaa</a>
+    <a href="/dashboard/delete/<%=data._id%>">Poista</a>
+    <%
+    }
+    %>
+  </p>
+  <p>
+    <%-data.content.replace(/\n/g, "<br />")%>
+  </p>
+<%
+});
+%>
+
+<%= include footer.ejs %>

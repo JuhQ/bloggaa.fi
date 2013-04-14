@@ -1,5 +1,5 @@
 (function() {
-  var app, express, http, mongoconfig, routes, routesBlogs, routesUsers;
+  var app, express, http, mongoconfig, routes, routesBlogs, routesDashboard, routesUsers;
 
   express = require("express");
 
@@ -8,6 +8,8 @@
   routesUsers = require("./routes/users");
 
   routesBlogs = require("./routes/blogs");
+
+  routesDashboard = require("./routes/dashboard");
 
   mongoconfig = require("./utils/mongoconfig");
 
@@ -23,11 +25,7 @@
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(express.cookieParser("bloggaa.fi is awesome"));
-    app.use(express.session({
-      cookie: {
-        domain: "yoshi.local"
-      }
-    }));
+    app.use(express.session());
     return app.use(app.router);
   });
 
@@ -51,17 +49,21 @@
 
   app.post("/login", routesUsers.handleLogin);
 
-  app.get("/settings", routes.settings);
+  app.get("/dashboard", routesDashboard.index);
 
-  app.post("/settings", routes.saveSettings);
+  app.get("/dashboard/settings", routes.settings);
 
-  app.get("/write", routesBlogs.write);
+  app.post("/dashboard/settings", routes.saveSettings);
 
-  app.get("/edit/:id", routesBlogs.edit);
+  app.get("/dashboard/write", routesBlogs.write);
 
-  app.post("/saveBlog", routesBlogs.saveBlog);
+  app.get("/dashboard/edit/:id", routesBlogs.edit);
 
-  app.post("/saveEdit/:id", routesBlogs.saveEdit);
+  app.get("/dashboard/delete/:id", routesBlogs.remove);
+
+  app.post("/dashboard/saveBlog", routesBlogs.saveBlog);
+
+  app.post("/dashboard/saveEdit/:id", routesBlogs.saveEdit);
 
   app.get("/blog", routesBlogs.latestBlogs);
 

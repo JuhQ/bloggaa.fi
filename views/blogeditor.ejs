@@ -1,7 +1,7 @@
 <%= include header.ejs %>
 
     <div class="container writer">
-      <form class="form-signin" method="post" action="/<%=action%>">
+      <form class="form-signin" method="post" action="/dashboard/<%=action%>">
         <h2 class="form-signin-heading">Sana on vapaa :)</h2>
         <input type="hidden" name="blogid" value="<%=blogid%>" />
         <input type="text" name="title" class="input-block-level" placeholder="Otsikko" value="<%=blogTitle%>" />

@@ -2,6 +2,7 @@ express = require("express")
 routes = require("./routes")
 routesUsers = require("./routes/users")
 routesBlogs = require("./routes/blogs")
+routesDashboard = require("./routes/dashboard")
 mongoconfig = require("./utils/mongoconfig")
 http = require("http")
 app = express()
@@ -14,11 +15,11 @@ app.configure ->
   app.use express.bodyParser()
   app.use express.methodOverride()
   app.use express.cookieParser("bloggaa.fi is awesome")
-  #app.use express.session()
-  app.use express.session(
-    cookie:
-      domain: "yoshi.local"
-  )
+  app.use express.session()
+  #app.use express.session(
+  #  cookie:
+  #    domain: "localhost"
+  #)
   app.use app.router
 
 app.configure "development", ->
@@ -33,14 +34,17 @@ app.get "/login", routesUsers.login
 app.get "/login/:error", routesUsers.login
 app.get "/logout", routesUsers.logout
 app.post "/login", routesUsers.handleLogin
-app.get "/settings", routes.settings
-app.post "/settings", routes.saveSettings
 
-app.get "/write", routesBlogs.write
-app.get "/edit/:id", routesBlogs.edit
 
-app.post "/saveBlog", routesBlogs.saveBlog
-app.post "/saveEdit/:id", routesBlogs.saveEdit
+app.get "/dashboard", routesDashboard.index
+app.get "/dashboard/settings", routes.settings
+app.post "/dashboard/settings", routes.saveSettings
+app.get "/dashboard/write", routesBlogs.write
+app.get "/dashboard/edit/:id", routesBlogs.edit
+app.get "/dashboard/delete/:id", routesBlogs.remove
+app.post "/dashboard/saveBlog", routesBlogs.saveBlog
+app.post "/dashboard/saveEdit/:id", routesBlogs.saveEdit
+
 
 app.get "/blog", routesBlogs.latestBlogs
 app.get "/blog/:blog", routesBlogs.showblog

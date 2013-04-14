@@ -24,6 +24,7 @@ exports.settings = (req, res) ->
   res.render "settings",
     meta: ""
     title: "Asetukset - Bloggaa.fi"
+    session: req.session
 
 exports.saveSettings = (req, res) ->
   return res.redirect "/" unless req.session.user_id
@@ -44,3 +45,4 @@ exports.saveSettings = (req, res) ->
     res.render "settings",
       meta: ""
       title: "Asetukset tallennettu - Bloggaa.fi"
+      session: req.session

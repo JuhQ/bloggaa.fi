@@ -6,6 +6,7 @@ exports.config = () ->
     disqus: 'String'
     googleanalytics: 'String'
     sidebar: 'String'
+    theme: 'String'
     user: 'ObjectId'
     added: 'Date'
     lastpost: 'Date'

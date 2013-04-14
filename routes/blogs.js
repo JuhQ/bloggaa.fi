@@ -26,9 +26,23 @@
         blogTitle: "",
         blogContent: "",
         action: "saveBlog",
-        blogid: blog._id
+        blogid: blog._id,
+        session: req.session
       });
     });
+  };
+
+  exports.remove = function(req, res) {
+    var Blog, blogName, domain;
+
+    if (!req.session.user) {
+      return res.redirect("/");
+    }
+    domain = req.get('host').replace(req.subdomains[0] + ".", "");
+    blogName = req.params.blog.toLowerCase();
+    Blog = mongoose.model('blogs');
+    Blog.where('_id').equals(req.params.id).remove();
+    return res.redirect("/dashboard");
   };
 
   exports.saveBlog = function(req, res) {
@@ -85,7 +99,8 @@
           blogid: data._id,
           blogTitle: data.title,
           blogContent: data.content,
-          action: "saveEdit/" + data._id
+          action: "saveEdit/" + data._id,
+          session: req.session
         });
       }
     });
@@ -100,8 +115,8 @@
     Blog = mongoose.model('blogposts');
     title = req.body.title;
     url = title.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g, '-');
-    Blog.update({
-      _id: req.body.id,
+    return Blog.update({
+      _id: req.body.blogid,
       user: req.session.user.id
     }, {
       $set: {
@@ -111,8 +126,9 @@
         content: req.body.content,
         hidden: req.body.hidden === 1
       }
+    }, function() {
+      return res.redirect("/dashboard");
     });
-    return res.redirect("/");
   };
 
   exports.showblog = function(req, res) {
@@ -154,7 +170,8 @@
               title: "Bloggaa.fi",
               meta: "",
               blog: blogName,
-              domain: domain
+              domain: domain,
+              session: req.session
             });
           }
         });
@@ -164,7 +181,8 @@
           title: "Bloggaa.fi",
           meta: "",
           blog: blogName,
-          domain: domain
+          domain: domain,
+          session: req.session
         });
       }
     });
@@ -203,7 +221,8 @@
             return res.render("themes/default/nocontent", {
               title: "Bloggaa.fi",
               meta: "",
-              blog: blogName
+              blog: blogName,
+              session: req.session
             });
           }
         });
@@ -213,7 +232,8 @@
           title: "Bloggaa.fi",
           meta: "",
           blog: blogName,
-          domain: domain
+          domain: domain,
+          session: req.session
         });
       }
     });
@@ -233,7 +253,8 @@
         data: data,
         meta: "",
         domain: domain,
-        moment: moment
+        moment: moment,
+        session: req.session
       });
     });
   };
@@ -252,7 +273,8 @@
         data: data,
         meta: "",
         domain: domain,
-        moment: moment
+        moment: moment,
+        session: req.session
       });
     });
   };

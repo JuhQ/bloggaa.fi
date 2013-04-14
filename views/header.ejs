@@ -30,11 +30,16 @@
           </button>
           <a class="brand" href="/">Bloggaa!</a>
           <div class="nav-collapse collapse">
-            <!--
+
+          <%
+          if(session.user) {
+          %>
             <p class="navbar-text pull-right">
-              Logged in as <a href="#" class="navbar-link">Username</a>
+              Logged in as <a href="#" class="navbar-link"><%=session.user.email%></a>
             </p>
-            -->
+          <%
+          }
+          %>
             <ul class="nav">
               <li class="active"><a href="/">Etusivu</a></li>
               <li><a href="/login">Kirjaudu</a></li>

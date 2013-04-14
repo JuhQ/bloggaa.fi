@@ -34,7 +34,8 @@
     }
     return res.render("settings", {
       meta: "",
-      title: "Asetukset - Bloggaa.fi"
+      title: "Asetukset - Bloggaa.fi",
+      session: req.session
     });
   };
 
@@ -63,7 +64,8 @@
       }
       return res.render("settings", {
         meta: "",
-        title: "Asetukset tallennettu - Bloggaa.fi"
+        title: "Asetukset tallennettu - Bloggaa.fi",
+        session: req.session
       });
     });
   };

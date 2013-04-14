@@ -5,6 +5,7 @@ exports.register = (req, res) ->
   res.render "register",
     meta: ""
     title: "Rekisteröinti - Bloggaa.fi"
+    session: req.session
 
 exports.login = (req, res) ->
   error = 1 if req.params.error
@@ -12,6 +13,7 @@ exports.login = (req, res) ->
     meta: ""
     title: "Kirjautuminen - Bloggaa.fi"
     error: error
+    session: req.session
 
 # Authenticate using our plain-object database of doom!
 authenticate = (email, password, callback) ->
@@ -33,14 +35,10 @@ authenticate = (email, password, callback) ->
 
 login = (req, res) ->
   authenticate req.body.email, req.body.password, (err, user) ->
-    unless user
-      res.redirect "/login/error"
-      return
+    return res.redirect "/login/error" unless user
 
-    console.log "yayayayayaya login"
     # Regenerate session when signing in to prevent fixation
     req.session.regenerate ->
-      console.log "user", user
       req.session.user =
         id: user._id
         email: user.email
@@ -107,6 +105,7 @@ exports.createAccount = (req, res) ->
             name: req.body.blogname
             url: req.body.blogname.toLowerCase()
             added: new Date()
+            theme: "default"
 
           blog.save()
           login req, res

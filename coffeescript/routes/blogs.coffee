@@ -18,6 +18,16 @@ exports.write = (req, res) ->
       blogContent: ""
       action: "saveBlog"
       blogid: blog._id
+      session: req.session
+
+exports.remove = (req, res) ->
+  return res.redirect "/" unless req.session.user
+
+  domain = req.get('host').replace(req.subdomains[0] + ".", "")
+  blogName = req.params.blog.toLowerCase()
+  Blog = mongoose.model 'blogs'
+  Blog.where('_id').equals(req.params.id).remove()
+  res.redirect "/dashboard"
 
 exports.saveBlog = (req, res) ->
   return res.redirect "/" unless req.session.user
@@ -57,6 +67,7 @@ exports.edit = (req, res) ->
         blogTitle: data.title
         blogContent: data.content
         action: "saveEdit/" + data._id
+        session: req.session
 
 exports.saveEdit = (req, res) ->
   return res.redirect "/" unless req.session.user
@@ -65,14 +76,15 @@ exports.saveEdit = (req, res) ->
   title = req.body.title
   url = title.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g,'-')
 
-  Blog.update { _id: req.body.id, user: req.session.user.id },
+  Blog.update { _id: req.body.blogid, user: req.session.user.id },
     $set:
       edited: new Date()
       title: title
       url: url
       content: req.body.content
       hidden: req.body.hidden is 1
-  res.redirect "/"
+  , () ->
+    res.redirect "/dashboard"
 
 exports.showblog = (req, res) ->
   domain = req.get('host').replace(req.subdomains[0] + ".", "")
@@ -105,6 +117,7 @@ exports.showblog = (req, res) ->
             meta: ""
             blog: blogName
             domain: domain
+            session: req.session
 
     unless blogData
       res.render "themes/default/blog-not-found",
@@ -112,6 +125,7 @@ exports.showblog = (req, res) ->
         meta: ""
         blog: blogName
         domain: domain
+        session: req.session
 
 exports.showpost = (req, res) ->
   domain = req.get('host').replace(req.subdomains[0] + ".", "")
@@ -143,6 +157,7 @@ exports.showpost = (req, res) ->
             title: "Bloggaa.fi"
             meta: ""
             blog: blogName
+            session: req.session
 
     unless blogData
       res.render "themes/default/blog-not-found",
@@ -150,6 +165,7 @@ exports.showpost = (req, res) ->
         meta: ""
         blog: blogName
         domain: domain
+        session: req.session
 
 exports.latestBlogs = (req, res) ->
   domain = req.get('host').replace(req.subdomains[0] + ".", "")
@@ -162,6 +178,7 @@ exports.latestBlogs = (req, res) ->
       meta: ""
       domain: domain
       moment: moment
+      session: req.session
 
 exports.latestTexts = (req, res) ->
   domain = req.get('host').replace(req.subdomains[0] + ".", "")
@@ -174,3 +191,4 @@ exports.latestTexts = (req, res) ->
       meta: ""
       domain: domain
       moment: moment
+      session: req.session
