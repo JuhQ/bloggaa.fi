@@ -8,11 +8,13 @@
 
     blogSchema = mongoose.Schema({
       name: 'String',
+      title: 'String',
       url: 'String',
       disqus: 'String',
       googleanalytics: 'String',
       sidebar: 'String',
       theme: 'String',
+      description: 'String',
       user: 'ObjectId',
       added: 'Date',
       lastpost: 'Date'

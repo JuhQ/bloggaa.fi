@@ -24,7 +24,6 @@
           return res.render("dashboard", {
             title: "Bloggaa.fi",
             data: data,
-            meta: "",
             session: req.session
           });
         });

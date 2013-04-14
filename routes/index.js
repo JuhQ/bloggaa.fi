@@ -9,7 +9,6 @@
     domain = req.get('host').replace(req.subdomains[0] + ".", "");
     options = {
       title: "Bloggaa.fi",
-      meta: "",
       domain: domain,
       session: req.session
     };
@@ -29,44 +28,49 @@
   };
 
   exports.settings = function(req, res) {
-    if (!req.session.user_id) {
+    if (!req.session.user.id) {
       return res.redirect("/");
     }
     return res.render("settings", {
-      meta: "",
       title: "Asetukset - Bloggaa.fi",
       session: req.session
     });
   };
 
   exports.saveSettings = function(req, res) {
-    var Blog, blogName, blogtitle;
+    var Blog, blogName, blogtitle, url;
 
-    if (!req.session.user_id) {
+    if (!req.session.user.id) {
       return res.redirect("/");
     }
-    blogName = req.params.blog.toLowerCase();
-    blogtitle = req.params.blog;
+    blogName = req.body.blog.toLowerCase();
+    blogtitle = req.body.blog;
+    url = req.body.blog.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g, '-');
     Blog = mongoose.model('blogs');
     return Blog.findOne({
-      url: blogName,
-      title: blogtitle
+      user: req.session.user.id,
+      _id: req.body.id
     }).exec(function(err, data) {
       if (!data) {
-        Blog.update({
+        return Blog.update({
           _id: data._id
         }, {
           $set: {
-            url: blogName,
-            title: blogtitle
+            name: req.body.name,
+            url: url,
+            disqus: req.body.disqus,
+            googleanalytics: req.body.googleanalytics,
+            sidebar: req.body.sidebar,
+            theme: req.body.theme,
+            description: req.body.description
           }
+        }, function() {
+          return res.render("settings", {
+            title: "Asetukset tallennettu - Bloggaa.fi",
+            session: req.session
+          });
         });
       }
-      return res.render("settings", {
-        meta: "",
-        title: "Asetukset tallennettu - Bloggaa.fi",
-        session: req.session
-      });
     });
   };
 

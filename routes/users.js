@@ -5,7 +5,6 @@
 
   exports.register = function(req, res) {
     return res.render("register", {
-      meta: "",
       title: "Rekisteröinti - Bloggaa.fi",
       session: req.session
     });
@@ -18,7 +17,6 @@
       error = 1;
     }
     return res.render("login", {
-      meta: "",
       title: "Kirjautuminen - Bloggaa.fi",
       error: error,
       session: req.session

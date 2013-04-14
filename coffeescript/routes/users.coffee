@@ -3,14 +3,12 @@ mongoose = require('mongoose')
 # Prints registration form
 exports.register = (req, res) ->
   res.render "register",
-    meta: ""
     title: "Rekisteröinti - Bloggaa.fi"
     session: req.session
 
 exports.login = (req, res) ->
   error = 1 if req.params.error
   res.render "login",
-    meta: ""
     title: "Kirjautuminen - Bloggaa.fi"
     error: error
     session: req.session
@@ -109,4 +107,3 @@ exports.createAccount = (req, res) ->
 
           blog.save()
           login req, res
-        

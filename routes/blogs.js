@@ -22,7 +22,6 @@
       }
       return res.render("blogeditor", {
         title: "Kirjoita - Bloggaa.fi",
-        meta: "",
         blogTitle: "",
         blogContent: "",
         action: "saveBlog",
@@ -95,7 +94,6 @@
       if (data) {
         return res.render("blogeditor", {
           title: "Muokkaus - Bloggaa.fi",
-          meta: "",
           blogid: data._id,
           blogTitle: data.title,
           blogContent: data.content,
@@ -158,7 +156,6 @@
             res.render("themes/kukkatheme/blogposts", {
               title: title + "Bloggaa.fi",
               data: data,
-              meta: "",
               blog: blogName,
               moment: moment,
               domain: domain,
@@ -168,7 +165,6 @@
           if (!data) {
             return res.render("themes/kukkatheme/nocontent", {
               title: "Bloggaa.fi",
-              meta: "",
               blog: blogName,
               domain: domain,
               session: req.session
@@ -179,7 +175,6 @@
       if (!blogData) {
         return res.render("themes/kukkatheme/blog-not-found", {
           title: "Bloggaa.fi",
-          meta: "",
           blog: blogName,
           domain: domain,
           session: req.session
@@ -209,7 +204,6 @@
           if (data) {
             res.render("themes/kukkatheme/blogpost", {
               title: data.title + " - Bloggaa.fi",
-              meta: "",
               data: data,
               blog: blogName,
               moment: moment,
@@ -220,7 +214,6 @@
           if (!data) {
             return res.render("themes/kukkatheme/nocontent", {
               title: "Bloggaa.fi",
-              meta: "",
               blog: blogName,
               session: req.session
             });
@@ -230,7 +223,6 @@
       if (!blogData) {
         return res.render("themes/kukkatheme/blog-not-found", {
           title: "Bloggaa.fi",
-          meta: "",
           blog: blogName,
           domain: domain,
           session: req.session
@@ -251,7 +243,6 @@
       return res.render("latestsblogs", {
         title: "Uusimmat blogit - Bloggaa.fi",
         data: data,
-        meta: "",
         domain: domain,
         moment: moment,
         session: req.session
@@ -271,7 +262,6 @@
       return res.render("latestsblogposts", {
         title: "Uusimmat kirjoitukset - Bloggaa.fi",
         data: data,
-        meta: "",
         domain: domain,
         moment: moment,
         session: req.session

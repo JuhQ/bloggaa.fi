@@ -53,6 +53,8 @@
 
   app.get("/dashboard/settings", routes.settings);
 
+  app.get("/dashboard/saved", routes.settings);
+
   app.post("/dashboard/settings", routes.saveSettings);
 
   app.get("/dashboard/write", routesBlogs.write);

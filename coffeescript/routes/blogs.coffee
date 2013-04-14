@@ -13,7 +13,6 @@ exports.write = (req, res) ->
 
     res.render "blogeditor",
       title: "Kirjoita - Bloggaa.fi"
-      meta: ""
       blogTitle: ""
       blogContent: ""
       action: "saveBlog"
@@ -62,7 +61,6 @@ exports.edit = (req, res) ->
     if data
       res.render "blogeditor",
         title: "Muokkaus - Bloggaa.fi"
-        meta: ""
         blogid: data._id
         blogTitle: data.title
         blogContent: data.content
@@ -106,7 +104,6 @@ exports.showblog = (req, res) ->
           res.render "themes/kukkatheme/blogposts",
             title: title + "Bloggaa.fi"
             data: data
-            meta: ""
             blog: blogName
             moment: moment
             domain: domain
@@ -114,7 +111,6 @@ exports.showblog = (req, res) ->
         unless data
           res.render "themes/kukkatheme/nocontent",
             title: "Bloggaa.fi"
-            meta: ""
             blog: blogName
             domain: domain
             session: req.session
@@ -122,7 +118,6 @@ exports.showblog = (req, res) ->
     unless blogData
       res.render "themes/kukkatheme/blog-not-found",
         title: "Bloggaa.fi"
-        meta: ""
         blog: blogName
         domain: domain
         session: req.session
@@ -145,7 +140,6 @@ exports.showpost = (req, res) ->
         if data
           res.render "themes/kukkatheme/blogpost",
             title: data.title + " - Bloggaa.fi"
-            meta: ""
             data: data
             blog: blogName
             moment: moment
@@ -155,14 +149,12 @@ exports.showpost = (req, res) ->
         unless data
           res.render "themes/kukkatheme/nocontent",
             title: "Bloggaa.fi"
-            meta: ""
             blog: blogName
             session: req.session
 
     unless blogData
       res.render "themes/kukkatheme/blog-not-found",
         title: "Bloggaa.fi"
-        meta: ""
         blog: blogName
         domain: domain
         session: req.session
@@ -175,7 +167,6 @@ exports.latestBlogs = (req, res) ->
     res.render "latestsblogs",
       title: "Uusimmat blogit - Bloggaa.fi"
       data: data
-      meta: ""
       domain: domain
       moment: moment
       session: req.session
@@ -188,7 +179,6 @@ exports.latestTexts = (req, res) ->
     res.render "latestsblogposts",
       title: "Uusimmat kirjoitukset - Bloggaa.fi"
       data: data
-      meta: ""
       domain: domain
       moment: moment
       session: req.session
