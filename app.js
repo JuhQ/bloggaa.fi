@@ -23,11 +23,7 @@
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(express.cookieParser("bloggaa.fi is awesome"));
-    app.use(express.session({
-      cookie: {
-        domain: "yoshi.local"
-      }
-    }));
+    app.use(express.session());
     return app.use(app.router);
   });
 

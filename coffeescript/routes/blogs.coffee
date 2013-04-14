@@ -91,7 +91,7 @@ exports.showblog = (req, res) ->
           title = ""
           title = blogData.title + " - " if blogData.title
 
-          res.render "themes/default/blogposts",
+          res.render "themes/kukkatheme/blogposts",
             title: title + "Bloggaa.fi"
             data: data
             meta: ""
@@ -100,14 +100,14 @@ exports.showblog = (req, res) ->
             domain: domain
             session: req.session
         unless data
-          res.render "themes/default/nocontent",
+          res.render "themes/kukkatheme/nocontent",
             title: "Bloggaa.fi"
             meta: ""
             blog: blogName
             domain: domain
 
     unless blogData
-      res.render "themes/default/blog-not-found",
+      res.render "themes/kukkatheme/blog-not-found",
         title: "Bloggaa.fi"
         meta: ""
         blog: blogName
@@ -129,7 +129,7 @@ exports.showpost = (req, res) ->
         url: req.params.title.toLowerCase()
       }).exec (err, data) ->
         if data
-          res.render "themes/default/blogpost",
+          res.render "themes/kukkatheme/blogpost",
             title: data.title + " - Bloggaa.fi"
             meta: ""
             data: data
@@ -139,13 +139,13 @@ exports.showpost = (req, res) ->
             session: req.session
 
         unless data
-          res.render "themes/default/nocontent",
+          res.render "themes/kukkatheme/nocontent",
             title: "Bloggaa.fi"
             meta: ""
             blog: blogName
 
     unless blogData
-      res.render "themes/default/blog-not-found",
+      res.render "themes/kukkatheme/blog-not-found",
         title: "Bloggaa.fi"
         meta: ""
         blog: blogName

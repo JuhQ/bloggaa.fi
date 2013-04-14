@@ -14,11 +14,11 @@ app.configure ->
   app.use express.bodyParser()
   app.use express.methodOverride()
   app.use express.cookieParser("bloggaa.fi is awesome")
-  #app.use express.session()
-  app.use express.session(
-    cookie:
-      domain: "yoshi.local"
-  )
+  app.use express.session()
+  #app.use express.session(
+  #  cookie:
+  #    domain: "localhost"
+  #)
   app.use app.router
 
 app.configure "development", ->

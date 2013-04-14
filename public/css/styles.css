@@ -5,3 +5,41 @@ body {
 .writer textarea {
   height: 200px;
 }
+body {
+  background: grey;
+}
+.blog-post,
+.sidebar-block {
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+}
+.blog-post {
+  background: white;
+  padding: 20px;
+  margin: 0 0 30px 0;
+}
+.sidebar-block {
+  background: white;
+  padding: 20px;
+}
+.sidebar-block-header {
+  font-size: 18px;
+  font-weight: bold;
+}
+.kukkatheme h1,
+.kukkatheme h2,
+.kukkatheme h3,
+.kukkatheme h4,
+.kukkatheme h5,
+.kukkatheme p,
+.kukkatheme a,
+.kukkatheme div {
+  font-family: 'Noto Sans', sans-serif;
+}
+.kukkatheme img {
+  border: 0;
+}
+.kukkatheme .sidebar-block-header {
+  padding: 0 0 10px 0;
+}
