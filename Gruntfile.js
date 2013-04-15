@@ -32,11 +32,20 @@ module.exports = function(grunt) {
       }
     },
     less: {
-      development: {
+      glob_to_multiple: 
+        {
+          expand: true,     // Enable dynamic expansion.
+          cwd: 'less',      // Src matches are relative to this path.
+          src: ['**/*.less', '!mixins.less'], // Actual pattern(s) to match.
+          dest: 'public/css/',   // Destination path prefix.
+          ext: '.css'   // Dest filepaths will have this extension.
+        }
+      
+        /*
         files: {
           "public/css/styles.css": "less/*.less"
         }
-      }
+        */
     },
     watch: {
       src: {
