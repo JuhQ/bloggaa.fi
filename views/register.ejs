@@ -1,20 +1,22 @@
 <%= include header.ejs %>
 
-    <div class="container">
-      <form class="form-signin" method="post" action="/register">
-        <h2 class="form-signin-heading">Rekisteröinti</h2>
-        <input type="email" name="email" class="input-block-level" placeholder="Email" />
-        <input type="password" name="password" class="input-block-level" placeholder="Salasana" />
-        
-        <div class="input-append">
-          <input class="span2" name="blogname" type="text" placeholder="Blogin osoite" />
-          <span class="add-on">.bloggaa.fi</span>
-        </div>
+<div class="container">
+  <form class="form-signin" method="post" action="/register">
+    <fieldset>
+      <legend>Rekisteröinti</legend>
+      <input type="email" name="email" class="input-block-level" placeholder="Email" />
+      <input type="password" name="password" class="input-block-level" placeholder="Salasana" />
+      
+      <div class="input-append">
+        <input class="span2" name="blogname" type="text" placeholder="Blogin osoite" />
+        <span class="add-on">.bloggaa.fi</span>
+      </div>
 
-        <div class="clearfix"></div>
-        <button class="btn btn-large btn-primary" type="submit">Luo tunnus</button>
-      </form>
-    </div>
-
+      <div class="clearfix"></div>
+      <button class="btn btn-large btn-primary" type="submit">Luo tunnus</button>
+      tai <a href="/login">Kirjaudu sisään</a>
+    </fieldset>
+  </form>
+</div>
 
 <%= include footer.ejs %>

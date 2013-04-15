@@ -4,9 +4,13 @@
       routes: {
         "": "index",
         "write": "write",
-        "edit(/:id)": "write"
+        "edit(/:id)": "write",
+        "dashboard(/edit/:id)": "dashboard"
       },
       index: function() {},
+      dashboard: function() {
+        return new WriteView();
+      },
       write: function() {
         return new WriteView();
       }

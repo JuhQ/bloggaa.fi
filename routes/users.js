@@ -73,7 +73,7 @@
     var hash;
 
     hash = require("../utils/password").hash;
-    if (req.session.user_id) {
+    if (req.session.user) {
       res.jsonp({
         fail: "logged-in"
       });

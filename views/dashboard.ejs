@@ -1,24 +1,40 @@
 <%= include header.ejs %>
 
-<%
-data.forEach(function(data, i) {
-%>
-  <h1><a href="/<%=data.url%>"><%=data.title%></a></h1>
-  <p>
-    <%
-    if(session.user && session.user.id == data.user) {
-    %>
-    <a href="/dashboard/edit/<%=data._id%>">Muokkaa</a>
-    <a href="/dashboard/delete/<%=data._id%>">Poista</a>
-    <%
-    }
-    %>
-  </p>
-  <p>
-    <%-data.content.replace(/\n/g, "<br />")%>
-  </p>
-<%
-});
-%>
+<div class="container">
+  <h1>Blogin hallinta</h1>
+  <a href="/dashboard/settings">Blogin asetukset</a>
 
+  <div class="row-fluid">
+    <div class="span4">
+      <h4>Kirjoita ;)</h4>
+      <%= include blogeditor.ejs %>
+    </div>
+    <div class="span8">
+      <%
+      data.forEach(function(data, i) {
+      %>
+      <p>
+        <a href="/dashboard/edit/<%=data._id%>"><i class="icon-edit"></i> Muokkaa</a>
+        <a href="/dashboard/delete/<%=data._id%>"><i class="icon-remove"></i> Poista</a>
+        <%
+        if(!data.hidden) {
+        %>
+          <a href="/dashboard/hide/<%=data._id%>"><i class="icon-flag"></i> Piilota</a>
+        <%
+        } else {
+        %>
+          <a href="/dashboard/show/<%=data._id%>"><i class="icon-flag"></i> Poista piilotus</a>
+        <%
+        }
+        %>
+        -
+        <a href="http://<%=url%>.<%=domain%>/<%=data.url%>"><%=data.title%></a>
+      </p>
+      <%
+      });
+      %>
+    </div>
+  </div>
+
+</div>
 <%= include footer.ejs %>

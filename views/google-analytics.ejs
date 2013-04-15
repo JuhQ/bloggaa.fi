@@ -1,8 +1,18 @@
 
     <script type="text/javascript">
     var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-39770296-1']);
-    _gaq.push(['_trackPageview']);
+    _gaq.push(
+      ['_setAccount', 'UA-39770296-1'],
+      ['_trackPageview']
+      <%
+      if(typeof blog != "undefined" && blog.googleanalytics) {
+      %>,
+      ['b._setAccount', '<%=blog.googleanalytics%>'],
+      ['b._trackPageview']
+      <%
+      }
+      %>
+    );
 
     (function() {
       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;

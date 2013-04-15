@@ -1,28 +1,83 @@
 <%= include header.ejs %>
 
-    <div class="container">
-      <form class="form-signin" method="post" action="/settings">
-        <h2 class="form-signin-heading">Päivitä tietoja</h2>
-        <input type="email" name="email" class="input-block-level" placeholder="Email" />
-        <input type="password" name="password" class="input-block-level" placeholder="Salasana" />
-        <input type="password" name="password2" class="input-block-level" placeholder="Salasana" />
+<div class="container settings">
+  <div class="row">
+    <div class="span6">
+      <form class="form-signin" method="post" action="/dashboard/settings">
+        <input type="hidden" name="id" value="<%=blog._id%>" />
+        <fieldset>
+          <legend>Päivitä blogin tietoja</legend>
+          <label>
+            Blogin nimi
+            <input type="text" name="name" class="input-block-level" placeholder="Blogin nimi" value="<%=blog.name || ""%>" />
+          </label>
 
-        <input type="text" name="blogtitle" class="input-block-level" placeholder="Blogin nimi" />
-        <textarea name="sidebar" placeholder="Voit tähän lisätä vapaasti tekstiä tai html:ää."></textarea>
-        <textarea name="description" placeholder="Blogin kuvaus"></textarea>
+          <label>
+            Kuvaus blogistasi
+            <textarea name="description" class="input-block-level" placeholder="Kuvaus blogistasi"><%=blog.description || ""%></textarea>
+          </label>
+          <label>
+            Vapaamuotoista tekstiä joka näkyy blogisi reunassa
+            <textarea name="sidebar" class="input-block-level" placeholder="Vapaamuotoista tekstiä joka näkyy blogisi reunassa"><%=blog.sidebar || ""%></textarea>
+          </label>
 
-        <label>
-            Theme
-            <option name="theme">
-                <select value="default">Default</select>
-                <select value="kukkatheme">Kukka</select>
-            </option>
-        </label>
-
-        <div class="clearfix"></div>
-        <button class="btn btn-large btn-primary" type="submit">Tallenna</button>
+          <label>
+            Google Analytics seuranta ID
+            <input type="text" name="googleanalytics" class="input-block-level" placeholder="Google Analytics -tunnus" value="<%=blog.googleanalytics || ""%>"  />
+          </label>
+          <label>
+            Disqus tunnus, kommentointia varten
+            <input type="text" name="disqus" class="input-block-level" placeholder="Disqus -tunnus" value="<%=blog.disqus || ""%>" />
+          </label>
+          <label>
+            AddThis ID, omaa linkkiseurantaa varten
+            <input type="text" name="addthis" class="input-block-level" placeholder="AddThis ID" value="<%=blog.addthis || ""%>" />
+          </label>
+          <label>
+            Otsikon fontti
+            <input type="text" name="titlefont" class="input-block-level" placeholder="Fontti" value="<%=blog.titlefont || ""%>" />
+          </label>
+          <label>
+            Sisällön fontti
+            <input type="text" name="contentfont" class="input-block-level" placeholder="Fontti" value="<%=blog.contentfont || ""%>" />
+          </label>
+          
+          <label>
+            Blogin teema<br />
+            <select name="theme">
+              <option value="default">Default</option>
+              <option value="kukkatheme">Kukka</option>
+            </select>
+          </label>
+          <button class="btn btn-large btn-primary" type="submit">Tallenna blogin tiedot</button>
+        </fieldset>
       </form>
     </div>
 
+    <div class="span6">
+      <form class="form-signin" method="post" action="/dashboard/settings/account">
+
+        <fieldset>
+          <legend>Päivitä tunnuksen tiedot</legend>
+          <label>
+            Email
+            <input type="email" name="email" class="input-block-level" placeholder="Email" value="<%=session.user.email%>" />
+          </label>
+          <label>
+            Salasana
+            <input type="password" name="password" class="input-block-level" placeholder="Salasana" />
+          </label>
+          <label>
+            Salasana uudelleen
+            <input type="password" name="password2" class="input-block-level" placeholder="Salasana uudelleen" />
+          </label>
+
+          <div class="clearfix"></div>
+          <button class="btn btn-large btn-primary" type="submit">Tallenna tunnuksen tiedot</button>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
 
 <%= include footer.ejs %>

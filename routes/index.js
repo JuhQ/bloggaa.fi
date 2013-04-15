@@ -28,49 +28,70 @@
   };
 
   exports.settings = function(req, res) {
-    if (!req.session.user.id) {
+    var Blog;
+
+    if (!req.session.user) {
       return res.redirect("/");
     }
-    return res.render("settings", {
-      title: "Asetukset - Bloggaa.fi",
-      session: req.session
+    Blog = mongoose.model('blogs');
+    return Blog.findOne({
+      user: req.session.user.id
+    }).exec(function(err, data) {
+      console.log(data);
+      return res.render("settings", {
+        title: "Asetukset - Bloggaa.fi",
+        session: req.session,
+        blog: data
+      });
     });
   };
 
-  exports.saveSettings = function(req, res) {
-    var Blog, blogName, blogtitle, url;
+  exports.saveAccountSettings = function(req, res) {
+    return res.send("Hello world");
+  };
 
-    if (!req.session.user.id) {
+  exports.saveSettings = function(req, res) {
+    var Blog, url;
+
+    if (!req.session.user) {
       return res.redirect("/");
     }
-    blogName = req.body.blog.toLowerCase();
-    blogtitle = req.body.blog;
-    url = req.body.blog.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g, '-');
+    url = req.body.name.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g, '-');
     Blog = mongoose.model('blogs');
     return Blog.findOne({
       user: req.session.user.id,
       _id: req.body.id
     }).exec(function(err, data) {
       if (!data) {
-        return Blog.update({
-          _id: data._id
-        }, {
-          $set: {
-            name: req.body.name,
-            url: url,
-            disqus: req.body.disqus,
-            googleanalytics: req.body.googleanalytics,
-            sidebar: req.body.sidebar,
-            theme: req.body.theme,
-            description: req.body.description
-          }
-        }, function() {
+        return res.redirect("/");
+      }
+      return Blog.update({
+        _id: data._id
+      }, {
+        $set: {
+          name: req.body.name,
+          url: url,
+          disqus: req.body.disqus,
+          googleanalytics: req.body.googleanalytics,
+          theme: req.body.theme,
+          sidebar: req.body.sidebar,
+          description: req.body.description,
+          addthis: req.body.addthis,
+          titlefont: req.body.titlefont,
+          contentfont: req.body.contentfont
+        }
+      }, function() {
+        return Blog.findOne({
+          user: req.session.user.id,
+          _id: req.body.id
+        }).exec(function(err, data) {
           return res.render("settings", {
             title: "Asetukset tallennettu - Bloggaa.fi",
-            session: req.session
+            session: req.session,
+            blog: data
           });
         });
-      }
+      });
     });
   };
 

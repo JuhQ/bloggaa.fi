@@ -53,7 +53,7 @@ exports.logout = (req, res) ->
 exports.createAccount = (req, res) ->
   hash = require("../utils/password").hash
 
-  if req.session.user_id
+  if req.session.user
     res.jsonp fail: "logged-in"
     return
 

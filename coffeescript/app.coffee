@@ -40,8 +40,11 @@ app.get "/dashboard", routesDashboard.index
 app.get "/dashboard/settings", routes.settings
 app.get "/dashboard/saved", routes.settings
 app.post "/dashboard/settings", routes.saveSettings
+app.post "/dashboard/settings/account", routes.saveAccountSettings
 app.get "/dashboard/write", routesBlogs.write
 app.get "/dashboard/edit/:id", routesBlogs.edit
+app.get "/dashboard/show/:id", routesBlogs.show
+app.get "/dashboard/hide/:id", routesBlogs.hide
 app.get "/dashboard/delete/:id", routesBlogs.remove
 app.post "/dashboard/saveBlog", routesBlogs.saveBlog
 app.post "/dashboard/saveEdit/:id", routesBlogs.saveEdit

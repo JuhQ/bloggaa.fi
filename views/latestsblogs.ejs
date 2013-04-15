@@ -3,7 +3,7 @@
 <%
 data.forEach(function(data, i) {
 %>
-  <p><a href="http://<%=data.url%>.<%=domain%>"><%=data.name%></a> - <%=moment(data.added).fromNow()%></p>
+  <p><a href="http://<%=data.url%>.<%=domain%>"><%=data.name%></a> - <span class="muted"><%=moment(data.added).fromNow()%></span></p>
 <%
 });
 %>

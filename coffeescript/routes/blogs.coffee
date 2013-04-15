@@ -2,6 +2,8 @@ mongoose = require('mongoose')
 moment = require('moment')
 moment.lang("fi")
 
+addthis = "ra-4e04fe637cc97ed4"
+
 exports.write = (req, res) ->
   return res.redirect "/" unless req.session.user
 
@@ -11,22 +13,38 @@ exports.write = (req, res) ->
   }).exec (err, blog) ->
     return res.redirect "/" unless blog
 
-    res.render "blogeditor",
+    res.render "blogeditorpage",
       title: "Kirjoita - Bloggaa.fi"
       blogTitle: ""
       blogContent: ""
       action: "saveBlog"
+      url: blog.url
       blogid: blog._id
       session: req.session
 
 exports.remove = (req, res) ->
   return res.redirect "/" unless req.session.user
-
-  domain = req.get('host').replace(req.subdomains[0] + ".", "")
-  blogName = req.params.blog.toLowerCase()
-  Blog = mongoose.model 'blogs'
-  Blog.where('_id').equals(req.params.id).remove()
+  Blog = mongoose.model 'blogposts'
+  Blog.where('_id').equals(req.params.id).where('user').equals(req.session.user.id).remove()
   res.redirect "/dashboard"
+
+exports.hide = (req, res) ->
+  return res.redirect "/" unless req.session.user
+  Blog = mongoose.model 'blogposts'
+  Blog.update { _id: req.params.id, user: req.session.user.id },
+    $set:
+      hidden: true
+  , () ->
+    res.redirect "/dashboard"
+
+exports.show = (req, res) ->
+  return res.redirect "/" unless req.session.user
+  Blog = mongoose.model 'blogposts'
+  Blog.update { _id: req.params.id, user: req.session.user.id },
+    $set:
+      hidden: false
+  , () ->
+    res.redirect "/dashboard"
 
 exports.saveBlog = (req, res) ->
   return res.redirect "/" unless req.session.user
@@ -42,30 +60,37 @@ exports.saveBlog = (req, res) ->
     user: req.session.user.id
     blog: req.body.blogid
   blog.save (err) ->
-
     Blog = mongoose.model 'blogs'
-    Blog.update { _id: req.body.blogid },
+    Blog.update { _id: req.body.blogid, user: req.session.user.id },
       $set:
         lastpost: new Date()
-
-    res.redirect "/"
+    , () ->
+      res.redirect "/dashboard"
 
 exports.edit = (req, res) ->
   return res.redirect "/" unless req.session.user
-  Blogs = mongoose.model 'blogposts'
-  Blogs.findOne({
-    _id: req.params.id
+
+  Blog = mongoose.model 'blogs'
+  Blog.findOne({
     user: req.session.user.id
-  }).exec (err, data) ->
-    return res.redirect "/" unless data
-    if data
-      res.render "blogeditor",
-        title: "Muokkaus - Bloggaa.fi"
-        blogid: data._id
-        blogTitle: data.title
-        blogContent: data.content
-        action: "saveEdit/" + data._id
-        session: req.session
+  }).exec (err, blog) ->
+    return res.redirect "/" unless blog
+
+    Blogs = mongoose.model 'blogposts'
+    Blogs.findOne({
+      _id: req.params.id
+      user: req.session.user.id
+    }).exec (err, data) ->
+      return res.redirect "/" unless data
+      if data
+        res.render "blogeditorpage",
+          title: "Muokkaus - Bloggaa.fi"
+          blogid: data._id
+          blogTitle: data.title
+          blogContent: data.content
+          url: blog.url
+          action: "saveEdit/" + data._id
+          session: req.session
 
 exports.saveEdit = (req, res) ->
   return res.redirect "/" unless req.session.user
@@ -99,32 +124,30 @@ exports.showblog = (req, res) ->
       }).sort('-added').exec (err, data) ->
         if data
           title = ""
-          title = blogData.title + " - " if blogData.title
-
-          res.render "themes/kukkatheme/blogposts",
+          title = blogData.name + " - " if blogData.name
+          blogData.addthis = blogData.addthis or addthis
+          blogData.sidebar = blogData.sidebar or ""
+          res.render "themes/" + blogData.theme + "/blogposts",
             title: title + "Bloggaa.fi"
+            blog: blogData
             data: data
-            blog: blogName
             moment: moment
             domain: domain
             session: req.session
         unless data
-          res.render "themes/kukkatheme/nocontent",
+          res.render "themes/" + blogData.theme + "/nocontent",
             title: "Bloggaa.fi"
-            blog: blogName
             domain: domain
             session: req.session
 
     unless blogData
-      res.render "themes/kukkatheme/blog-not-found",
+      res.render "themes/default/blog-not-found",
         title: "Bloggaa.fi"
-        blog: blogName
         domain: domain
         session: req.session
 
 exports.showpost = (req, res) ->
   domain = req.get('host').replace(req.subdomains[0] + ".", "")
-  blogName = req.params.blog.toLowerCase()
   Blog = mongoose.model 'blogs'
   Blog.findOne({
     url: req.params.blog.toLowerCase()
@@ -138,24 +161,27 @@ exports.showpost = (req, res) ->
         url: req.params.title.toLowerCase()
       }).exec (err, data) ->
         if data
-          res.render "themes/kukkatheme/blogpost",
+          Blogs.update { _id: data._id },
+            $inc: visits: 1
+          , () ->
+          blogData.addthis = blogData.addthis or addthis
+          blogData.sidebar = blogData.sidebar or ""
+          res.render "themes/" + blogData.theme + "/blogpost",
             title: data.title + " - Bloggaa.fi"
             data: data
-            blog: blogName
+            blog: blogData
             moment: moment
             domain: domain
             session: req.session
 
         unless data
-          res.render "themes/kukkatheme/nocontent",
+          res.render "themes/" + blogData.theme + "/nocontent",
             title: "Bloggaa.fi"
-            blog: blogName
             session: req.session
 
     unless blogData
-      res.render "themes/kukkatheme/blog-not-found",
+      res.render "themes/default/blog-not-found",
         title: "Bloggaa.fi"
-        blog: blogName
         domain: domain
         session: req.session
 

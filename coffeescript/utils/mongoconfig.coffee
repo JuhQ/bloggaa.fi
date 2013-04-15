@@ -2,12 +2,14 @@ mongoose = require('mongoose')
 exports.config = () ->
   blogSchema = mongoose.Schema {
     name: 'String'
-    title: 'String'
     url: 'String'
+    addthis: 'String'
     disqus: 'String'
     googleanalytics: 'String'
     sidebar: 'String'
     theme: 'String'
+    titlefont: 'String'
+    contentfont: 'String'
     description: 'String'
     user: 'ObjectId'
     added: 'Date'

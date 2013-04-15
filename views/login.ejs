@@ -1,27 +1,29 @@
 <%= include header.ejs %>
 
-    <div class="container">
-      <form class="form-signin" method="post" action="/login">
-      <%
-      if(error) {
-      %>
-        <div class="alert alert-error">
-          <strong>Voi hitsin pimpulat sentään!</strong><br />
-          Tunnuksesi tai salasanasi oli väärin :(<br />
-          Ei se mitään, kokeilehan uudestaan.
-        </div>
-      <%
-      }
-      %>
-        <h2 class="form-signin-heading">Kirjautuminen</h2>
-        <input type="email" name="email" class="input-block-level" placeholder="Email" />
-        <input type="password" name="password" class="input-block-level" placeholder="Salasana" />
-        
-        <div class="clearfix"></div>
-        <button class="btn btn btn-primary" type="submit">Kirjaudu</button>
-        tai <a href="/register">Luo tunnus</a>
-      </form>
+<div class="container">
+  <form class="form-signin" method="post" action="/login">
+  <%
+  if(error) {
+  %>
+    <div class="alert alert-error">
+      <strong>Voi hitsin pimpulat sentään!</strong><br />
+      Tunnuksesi tai salasanasi oli väärin :(<br />
+      Ei se mitään, kokeilehan uudestaan.
     </div>
+  <%
+  }
+  %>
+    <fieldset>
+      <legend>Kirjautuminen</legend>
+      <input type="email" name="email" class="input-block-level" placeholder="Email" />
+      <input type="password" name="password" class="input-block-level" placeholder="Salasana" />
+      
+      <div class="clearfix"></div>
+      <button class="btn btn btn-primary" type="submit">Kirjaudu sisään</button>
+      tai <a href="/register">Luo tunnus</a>
+    </fieldset>
+  </form>
+</div>
 
 
 <%= include footer.ejs %>

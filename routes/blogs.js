@@ -1,11 +1,13 @@
 (function() {
-  var moment, mongoose;
+  var addthis, moment, mongoose;
 
   mongoose = require('mongoose');
 
   moment = require('moment');
 
   moment.lang("fi");
+
+  addthis = "ra-4e04fe637cc97ed4";
 
   exports.write = function(req, res) {
     var Blog;
@@ -20,11 +22,12 @@
       if (!blog) {
         return res.redirect("/");
       }
-      return res.render("blogeditor", {
+      return res.render("blogeditorpage", {
         title: "Kirjoita - Bloggaa.fi",
         blogTitle: "",
         blogContent: "",
         action: "saveBlog",
+        url: blog.url,
         blogid: blog._id,
         session: req.session
       });
@@ -32,16 +35,52 @@
   };
 
   exports.remove = function(req, res) {
-    var Blog, blogName, domain;
+    var Blog;
 
     if (!req.session.user) {
       return res.redirect("/");
     }
-    domain = req.get('host').replace(req.subdomains[0] + ".", "");
-    blogName = req.params.blog.toLowerCase();
-    Blog = mongoose.model('blogs');
-    Blog.where('_id').equals(req.params.id).remove();
+    Blog = mongoose.model('blogposts');
+    Blog.where('_id').equals(req.params.id).where('user').equals(req.session.user.id).remove();
     return res.redirect("/dashboard");
+  };
+
+  exports.hide = function(req, res) {
+    var Blog;
+
+    if (!req.session.user) {
+      return res.redirect("/");
+    }
+    Blog = mongoose.model('blogposts');
+    return Blog.update({
+      _id: req.params.id,
+      user: req.session.user.id
+    }, {
+      $set: {
+        hidden: true
+      }
+    }, function() {
+      return res.redirect("/dashboard");
+    });
+  };
+
+  exports.show = function(req, res) {
+    var Blog;
+
+    if (!req.session.user) {
+      return res.redirect("/");
+    }
+    Blog = mongoose.model('blogposts');
+    return Blog.update({
+      _id: req.params.id,
+      user: req.session.user.id
+    }, {
+      $set: {
+        hidden: false
+      }
+    }, function() {
+      return res.redirect("/dashboard");
+    });
   };
 
   exports.saveBlog = function(req, res) {
@@ -66,41 +105,54 @@
       var Blog;
 
       Blog = mongoose.model('blogs');
-      Blog.update({
-        _id: req.body.blogid
+      return Blog.update({
+        _id: req.body.blogid,
+        user: req.session.user.id
       }, {
         $set: {
           lastpost: new Date()
         }
+      }, function() {
+        return res.redirect("/dashboard");
       });
-      return res.redirect("/");
     });
   };
 
   exports.edit = function(req, res) {
-    var Blogs;
+    var Blog;
 
     if (!req.session.user) {
       return res.redirect("/");
     }
-    Blogs = mongoose.model('blogposts');
-    return Blogs.findOne({
-      _id: req.params.id,
+    Blog = mongoose.model('blogs');
+    return Blog.findOne({
       user: req.session.user.id
-    }).exec(function(err, data) {
-      if (!data) {
+    }).exec(function(err, blog) {
+      var Blogs;
+
+      if (!blog) {
         return res.redirect("/");
       }
-      if (data) {
-        return res.render("blogeditor", {
-          title: "Muokkaus - Bloggaa.fi",
-          blogid: data._id,
-          blogTitle: data.title,
-          blogContent: data.content,
-          action: "saveEdit/" + data._id,
-          session: req.session
-        });
-      }
+      Blogs = mongoose.model('blogposts');
+      return Blogs.findOne({
+        _id: req.params.id,
+        user: req.session.user.id
+      }).exec(function(err, data) {
+        if (!data) {
+          return res.redirect("/");
+        }
+        if (data) {
+          return res.render("blogeditorpage", {
+            title: "Muokkaus - Bloggaa.fi",
+            blogid: data._id,
+            blogTitle: data.title,
+            blogContent: data.content,
+            url: blog.url,
+            action: "saveEdit/" + data._id,
+            session: req.session
+          });
+        }
+      });
     });
   };
 
@@ -150,22 +202,23 @@
 
           if (data) {
             title = "";
-            if (blogData.title) {
-              title = blogData.title + " - ";
+            if (blogData.name) {
+              title = blogData.name + " - ";
             }
-            res.render("themes/kukkatheme/blogposts", {
+            blogData.addthis = blogData.addthis || addthis;
+            blogData.sidebar = blogData.sidebar || "";
+            res.render("themes/" + blogData.theme + "/blogposts", {
               title: title + "Bloggaa.fi",
+              blog: blogData,
               data: data,
-              blog: blogName,
               moment: moment,
               domain: domain,
               session: req.session
             });
           }
           if (!data) {
-            return res.render("themes/kukkatheme/nocontent", {
+            return res.render("themes/" + blogData.theme + "/nocontent", {
               title: "Bloggaa.fi",
-              blog: blogName,
               domain: domain,
               session: req.session
             });
@@ -173,9 +226,8 @@
         });
       }
       if (!blogData) {
-        return res.render("themes/kukkatheme/blog-not-found", {
+        return res.render("themes/default/blog-not-found", {
           title: "Bloggaa.fi",
-          blog: blogName,
           domain: domain,
           session: req.session
         });
@@ -184,10 +236,9 @@
   };
 
   exports.showpost = function(req, res) {
-    var Blog, blogName, domain;
+    var Blog, domain;
 
     domain = req.get('host').replace(req.subdomains[0] + ".", "");
-    blogName = req.params.blog.toLowerCase();
     Blog = mongoose.model('blogs');
     return Blog.findOne({
       url: req.params.blog.toLowerCase()
@@ -202,28 +253,35 @@
           url: req.params.title.toLowerCase()
         }).exec(function(err, data) {
           if (data) {
-            res.render("themes/kukkatheme/blogpost", {
+            Blogs.update({
+              _id: data._id
+            }, {
+              $inc: {
+                visits: 1
+              }
+            }, function() {});
+            blogData.addthis = blogData.addthis || addthis;
+            blogData.sidebar = blogData.sidebar || "";
+            res.render("themes/" + blogData.theme + "/blogpost", {
               title: data.title + " - Bloggaa.fi",
               data: data,
-              blog: blogName,
+              blog: blogData,
               moment: moment,
               domain: domain,
               session: req.session
             });
           }
           if (!data) {
-            return res.render("themes/kukkatheme/nocontent", {
+            return res.render("themes/" + blogData.theme + "/nocontent", {
               title: "Bloggaa.fi",
-              blog: blogName,
               session: req.session
             });
           }
         });
       }
       if (!blogData) {
-        return res.render("themes/kukkatheme/blog-not-found", {
+        return res.render("themes/default/blog-not-found", {
           title: "Bloggaa.fi",
-          blog: blogName,
           domain: domain,
           session: req.session
         });

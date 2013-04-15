@@ -6,12 +6,14 @@ requirejs.config
     backbone: "libs/backbone"
     underscore: "libs/underscore"
     text: "libs/text"
+    bootstrap: "libs/bootstrap"
 
 define ["jquery", "underscore", "backbone"], ($, _, Backbone) ->
   require [
     "routers/router"
     "libs/fastclick"
-    ], (Router, Fastclick) ->
+    "bootstrap"
+    ], (Router, Fastclick, bootstrap) ->
 
     window.router = new Router()
     Backbone.history.start
