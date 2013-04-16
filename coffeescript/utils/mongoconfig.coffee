@@ -6,6 +6,7 @@ exports.config = () ->
     addthis: 'String'
     disqus: 'String'
     googleanalytics: 'String'
+    facebookComments: 'String'
     sidebar: 'String'
     theme: 'String'
     titlefont: 'String'
@@ -34,6 +35,14 @@ exports.config = () ->
     lastvisit: 'Date'
     lastpost: 'Date'
   }
+  visitSchema = mongoose.Schema {
+    blog: 'ObjectId'
+    user: 'ObjectId'
+    blogpost: 'ObjectId'
+    date: 'Date'
+    ip: 'String'
+  }
+  mongoose.model 'visits', visitSchema
   mongoose.model 'blogs', blogSchema
   mongoose.model 'blogposts', blogPostSchema
   mongoose.model 'users', userSchema

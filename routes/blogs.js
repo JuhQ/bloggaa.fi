@@ -1,5 +1,5 @@
 (function() {
-  var addthis, moment, mongoose;
+  var addthis, facebookComments, moment, mongoose, visitlog;
 
   mongoose = require('mongoose');
 
@@ -7,7 +7,24 @@
 
   moment.lang("fi");
 
+  facebookComments = 400504446723077;
+
   addthis = "ra-4e04fe637cc97ed4";
+
+  visitlog = function(blog, post, req) {
+    var Log, ip, log;
+
+    ip = req.headers['X-Forwarded-For'] || req.connection.remoteAddress;
+    Log = mongoose.model('visits');
+    log = new Log({
+      blog: blog._id,
+      user: blog.user,
+      blogpost: post,
+      date: new Date(),
+      ip: ip
+    });
+    return log.save(function(err) {});
+  };
 
   exports.write = function(req, res) {
     var Blog;
@@ -201,12 +218,14 @@
           var title;
 
           if (data) {
+            visitlog(blogData, data._id, req);
             title = "";
             if (blogData.name) {
               title = blogData.name + " - ";
             }
             blogData.addthis = blogData.addthis || addthis;
             blogData.sidebar = blogData.sidebar || "";
+            blogData.facebookComments = blogData.facebookComments || facebookComments;
             res.render("themes/" + blogData.theme + "/blogposts", {
               title: title + "Bloggaa.fi",
               blog: blogData,
@@ -220,6 +239,7 @@
             return res.render("themes/" + blogData.theme + "/nocontent", {
               title: "Bloggaa.fi",
               domain: domain,
+              blog: {},
               session: req.session
             });
           }
@@ -229,6 +249,8 @@
         return res.render("themes/default/blog-not-found", {
           title: "Bloggaa.fi",
           domain: domain,
+          blog: {},
+          blogName: req.subdomains[0],
           session: req.session
         });
       }
@@ -253,6 +275,7 @@
           url: req.params.title.toLowerCase()
         }).exec(function(err, data) {
           if (data) {
+            visitlog(blogData, data._id, req);
             Blogs.update({
               _id: data._id
             }, {
@@ -262,6 +285,7 @@
             }, function() {});
             blogData.addthis = blogData.addthis || addthis;
             blogData.sidebar = blogData.sidebar || "";
+            blogData.facebookComments = blogData.facebookComments || facebookComments;
             res.render("themes/" + blogData.theme + "/blogpost", {
               title: data.title + " - Bloggaa.fi",
               data: data,
@@ -274,6 +298,7 @@
           if (!data) {
             return res.render("themes/" + blogData.theme + "/nocontent", {
               title: "Bloggaa.fi",
+              blog: {},
               session: req.session
             });
           }
@@ -283,6 +308,8 @@
         return res.render("themes/default/blog-not-found", {
           title: "Bloggaa.fi",
           domain: domain,
+          blog: {},
+          blogName: req.subdomains[0],
           session: req.session
         });
       }

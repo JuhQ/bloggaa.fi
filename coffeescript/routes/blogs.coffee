@@ -2,7 +2,20 @@ mongoose = require('mongoose')
 moment = require('moment')
 moment.lang("fi")
 
+facebookComments = 400504446723077
 addthis = "ra-4e04fe637cc97ed4"
+
+visitlog = (blog, post, req) ->
+  ip = req.headers['X-Forwarded-For'] or req.connection.remoteAddress
+  Log = mongoose.model 'visits'
+  log = new Log
+    blog: blog._id
+    user: blog.user
+    blogpost: post
+    date: new Date()
+    ip: ip
+  log.save (err) ->
+
 
 exports.write = (req, res) ->
   return res.redirect "/" unless req.session.user
@@ -123,10 +136,13 @@ exports.showblog = (req, res) ->
         hidden: false
       }).sort('-added').exec (err, data) ->
         if data
+          visitlog(blogData, data._id, req)
           title = ""
           title = blogData.name + " - " if blogData.name
           blogData.addthis = blogData.addthis or addthis
           blogData.sidebar = blogData.sidebar or ""
+          blogData.facebookComments = blogData.facebookComments or facebookComments
+          
           res.render "themes/" + blogData.theme + "/blogposts",
             title: title + "Bloggaa.fi"
             blog: blogData
@@ -138,12 +154,15 @@ exports.showblog = (req, res) ->
           res.render "themes/" + blogData.theme + "/nocontent",
             title: "Bloggaa.fi"
             domain: domain
+            blog: {}
             session: req.session
 
     unless blogData
       res.render "themes/default/blog-not-found",
         title: "Bloggaa.fi"
         domain: domain
+        blog: {}
+        blogName: req.subdomains[0]
         session: req.session
 
 exports.showpost = (req, res) ->
@@ -153,7 +172,6 @@ exports.showpost = (req, res) ->
     url: req.params.blog.toLowerCase()
   }).exec (err, blogData) ->
     if blogData
-
       Blogs = mongoose.model 'blogposts'
       Blogs.findOne({
         blog: blogData._id
@@ -161,11 +179,16 @@ exports.showpost = (req, res) ->
         url: req.params.title.toLowerCase()
       }).exec (err, data) ->
         if data
-          Blogs.update { _id: data._id },
-            $inc: visits: 1
-          , () ->
+
+          # Save visit log
+          visitlog(blogData, data._id, req)
+
+          # update visit count for post
+          Blogs.update { _id: data._id }, $inc: visits: 1, () ->
+
           blogData.addthis = blogData.addthis or addthis
           blogData.sidebar = blogData.sidebar or ""
+          blogData.facebookComments = blogData.facebookComments or facebookComments
           res.render "themes/" + blogData.theme + "/blogpost",
             title: data.title + " - Bloggaa.fi"
             data: data
@@ -177,12 +200,15 @@ exports.showpost = (req, res) ->
         unless data
           res.render "themes/" + blogData.theme + "/nocontent",
             title: "Bloggaa.fi"
+            blog: {}
             session: req.session
 
     unless blogData
       res.render "themes/default/blog-not-found",
         title: "Bloggaa.fi"
         domain: domain
+        blog: {}
+        blogName: req.subdomains[0]
         session: req.session
 
 exports.latestBlogs = (req, res) ->

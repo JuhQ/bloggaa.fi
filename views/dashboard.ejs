@@ -1,40 +1,51 @@
 <%= include header.ejs %>
 
 <div class="container">
-  <h1>Blogin hallinta</h1>
-  <a href="/dashboard/settings">Blogin asetukset</a>
 
   <div class="row-fluid">
     <div class="span4">
-      <h4>Kirjoita ;)</h4>
-      <%= include blogeditor.ejs %>
+      <fieldset>
+      <legend>Blogin hallinta</legend>
+        <a href="/dashboard/settings">Blogin asetukset</a>
+          <h4>Kirjoita ;)</h4>
+          <%= include blogeditor.ejs %>
+      </fieldset>
     </div>
     <div class="span8">
-      <%
-      data.forEach(function(data, i) {
-      %>
-      <p>
-        <a href="/dashboard/edit/<%=data._id%>"><i class="icon-edit"></i> Muokkaa</a>
-        <a href="/dashboard/delete/<%=data._id%>"><i class="icon-remove"></i> Poista</a>
+      <fieldset>
+      <legend>Kirjoitukset</legend>
         <%
-        if(!data.hidden) {
+        if(data.length === 0) {
         %>
-          <a href="/dashboard/hide/<%=data._id%>"><i class="icon-flag"></i> Piilota</a>
-        <%
-        } else {
-        %>
-          <a href="/dashboard/show/<%=data._id%>"><i class="icon-flag"></i> Poista piilotus</a>
+        Ei vielä kirjoituksia, voit kirjoittaa koska vaan vasemmalla olevasta formista.
         <%
         }
+        data.forEach(function(data, i) {
         %>
-        -
-        <a href="http://<%=url%>.<%=domain%>/<%=data.url%>"><%=data.title%></a>
-      </p>
-      <%
-      });
-      %>
+        <p>
+          <a href="/dashboard/edit/<%=data._id%>"><i class="icon-edit"></i> Muokkaa</a>
+          <a href="/dashboard/delete/<%=data._id%>"><i class="icon-remove"></i> Poista</a>
+          <%
+          if(!data.hidden) {
+          %>
+            <a href="/dashboard/hide/<%=data._id%>"><i class="icon-flag"></i> Piilota</a>
+          <%
+          } else {
+          %>
+            <a href="/dashboard/show/<%=data._id%>"><i class="icon-flag"></i> Poista piilotus</a>
+          <%
+          }
+          %>
+          -
+          <a href="http://<%=url%>.<%=domain%>/<%=data.url%>"><%=data.title%></a>
+        </p>
+        <%
+        });
+        %>
+      </fieldset>
     </div>
   </div>
+
 
 </div>
 <%= include footer.ejs %>

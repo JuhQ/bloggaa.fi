@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta property="description" content="Bloggaa.fi!"/>
     <meta property="og:description" content="Click here to see more!"/>
-    <meta property="og:site_name" content="userpics.com"/>
+    <meta property="og:site_name" content="bloggaa.fi"/>
     <meta property="og:type" content="article"/>
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css" />
@@ -17,6 +17,21 @@
     <script data-main="/js/main.js" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.4/require.min.js"></script>
   </head>
   <body>
+
+    <%
+    if(blog && blog.facebookComments) {
+      %>
+      <div id="fb-root"></div>
+      <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/fi_FI/all.js#xfbml=1&appId=<%=blog.facebookComments%>";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
+      <%
+    }
+    %>
 
     <div class="navbar navbar">
       <div class="navbar-inner">
@@ -30,6 +45,7 @@
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li class="active"><a href="/">Etusivu</a></li>
+              <li><a href="http://<%=domain%>/register">Rekisteröi ilmainen blog</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>

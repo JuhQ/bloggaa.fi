@@ -73,6 +73,7 @@
           url: url,
           disqus: req.body.disqus,
           googleanalytics: req.body.googleanalytics,
+          facebookComments: req.body.facebookComments,
           theme: req.body.theme,
           sidebar: req.body.sidebar,
           description: req.body.description,

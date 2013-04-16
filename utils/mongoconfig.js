@@ -4,7 +4,7 @@
   mongoose = require('mongoose');
 
   exports.config = function() {
-    var blogPostSchema, blogSchema, userSchema;
+    var blogPostSchema, blogSchema, userSchema, visitSchema;
 
     blogSchema = mongoose.Schema({
       name: 'String',
@@ -12,6 +12,7 @@
       addthis: 'String',
       disqus: 'String',
       googleanalytics: 'String',
+      facebookComments: 'String',
       sidebar: 'String',
       theme: 'String',
       titlefont: 'String',
@@ -40,6 +41,14 @@
       lastvisit: 'Date',
       lastpost: 'Date'
     });
+    visitSchema = mongoose.Schema({
+      blog: 'ObjectId',
+      user: 'ObjectId',
+      blogpost: 'ObjectId',
+      date: 'Date',
+      ip: 'String'
+    });
+    mongoose.model('visits', visitSchema);
     mongoose.model('blogs', blogSchema);
     mongoose.model('blogposts', blogPostSchema);
     mongoose.model('users', userSchema);

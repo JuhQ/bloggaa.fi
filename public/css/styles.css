@@ -7,6 +7,9 @@ body {
 .settings textarea {
   min-height: 80px;
 }
+blockquote p.small {
+  font-size: 0.9em;
+}
 .blog-post,
 .sidebar-block {
   -webkit-border-radius: 6px;
