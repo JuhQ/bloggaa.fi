@@ -16,6 +16,33 @@ visitlog = (blog, post, req) ->
     ip: ip
   log.save (err) ->
 
+exports.reblog = (req, res) ->
+  return res.redirect "/" unless req.session.user
+
+  Blog = mongoose.model 'blogs'
+  Blog.findOne({
+    user: req.session.user.id
+  }).exec (err, blog) ->
+    return res.redirect "/asd" unless blog
+    console.log req.params
+    Blog.findOne({
+      _id: req.params.id
+    }).exec (err, reblog) ->
+      console.log reblog
+      return res.redirect "/nope" unless reblog
+
+      res.render "blogeditorpage",
+        title: "Kirjoita - Bloggaa.fi"
+        blogTitle: reblog.title
+        blogContent: '<blockquote><p>' + reblog.content + '<small>' + reblog.url + '</small></p></blockquote>'
+        action: "saveBlog"
+        url: blog.url
+        blogid: blog._id
+        session: req.session
+
+exports.like = (req, res) ->
+  return res.redirect "/" unless req.session.user
+  res.send "hello"
 
 exports.write = (req, res) ->
   return res.redirect "/" unless req.session.user
@@ -228,9 +255,13 @@ exports.latestTexts = (req, res) ->
   Blogs = mongoose.model 'blogposts'
   Blogs.find().sort('-added').exec (err, data) ->
     return res.redirect "/" unless data
+
+    subdomain = "juha"
+
     res.render "latestsblogposts",
       title: "Uusimmat kirjoitukset - Bloggaa.fi"
       data: data
+      subdomain: subdomain
       domain: domain
       moment: moment
       session: req.session

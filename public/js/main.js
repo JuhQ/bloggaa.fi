@@ -7,7 +7,8 @@
       backbone: "libs/backbone",
       underscore: "libs/underscore",
       text: "libs/text",
-      bootstrap: "libs/bootstrap"
+      bootstrap: "libs/bootstrap",
+      wysihtml5: "libs/wysihtml5"
     }
   });
 

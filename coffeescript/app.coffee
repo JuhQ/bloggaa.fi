@@ -11,14 +11,15 @@ app.configure ->
   app.set "port", process.env.PORT or 4001
   app.set "views", __dirname + "/views"
   app.set "view engine", "ejs"
-  app.use express.logger("dev")
   app.use express.bodyParser()
   app.use express.methodOverride()
   app.use express.cookieParser("bloggaa.fi is awesome")
+
+  #app.use express.logger("dev")
   app.use express.session()
   #app.use express.session(
   #  cookie:
-  #    domain: "localhost"
+  #    domain: ".bloggaa.fi"
   #)
   app.use app.router
 
@@ -36,12 +37,14 @@ app.get "/logout", routesUsers.logout
 app.post "/login", routesUsers.handleLogin
 
 
+app.get "/like", routesBlogs.like
 app.get "/dashboard", routesDashboard.index
 app.get "/dashboard/settings", routes.settings
 app.get "/dashboard/saved", routes.settings
 app.post "/dashboard/settings", routes.saveSettings
 app.post "/dashboard/settings/account", routes.saveAccountSettings
 app.get "/dashboard/write", routesBlogs.write
+app.get "/dashboard/reblog/:id", routesBlogs.reblog
 app.get "/dashboard/edit/:id", routesBlogs.edit
 app.get "/dashboard/show/:id", routesBlogs.show
 app.get "/dashboard/hide/:id", routesBlogs.hide

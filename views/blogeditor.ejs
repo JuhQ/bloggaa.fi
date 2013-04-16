@@ -1,15 +1,73 @@
 
 <div class="writer">
-  <form class="form-signin" method="post" action="/dashboard/<%=action%>">
-    <input type="hidden" name="blogid" value="<%=blogid%>" />
-    <input type="text" name="title" class="input-block-level" placeholder="Otsikko" value="<%=blogTitle%>" />
+<form class="form-signin" method="post" action="/dashboard/<%=action%>">
+  <input type="hidden" name="blogid" value="<%=blogid%>" />
+  <input type="text" name="title" class="input-block-level" placeholder="Otsikko" value="<%=blogTitle%>" />
 
-    <div class="url-container hidden">
-        Blogin osoite: http://<%=url%>.bloggaa.fi/<span class="url"></span>
+  <div class="url-container hidden">
+    Blogin osoite: http://<%=url%>.bloggaa.fi/<span class="url"></span>
+  </div>
+
+  <div id="toolbar" style="display: none;">
+    <div class="btn-group">
+      <a class="btn" data-wysihtml5-command="bold" title="CTRL+B"><i class="icon-bold"></i></a>
+      <a class="btn" data-wysihtml5-command="italic" title="CTRL+I"><i class="icon-italic"></i></a>
+      <a class="btn" data-wysihtml5-command="createLink"><i class="icon-link"></i></a>
+      <a class="btn" data-wysihtml5-command="insertImage"><i class="icon-picture"></i></a>
+      <a class="btn" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1">h1</a>
+      <a class="btn" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2">h2</a>
+      <a class="btn" data-wysihtml5-command="insertUnorderedList"><i class="icon-list-ul"></i></a>
+      <a class="btn" data-wysihtml5-command="insertOrderedList"><i class="icon-list-ol"></i></a>
+      <!--
+      <a class="btn" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="red">red</a>
+      <a class="btn" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="green">green</a>
+      <a class="btn" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="blue">blue</a>
+      -->
+      <a class="btn" data-wysihtml5-command="undo"><i class="icon-undo"></i></a>
+      <a class="btn" data-wysihtml5-command="redo"><i class="icon-repeat"></i></a>
+      <!--<a class="btn" data-wysihtml5-command="insertSpeech">speech</a>-->
     </div>
-    <textarea name="content" class="input-block-level" placeholder="Blogauksen sisältö"><%=blogContent%></textarea>
 
-    <div class="clearfix"></div>
-    <button class="btn btn-large btn-primary" type="submit">Tallenna</button>
-  </form>
+    <div data-wysihtml5-dialog="createLink" style="display: none;">
+      <label>
+        Link:
+        <input data-wysihtml5-dialog-field="href" value="http://">
+      </label>
+      <a data-wysihtml5-dialog-action="save">OK</a>&nbsp;<a data-wysihtml5-dialog-action="cancel">Cancel</a>
+    </div>
+
+    <div data-wysihtml5-dialog="insertImage" style="display: none;">
+      <label>
+        Image:
+        <input data-wysihtml5-dialog-field="src" value="http://">
+      </label>
+      <label>
+        Align:
+        <select data-wysihtml5-dialog-field="className">
+          <option value="">default</option>
+          <option value="wysiwyg-float-left">left</option>
+          <option value="wysiwyg-float-right">right</option>
+        </select>
+      </label>
+      <a data-wysihtml5-dialog-action="save">OK</a>&nbsp;<a data-wysihtml5-dialog-action="cancel">Cancel</a>
+    </div>
+
+  </div>
+
+
+
+
+
+  <textarea name="content" id="textarea" class="input-block-level" placeholder="Blogauksen sisältö"><%=blogContent%></textarea>
+
+  <div class="clearfix"></div>
+  <button class="btn btn-large btn-primary" type="submit">Tallenna</button>
+</form>
+
+
+
+
+  <h2>Events:</h2>
+  <div id="log"></div>
+
 </div>

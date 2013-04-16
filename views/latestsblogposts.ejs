@@ -3,7 +3,7 @@
 <%
 data.forEach(function(data, i) {
 %>
-  <h1><a href="http://<%=data.url%>.<%=domain%>/<%=data.url%>"><%=data.title%></a></h1>
+  <h1><a href="http://<%=subdomain%>.<%=domain%>/<%=data.url%>"><%=data.title%></a></h1>
   <p>
     <%-data.content.replace("\n", "<br />")%>
   </p>

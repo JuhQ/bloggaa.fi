@@ -62,14 +62,14 @@ exports.createAccount = (req, res) ->
     res.jsonp fail: "empty-fields"
     return
 
+  # Check that blog url is available
+
   ### this feature not supported yet
   if req.body.password isnt req.body.password2
     console.log "Passwords don't match"
     return
   ###
 
-  # when you create a user, generate a salt
-  # and hash the password ('foobar' is the password here)
   hash req.body.password, (err, salt, password) ->
     throw err if err
 
@@ -97,11 +97,12 @@ exports.createAccount = (req, res) ->
           lastvisit: new Date()
 
         user.save (err) ->
+          url = req.body.blogname.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g,'-')
           Blogs = mongoose.model 'blogs'
           blog = new Blogs
             user: user._id
             name: req.body.blogname
-            url: req.body.blogname.toLowerCase()
+            url: url
             added: new Date()
             theme: "default"
 

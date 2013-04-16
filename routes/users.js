@@ -130,13 +130,14 @@
             lastvisit: new Date()
           });
           return user.save(function(err) {
-            var blog;
+            var blog, url;
 
+            url = req.body.blogname.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g, '-');
             Blogs = mongoose.model('blogs');
             blog = new Blogs({
               user: user._id,
               name: req.body.blogname,
-              url: req.body.blogname.toLowerCase(),
+              url: url,
               added: new Date(),
               theme: "default"
             });

@@ -7,6 +7,7 @@ requirejs.config
     underscore: "libs/underscore"
     text: "libs/text"
     bootstrap: "libs/bootstrap"
+    wysihtml5: "libs/wysihtml5"
 
 define ["jquery", "underscore", "backbone"], ($, _, Backbone) ->
   require [

@@ -35,6 +35,10 @@
         <p>
           <%-data.content.replace(/\n/g, "<br />")%>
         </p>
+        <p>
+          <a href="http://<%=domain%>/like/<%=data._id%>" class="like">Tykkää</a> -
+          <a href="http://<%=domain%>/dashboard/reblog/<%=data._id%>">Rebloggaa</a>
+        </p>
       </div>
         <div class="addthis_toolbox addthis_default_style ">
           <a class="addthis_counter addthis_pill_style" addthis:url="http://<%=blog.url%>.<%=domain%>/<%=data.url%>" addthis:title="<%=data.title%>"></a>

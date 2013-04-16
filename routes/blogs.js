@@ -26,6 +26,47 @@
     return log.save(function(err) {});
   };
 
+  exports.reblog = function(req, res) {
+    var Blog;
+
+    if (!req.session.user) {
+      return res.redirect("/");
+    }
+    Blog = mongoose.model('blogs');
+    return Blog.findOne({
+      user: req.session.user.id
+    }).exec(function(err, blog) {
+      if (!blog) {
+        return res.redirect("/asd");
+      }
+      console.log(req.params);
+      return Blog.findOne({
+        _id: req.params.id
+      }).exec(function(err, reblog) {
+        console.log(reblog);
+        if (!reblog) {
+          return res.redirect("/nope");
+        }
+        return res.render("blogeditorpage", {
+          title: "Kirjoita - Bloggaa.fi",
+          blogTitle: reblog.title,
+          blogContent: '<blockquote><p>' + reblog.content + '<small>' + reblog.url + '</small></p></blockquote>',
+          action: "saveBlog",
+          url: blog.url,
+          blogid: blog._id,
+          session: req.session
+        });
+      });
+    });
+  };
+
+  exports.like = function(req, res) {
+    if (!req.session.user) {
+      return res.redirect("/");
+    }
+    return res.send("hello");
+  };
+
   exports.write = function(req, res) {
     var Blog;
 
@@ -341,12 +382,16 @@
     domain = req.get('host').replace(req.subdomains[0] + ".", "");
     Blogs = mongoose.model('blogposts');
     return Blogs.find().sort('-added').exec(function(err, data) {
+      var subdomain;
+
       if (!data) {
         return res.redirect("/");
       }
+      subdomain = "juha";
       return res.render("latestsblogposts", {
         title: "Uusimmat kirjoitukset - Bloggaa.fi",
         data: data,
+        subdomain: subdomain,
         domain: domain,
         moment: moment,
         session: req.session
