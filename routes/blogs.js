@@ -251,6 +251,10 @@
       var Blogs;
 
       if (blogData) {
+        if (blogData.theme.match("simple-")) {
+          blogData.css = blogData.theme.replace("simple-", "");
+          blogData.theme = "default";
+        }
         Blogs = mongoose.model('blogposts');
         Blogs.find({
           blog: blogData._id,
@@ -310,6 +314,10 @@
       var Blogs;
 
       if (blogData) {
+        if (blogData.theme.match("simple-")) {
+          blogData.css = blogData.theme.replace("simple-", "");
+          blogData.theme = "default";
+        }
         Blogs = mongoose.model('blogposts');
         Blogs.findOne({
           blog: blogData._id,

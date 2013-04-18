@@ -11,7 +11,14 @@
     <meta property="og:site_name" content="bloggaa.fi"/>
     <meta property="og:type" content="article"/>
 
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css" />
+    <%
+    var cssfile = "//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css";
+    if(typeof blog.css != "undefined") {
+      cssfile = "/css/simple-themes/" + blog.css + ".css";
+    }
+    %>
+    <link rel="stylesheet" href="<%=cssfile%>" />
+    <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css" />-->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css" />
     <link rel="stylesheet" href="/css/styles.css" />
     
@@ -46,7 +53,7 @@
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li class="active"><a href="/">Etusivu</a></li>
-              <li><a href="http://<%=domain%>/register">Rekisteröi ilmainen blog</a></li>
+              <li><a href="http://<%=domain%>">Rekisteröi ilmainen blog</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>

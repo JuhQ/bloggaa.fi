@@ -1,5 +1,7 @@
 <%= include header.ejs %>
 
+<link rel="stylesheet" href="/css/libs/select2.css" />
+
 <div class="container settings">
   <div class="row">
     <div class="span6">
@@ -26,8 +28,6 @@
             <input type="text" name="googleanalytics" class="input-block-level" placeholder="Google Analytics -tunnus" value="<%=blog.googleanalytics || ""%>"  />
           </label>
 
-
-
           <label>
             AddThis ID, omaa linkkiseurantaa varten
             <input type="text" name="addthis" class="input-block-level" placeholder="AddThis ID" value="<%=blog.addthis || ""%>" />
@@ -46,6 +46,18 @@
             <select name="theme">
               <option value="default">Default</option>
               <option value="kukkatheme">Kukka</option>
+              <option value="simple-amelia">Amelia</option>
+              <option value="simple-Cerulean">Cerulean</option>
+              <option value="simple-cosmo">Cosmo</option>
+              <option value="simple-cyborg">Cyborg</option>
+              <option value="simple-journal">Journal</option>
+              <option value="simple-readable">Readable</option>
+              <option value="simple-simplex">Simplex</option>
+              <option value="simple-slate">Slate</option>
+              <option value="simple-spacelab">Spacelab</option>
+              <option value="simple-spruce">Spruce</option>
+              <option value="simple-superhero">Superhero</option>
+              <option value="simple-united">United</option>
             </select>
           </label>
 

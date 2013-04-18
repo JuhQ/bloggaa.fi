@@ -1,8 +1,6 @@
 @import "mixins.less";
-@background-color: #fff;
 
 body {
-  background: @background-color;
 
   &.fabulous {
     background: url('http://farm9.staticflickr.com/8102/8559381070_f517991660_k.jpg');
@@ -42,7 +40,7 @@ blockquote p.small {
 }
 
 .blog-post, .sidebar-block {
-  .rounded(6px);
+  .rounded(4px);
 }
 
 .blog-post {
@@ -63,11 +61,7 @@ blockquote p.small {
 
 .kukkatheme {
   h1, h2, h3, h4, h5, p, a, div {
-    font-family: 'Noto Sans', sans-serif;
-  }
-
-  img {
-    border: 0;
+    font-family: 'Noto Sans';
   }
 
   .sidebar-block-header {

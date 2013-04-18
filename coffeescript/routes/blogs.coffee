@@ -157,6 +157,10 @@ exports.showblog = (req, res) ->
     url: blogName
   }).exec (err, blogData) ->
     if blogData
+      if blogData.theme.match("simple-")
+        blogData.css = blogData.theme.replace("simple-","")
+        blogData.theme = "default"
+
       Blogs = mongoose.model 'blogposts'
       Blogs.find({
         blog: blogData._id
@@ -200,6 +204,9 @@ exports.showpost = (req, res) ->
     url: req.params.blog.toLowerCase()
   }).exec (err, blogData) ->
     if blogData
+      if blogData.theme.match("simple-")
+        blogData.css = blogData.theme.replace("simple-","")
+        blogData.theme = "default"
       Blogs = mongoose.model 'blogposts'
       Blogs.findOne({
         blog: blogData._id

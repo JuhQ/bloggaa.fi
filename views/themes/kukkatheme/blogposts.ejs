@@ -4,7 +4,7 @@
   <%
   if(blog.name || blog.description) {
   %>
-    <div class="hero-unit">
+    <div class="well well-small">
       <%
       if(blog.name) {
       %>
@@ -39,7 +39,6 @@
           <a href="http://<%=domain%>/like/<%=data._id%>" class="like">Tykkää</a> -
           <a href="http://<%=domain%>/dashboard/reblog/<%=data._id%>">Rebloggaa</a>
         </p>
-      </div>
         <div class="addthis_toolbox addthis_default_style">
           <a class="addthis_button_facebook" addthis:url="http://<%=blog.url%>.<%=domain%>/<%=data.url%>" addthis:title="<%=data.title%>"></a>
           <a class="addthis_button_twitter" addthis:url="http://<%=blog.url%>.<%=domain%>/<%=data.url%>" addthis:title="<%=data.title%>"></a>
@@ -49,6 +48,7 @@
           <a class="addthis_button_compact" addthis:url="http://<%=blog.url%>.<%=domain%>/<%=data.url%>" addthis:title="<%=data.title%>"></a>
           <a class="addthis_counter addthis_bubble_style"></a>
         </div>
+      </div>
       <%
       });
       %>
