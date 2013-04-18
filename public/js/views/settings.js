@@ -1,13 +1,14 @@
 (function() {
-  define(["jquery", "underscore", "backbone", "../libs/select2"], function($, _, Backbone, select2) {
+  define(["jquery", "underscore", "backbone"], function($, _, Backbone) {
     return Backbone.View.extend({
       el: ".settings",
       events: {
         "click #tab a": "openTab"
       },
       initialize: function() {
-        console.log("asd");
-        return $('select').select2();
+        return require(["/js/libs/select2.js"], function(select2) {
+          return $('select').select2();
+        });
       },
       openTab: function(event) {
         event.preventDefault();

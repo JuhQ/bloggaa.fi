@@ -1,16 +1,16 @@
 (function() {
-  define(["jquery", "underscore", "backbone", "wysihtml5"], function($, _, Backbone, wysihtml5) {
+  define(["jquery", "underscore", "backbone"], function($, _, Backbone) {
     return Backbone.View.extend({
       el: ".container",
       events: {
         "keyup input[name='title']": "urlname"
       },
       initialize: function() {
-        var editor;
-
-        editor = new wysihtml5.Editor("textarea", {
-          toolbar: "toolbar",
-          parserRules: wysihtml5ParserRules
+        return require(["wysihtml5"], function(wysihtml5) {
+          return new wysihtml5.Editor("textarea", {
+            toolbar: "toolbar",
+            parserRules: wysihtml5ParserRules
+          });
         });
       },
       urlname: function(event) {
