@@ -26,6 +26,7 @@
       title: 'String',
       url: 'String',
       content: 'String',
+      tags: 'String',
       added: 'Date',
       edited: 'Date',
       hidden: 'Boolean',

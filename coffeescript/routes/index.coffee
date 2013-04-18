@@ -6,6 +6,7 @@ exports.index = (req, res) ->
     title: "Bloggaa.fi"
     domain: domain
     session: req.session
+    error: null
 
   if req.session.user
     Blog = mongoose.model 'blogs'
@@ -16,7 +17,7 @@ exports.index = (req, res) ->
         options.blogUrl = blog.url
         res.render "index", options
   else
-    res.render "index", options
+    res.render "landingpage-index", options
 
 exports.settings = (req, res) ->
   return res.redirect "/" unless req.session.user

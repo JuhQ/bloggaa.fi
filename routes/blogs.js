@@ -280,6 +280,7 @@
             return res.render("themes/" + blogData.theme + "/nocontent", {
               title: "Bloggaa.fi",
               domain: domain,
+              blogName: blogName,
               blog: {},
               session: req.session
             });
@@ -340,6 +341,8 @@
             return res.render("themes/" + blogData.theme + "/nocontent", {
               title: "Bloggaa.fi",
               blog: {},
+              blogName: req.subdomains[0],
+              domain: domain,
               session: req.session
             });
           }

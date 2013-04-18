@@ -181,6 +181,7 @@ exports.showblog = (req, res) ->
           res.render "themes/" + blogData.theme + "/nocontent",
             title: "Bloggaa.fi"
             domain: domain
+            blogName: blogName
             blog: {}
             session: req.session
 
@@ -228,6 +229,8 @@ exports.showpost = (req, res) ->
           res.render "themes/" + blogData.theme + "/nocontent",
             title: "Bloggaa.fi"
             blog: {}
+            blogName: req.subdomains[0]
+            domain: domain
             session: req.session
 
     unless blogData

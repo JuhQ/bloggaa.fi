@@ -10,7 +10,8 @@
     options = {
       title: "Bloggaa.fi",
       domain: domain,
-      session: req.session
+      session: req.session,
+      error: null
     };
     if (req.session.user) {
       Blog = mongoose.model('blogs');
@@ -23,7 +24,7 @@
         }
       });
     } else {
-      return res.render("index", options);
+      return res.render("landingpage-index", options);
     }
   };
 

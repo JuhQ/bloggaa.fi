@@ -3,6 +3,28 @@
 
 body {
   background: @background-color;
+
+  &.fabulous {
+    background: url('http://farm9.staticflickr.com/8102/8559381070_f517991660_k.jpg');
+    background-size: cover;
+
+    /* Main marketing message and sign up button */
+    .jumbotron {
+      background: rgba(255, 255, 255, 0.4);
+      margin-top: 60px;
+      margin-bottom: 60px;
+      text-align: center;
+      h1, h2 {
+        color: #fff;
+        text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.2), 0 1px 1px rgba(0, 0, 0, 0.2);
+        font-size: 72px;
+        line-height: 1;
+      }
+      h2 {
+        font-size: 35px;
+      }
+    }
+  }
 }
 
 .writer {

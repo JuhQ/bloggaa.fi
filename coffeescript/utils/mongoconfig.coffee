@@ -20,6 +20,7 @@ exports.config = () ->
     title: 'String'
     url: 'String'
     content: 'String'
+    tags: 'String' # Array does not work for some reason
     added: 'Date'
     edited: 'Date'
     hidden: 'Boolean'

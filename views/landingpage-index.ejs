@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# bloggaa: http://ogp.me/ns/fb/bloggaa#">
+    <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta property="description" content="Bloggaa.fi!"/>
+    <meta property="og:description" content="Click here to see more!"/>
+    <meta property="og:site_name" content="userpics.com"/>
+    <meta property="og:type" content="article"/>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css" />
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css" />
+    
+    <script data-main="/js/main.js" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.4/require.min.js"></script>
+  </head>
+  <body class="fabulous">
+  <!-- Background from http://www.flickr.com/photos/dspouliot/8559381070/sizes/l/in/photostream/ -->
+
+    <div class="container">
+    <div class="row">
+      <div class="jumbotron span10 offset1">
+        <h1>Bloggaa!</h1>
+        <p class="lead">Bloggaaminen on modernia keskustelua</p>
+
+        <div class="row">
+          <div class="span4 offset1">
+            <form class="form-signin" method="post" action="/login">
+            <%
+            if(error) {
+            %>
+              <div class="alert alert-error">
+                <strong>Voi hitsin pimpulat sentään!</strong><br />
+                Tunnuksesi tai salasanasi oli väärin :(<br />
+                Ei se mitään, kokeilehan uudestaan.
+              </div>
+            <%
+            }
+            %>
+              <h2>Kirjaudu</h2>
+              <input type="email" name="email" class="input-block-level" placeholder="Email" />
+              <input type="password" name="password" class="input-block-level" placeholder="Salasana" />
+              
+              <div class="clearfix"></div>
+              <button class="btn btn-primary" type="submit">Kirjaudu sisään</button>
+            </form>
+          </div>
+
+          <div class="span4">
+            <form class="form-signin" method="post" action="/register">
+              <h2>Luo tunnus</h2>
+              <input type="email" name="email" class="input-block-level" placeholder="Email" />
+              <input type="password" name="password" class="input-block-level" placeholder="Salasana" />
+              
+              <div class="input-append pull-left">
+                <input class="span2" name="blogname" type="text" placeholder="Blogin osoite" />
+                <span class="add-on">.bloggaa.fi</span>
+              </div>
+
+              <div class="clearfix"></div>
+              <button class="btn btn-primary" type="submit">Luo tunnus</button>
+            </form>
+          </div>
+
+        </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <!-- Site made with love by @juha_tauriainen
+         Using MongoDB, node.js, backbone.js, require.js and a lot of modules.
+    -->
+
+    <%= include google-analytics.ejs %>
+
+  </body>
+</html>
