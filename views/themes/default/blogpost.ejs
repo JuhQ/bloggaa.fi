@@ -25,47 +25,51 @@
   <div class="row-fluid">
     <div class="span8">
 
-      <h1><%=data.title%></h1>
-      <p>
-        <small class="muted"><%=moment(data.added).fromNow()%></small>
-      </p>
-      <p>
-        <%-data.content.replace(/\n/g, "<br />")%>
-      </p>
+      <div class="blog-post">
+        <h1><%=data.title%></h1>
+        <p>
+          <small class="muted"><%=moment(data.added).fromNow()%></small>
+        </p>
+        <p>
+          <%-data.content.replace(/\n/g, "<br />")%>
+        </p>
 
-      <div class="addthis_toolbox addthis_default_style">
-        <a class="addthis_button_facebook"></a>
-        <a class="addthis_button_twitter"></a>
-        <a class="addthis_button_stumbleupon"></a>
-        <a class="addthis_button_formspring"></a>
-        <a class="addthis_button_tumblr"></a>
-        <a class="addthis_button_compact"></a>
-        <a class="addthis_counter addthis_bubble_style"></a>
+        <div class="addthis_toolbox addthis_default_style">
+          <a class="addthis_button_facebook"></a>
+          <a class="addthis_button_twitter"></a>
+          <a class="addthis_button_stumbleupon"></a>
+          <a class="addthis_button_formspring"></a>
+          <a class="addthis_button_tumblr"></a>
+          <a class="addthis_button_compact"></a>
+          <a class="addthis_counter addthis_bubble_style"></a>
+        </div>
+        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<%=blog.addthis%>"></script>
       </div>
-      <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<%=blog.addthis%>"></script>
-      <%
-      if(blog.disqus) {
-      %>
-      <div id="disqus_thread"></div>
-      <script type="text/javascript">
-        var disqus_shortname = '<%=blog.disqus%>';
+      <div class="blog-post">
 
-        (function() {
-          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        })();
-      </script>
-      <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-      <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-      <%
-      } else if(blog.facebookComments) {
-      %>
-      <div class="fb-comments" data-href="http://<%=blog.url%>.<%=domain%>/<%=data.url%>" data-width="470" data-num-posts="10"></div>
-      <%
-      }
-      %>
+        <%
+        if(blog.disqus) {
+        %>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          var disqus_shortname = '<%=blog.disqus%>';
 
+          (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        <%
+        } else if(blog.facebookComments) {
+        %>
+        <div class="fb-comments" data-href="http://<%=blog.url%>.<%=domain%>/<%=data.url%>" data-width="470" data-num-posts="10"></div>
+        <%
+        }
+        %>
+
+      </div>
     </div>
 
     <div class="span4">
