@@ -8,6 +8,7 @@ exports.index = (req, res) ->
 
 exports.settings = (req, res) ->
   return res.redirect "/" unless req.session.user
+  domain = req.get('host').replace(req.subdomains[0] + ".", "")
   Blog = mongoose.model 'blogs'
   Blog.findOne({
     user: req.session.user.id
@@ -16,7 +17,7 @@ exports.settings = (req, res) ->
       title: "Asetukset - Bloggaa.fi"
       session: req.session
       blog: data
-      url: "<h1>MISSÄ VITTUSSA TÄÄ NÄKYY?"
+      domain: domain
 
 exports.saveAccountSettings = (req, res) ->
   res.send "Hello world"

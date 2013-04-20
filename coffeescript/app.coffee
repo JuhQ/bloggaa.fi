@@ -18,7 +18,8 @@ app.configure ->
   app.use express.cookieParser("bloggaa.fi is awesome")
 
   app.use express.session
-    secret:'bloggaa.fi is awesome and fun',
+    secret:'bloggaa.fi is awesome and fun'
+    cookie: {maxAge: 60000 * 60 * 24 * 30}
     store: new MongoStore
       db: "bloggaa"
 

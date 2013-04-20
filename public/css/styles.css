@@ -40,6 +40,14 @@ blockquote p.small {
   padding: 20px;
   margin: 0 0 30px 0;
 }
+.blog-post h1,
+.blog-post h2,
+.blog-post h3,
+.blog-post h4,
+.blog-post h5,
+.blog-post h6 {
+  color: #000;
+}
 .sidebar-block {
   background: #fff;
   padding: 20px;

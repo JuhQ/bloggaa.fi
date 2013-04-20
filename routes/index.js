@@ -16,11 +16,12 @@
   };
 
   exports.settings = function(req, res) {
-    var Blog;
+    var Blog, domain;
 
     if (!req.session.user) {
       return res.redirect("/");
     }
+    domain = req.get('host').replace(req.subdomains[0] + ".", "");
     Blog = mongoose.model('blogs');
     return Blog.findOne({
       user: req.session.user.id
@@ -29,7 +30,7 @@
         title: "Asetukset - Bloggaa.fi",
         session: req.session,
         blog: data,
-        url: "<h1>MISSÄ VITTUSSA TÄÄ NÄKYY?"
+        domain: domain
       });
     });
   };
