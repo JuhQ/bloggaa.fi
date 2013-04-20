@@ -13,6 +13,7 @@ exports.config = () ->
     contentfont: 'String'
     description: 'String'
     user: 'ObjectId'
+    visits: 'Number'
     added: 'Date'
     lastpost: 'Date'
   }

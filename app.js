@@ -1,5 +1,5 @@
 (function() {
-  var app, express, http, mongoconfig, routes, routesBlogs, routesDashboard, routesUsers;
+  var MongoStore, app, express, http, mongoconfig, mongoose, routes, routesBlogs, routesDashboard, routesUsers;
 
   express = require("express");
 
@@ -15,6 +15,10 @@
 
   http = require("http");
 
+  MongoStore = require('connect-mongo')(express);
+
+  mongoose = require('mongoose');
+
   app = express();
 
   app.configure(function() {
@@ -24,7 +28,12 @@
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(express.cookieParser("bloggaa.fi is awesome"));
-    app.use(express.session());
+    app.use(express.session({
+      secret: 'bloggaa.fi is awesome and fun',
+      store: new MongoStore({
+        db: "bloggaa"
+      })
+    }));
     return app.use(app.router);
   });
 

@@ -4,28 +4,15 @@
   mongoose = require('mongoose');
 
   exports.index = function(req, res) {
-    var Blog, domain, options;
+    var domain;
 
-    domain = req.get('host').replace(req.subdomains[0] + ".", "");
-    options = {
-      title: "Bloggaa.fi",
-      domain: domain,
-      session: req.session,
-      error: null
-    };
     if (req.session.user) {
-      Blog = mongoose.model('blogs');
-      return Blog.findOne({
-        user: req.session.user.id
-      }).exec(function(err, blog) {
-        if (blog) {
-          options.blogUrl = blog.url;
-          return res.render("index", options);
-        }
-      });
-    } else {
-      return res.render("landingpage-index", options);
+      return res.redirect("/dashboard");
     }
+    domain = req.get('host').replace(req.subdomains[0] + ".", "");
+    return res.render("landingpage-index", {
+      title: "Bloggaa.fi"
+    });
   };
 
   exports.settings = function(req, res) {
@@ -38,11 +25,11 @@
     return Blog.findOne({
       user: req.session.user.id
     }).exec(function(err, data) {
-      console.log(data);
       return res.render("settings", {
         title: "Asetukset - Bloggaa.fi",
         session: req.session,
-        blog: data
+        blog: data,
+        url: "<h1>MISSÄ VITTUSSA TÄÄ NÄKYY?"
       });
     });
   };

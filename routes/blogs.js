@@ -12,7 +12,7 @@
   addthis = "ra-4e04fe637cc97ed4";
 
   visitlog = function(blog, post, req) {
-    var Log, ip, log;
+    var Blog, Log, ip, log;
 
     ip = req.headers['X-Forwarded-For'] || req.connection.remoteAddress;
     Log = mongoose.model('visits');
@@ -23,7 +23,15 @@
       date: new Date(),
       ip: ip
     });
-    return log.save(function(err) {});
+    log.save(function(err) {});
+    Blog = mongoose.model('blogs');
+    return Blog.update({
+      _id: blog._id
+    }, {
+      $inc: {
+        visits: 1
+      }
+    }, function() {});
   };
 
   exports.reblog = function(req, res) {

@@ -1,23 +1,10 @@
 mongoose = require('mongoose')
 
 exports.index = (req, res) ->
+  return res.redirect "/dashboard" if req.session.user
   domain = req.get('host').replace(req.subdomains[0] + ".", "")
-  options =
+  res.render "landingpage-index",
     title: "Bloggaa.fi"
-    domain: domain
-    session: req.session
-    error: null
-
-  if req.session.user
-    Blog = mongoose.model 'blogs'
-    Blog.findOne({
-      user: req.session.user.id
-    }).exec (err, blog) ->
-      if blog
-        options.blogUrl = blog.url
-        res.render "index", options
-  else
-    res.render "landingpage-index", options
 
 exports.settings = (req, res) ->
   return res.redirect "/" unless req.session.user
@@ -25,11 +12,11 @@ exports.settings = (req, res) ->
   Blog.findOne({
     user: req.session.user.id
   }).exec (err, data) ->
-    console.log data
     res.render "settings",
       title: "Asetukset - Bloggaa.fi"
       session: req.session
       blog: data
+      url: "<h1>MISSÄ VITTUSSA TÄÄ NÄKYY?"
 
 exports.saveAccountSettings = (req, res) ->
   res.send "Hello world"

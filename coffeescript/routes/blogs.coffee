@@ -15,6 +15,8 @@ visitlog = (blog, post, req) ->
     date: new Date()
     ip: ip
   log.save (err) ->
+  Blog = mongoose.model 'blogs'
+  Blog.update { _id: blog._id }, $inc: visits: 1, () ->
 
 exports.reblog = (req, res) ->
   return res.redirect "/" unless req.session.user

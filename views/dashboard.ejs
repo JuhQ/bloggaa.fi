@@ -5,7 +5,11 @@
   <div class="row-fluid">
     <div class="span6">
       <fieldset>
-      <legend>Blogin hallinta <small><a href="/dashboard/settings">Blogin asetukset</a></small></legend>
+      <legend>Blogin hallinta
+        <small><a href="/dashboard/settings">Blogin asetukset</a> - 
+          <a href="http://<%=url%>.<%=domain%>">Oma blogi</a>
+        </small>
+        </legend>
           <h4>Kirjoita ;)</h4>
           <%= include blogeditor.ejs %>
       </fieldset>

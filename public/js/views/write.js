@@ -6,7 +6,11 @@
         "keyup input[name='title']": "urlname"
       },
       initialize: function() {
-        return require(["wysihtml5"], function(wysihtml5) {
+        return require(["wysihtml5", "/js/libs/select2.js"], function(wysihtml5, select2) {
+          $("input[name='tags']").select2({
+            tags: [],
+            tokenSeparators: [","]
+          });
           return new wysihtml5.Editor("textarea", {
             toolbar: "toolbar",
             parserRules: wysihtml5ParserRules

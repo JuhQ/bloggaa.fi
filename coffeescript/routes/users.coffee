@@ -46,7 +46,6 @@ login = (req, res) ->
 exports.handleLogin = login
 exports.logout = (req, res) ->
   req.session.destroy()
-  delete req.session.user
   res.redirect "/"
 
 # Saves user to the database

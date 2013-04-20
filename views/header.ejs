@@ -35,7 +35,9 @@
           if(session.user) {
           %>
             <p class="navbar-text pull-right">
-              Kirjautuneena <a href="/dashboard" class="navbar-link"><%=session.user.email%></a>
+              Kirjautuneena <a href="/dashboard" class="navbar-link"><%=session.user.email%></a> -
+              <a href="http://<%=url%>.<%=domain%>">Oma blogi</a> - 
+              <a href="/logout"><i class="icon-signout"></i>Ulos</a>
             </p>
           <%
           }

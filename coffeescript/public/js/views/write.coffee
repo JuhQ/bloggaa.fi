@@ -13,7 +13,13 @@ define [
       "keyup input[name='title']": "urlname"
 
     initialize: ->
-      require(["wysihtml5"], (wysihtml5) ->
+      require(["wysihtml5","/js/libs/select2.js"], (wysihtml5,select2) ->
+
+        $("input[name='tags']").select2(
+          tags:[]
+          tokenSeparators: [","]
+        )
+
         new wysihtml5.Editor("textarea", {
           toolbar: "toolbar"
           parserRules: wysihtml5ParserRules

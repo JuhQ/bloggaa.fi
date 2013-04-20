@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/css/libs/select2.css" />
 <div class="writer">
   <form class="form-signin" method="post" action="/dashboard/<%=action%>">
     <input type="hidden" name="blogid" value="<%=blogid%>" />
@@ -58,6 +59,10 @@
     </div>
 
     <textarea name="content" id="textarea" class="input-block-level" placeholder="Blogauksen sisältö"><%=blogContent%></textarea>
+
+    <label>Tagit<br />
+      <input type="hidden" name="tags" placeholder="Tagit" />
+    </label>
 
     <div class="clearfix"></div>
     <button class="btn btn-large btn-primary" type="submit">Tallenna</button>

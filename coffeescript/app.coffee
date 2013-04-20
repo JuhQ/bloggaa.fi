@@ -5,6 +5,8 @@ routesBlogs = require("./routes/blogs")
 routesDashboard = require("./routes/dashboard")
 mongoconfig = require("./utils/mongoconfig")
 http = require("http")
+MongoStore = require('connect-mongo')(express)
+mongoose = require('mongoose')
 app = express()
 
 app.configure ->
@@ -15,8 +17,11 @@ app.configure ->
   app.use express.methodOverride()
   app.use express.cookieParser("bloggaa.fi is awesome")
 
-  #app.use express.logger("dev")
-  app.use express.session()
+  app.use express.session
+    secret:'bloggaa.fi is awesome and fun',
+    store: new MongoStore
+      db: "bloggaa"
+
   #app.use express.session(
   #  cookie:
   #    domain: ".bloggaa.fi"
