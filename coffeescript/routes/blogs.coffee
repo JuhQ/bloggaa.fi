@@ -18,6 +18,21 @@ visitlog = (blog, post, req) ->
   Blog = mongoose.model 'blogs'
   Blog.update { _id: blog._id }, $inc: visits: 1, () ->
 
+exports.tagSearch = (req, res) ->
+  domain = req.get('host').replace(req.subdomains[0] + ".", "")
+  Blog = mongoose.model 'blogposts'
+  Blog.find(
+    tags: $regex: req.params.tag
+  ).exec (err, data) ->
+    console.log data
+    return res.send "nope" unless data and data.length
+    return res.redirect "/" unless data and data.length
+    res.render "tagsearch",
+      title: "Bloggaa.fi"
+      session: req.session
+      data: data
+      domain: domain
+
 exports.reblog = (req, res) ->
   return res.redirect "/" unless req.session.user
 
@@ -25,13 +40,13 @@ exports.reblog = (req, res) ->
   Blog.findOne({
     user: req.session.user.id
   }).exec (err, blog) ->
-    return res.redirect "/asd" unless blog
+    return res.redirect "/asd" unless blog and blog.length
     console.log req.params
     Blog.findOne({
       _id: req.params.id
     }).exec (err, reblog) ->
       console.log reblog
-      return res.redirect "/nope" unless reblog
+      return res.redirect "/nope" unless reblog and reblog.length
 
       res.render "blogeditorpage",
         title: "Kirjoita - Bloggaa.fi"
@@ -105,6 +120,7 @@ exports.saveBlog = (req, res) ->
       content: req.body.content
       subdomain: blogData.url
       added: new Date()
+      tags: req.body.tags
       hidden: req.body.hidden is 1
       visits: 0
       user: req.session.user.id
@@ -162,6 +178,7 @@ exports.saveEdit = (req, res) ->
         title: title
         url: url
         subdomain: blogData.url
+        tags: req.body.tags
         content: req.body.content
         hidden: req.body.hidden is 1
     , () ->

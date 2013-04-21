@@ -35,6 +35,18 @@
         <p>
           <%-data.content.replace(/\n/g, "<br />")%>
         </p>
+        <%
+        if(data.tags) {
+          %><p><%
+          var tags = data.tags.split(",");
+          tags.forEach(function(tag) {
+          %>
+            <a href="http://<%=domain%>/tag/<%=encodeURIComponent(tag)%>"><%=tag%></a>
+          <%
+          });
+          %></p><%
+        }
+        %>
         <p>
         <!-- icon-heart-empty -->
           <a href="http://<%=domain%>/like/<%=data._id%>" class="like" title="Tykkää"><i class="icon-heart"></i></a>

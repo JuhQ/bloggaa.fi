@@ -34,6 +34,32 @@
     }, function() {});
   };
 
+  exports.tagSearch = function(req, res) {
+    var Blog, domain;
+
+    domain = req.get('host').replace(req.subdomains[0] + ".", "");
+    Blog = mongoose.model('blogposts');
+    return Blog.find({
+      tags: {
+        $regex: req.params.tag
+      }
+    }).exec(function(err, data) {
+      console.log(data);
+      if (!(data && data.length)) {
+        return res.send("nope");
+      }
+      if (!(data && data.length)) {
+        return res.redirect("/");
+      }
+      return res.render("tagsearch", {
+        title: "Bloggaa.fi",
+        session: req.session,
+        data: data,
+        domain: domain
+      });
+    });
+  };
+
   exports.reblog = function(req, res) {
     var Blog;
 
@@ -44,7 +70,7 @@
     return Blog.findOne({
       user: req.session.user.id
     }).exec(function(err, blog) {
-      if (!blog) {
+      if (!(blog && blog.length)) {
         return res.redirect("/asd");
       }
       console.log(req.params);
@@ -52,7 +78,7 @@
         _id: req.params.id
       }).exec(function(err, reblog) {
         console.log(reblog);
-        if (!reblog) {
+        if (!(reblog && reblog.length)) {
           return res.redirect("/nope");
         }
         return res.render("blogeditorpage", {
@@ -172,6 +198,7 @@
         content: req.body.content,
         subdomain: blogData.url,
         added: new Date(),
+        tags: req.body.tags,
         hidden: req.body.hidden === 1,
         visits: 0,
         user: req.session.user.id,
@@ -258,6 +285,7 @@
           title: title,
           url: url,
           subdomain: blogData.url,
+          tags: req.body.tags,
           content: req.body.content,
           hidden: req.body.hidden === 1
         }

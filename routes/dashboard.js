@@ -45,4 +45,24 @@
     return res.render("statistics");
   };
 
+  exports.settings = function(req, res) {
+    var Blog, domain;
+
+    if (!req.session.user) {
+      return res.redirect("/");
+    }
+    domain = req.get('host').replace(req.subdomains[0] + ".", "");
+    Blog = mongoose.model('blogs');
+    return Blog.findOne({
+      user: req.session.user.id
+    }).exec(function(err, data) {
+      return res.render("settings", {
+        title: "Asetukset - Bloggaa.fi",
+        session: req.session,
+        blog: data,
+        domain: domain
+      });
+    });
+  };
+
 }).call(this);

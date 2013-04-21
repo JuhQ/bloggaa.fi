@@ -35,6 +35,18 @@
         <p>
           <%-data.content.replace(/\n/g, "<br />")%>
         </p>
+        <%
+        if(data.tags) {
+          %><p><%
+          var tags = data.tags.split(",");
+          tags.forEach(function(tag) {
+          %>
+            <a href="http://<%=domain%>/tag/<%=encodeURIComponent(tag)%>"><%=tag%></a>
+          <%
+          });
+          %></p><%
+        }
+        %>
         <p>
           <a href="http://<%=domain%>/like/<%=data._id%>" class="like">Tykkää</a> -
           <a href="http://<%=domain%>/dashboard/reblog/<%=data._id%>">Rebloggaa</a>

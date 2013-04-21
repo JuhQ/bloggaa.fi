@@ -6,19 +6,6 @@ exports.index = (req, res) ->
   res.render "landingpage-index",
     title: "Bloggaa.fi"
 
-exports.settings = (req, res) ->
-  return res.redirect "/" unless req.session.user
-  domain = req.get('host').replace(req.subdomains[0] + ".", "")
-  Blog = mongoose.model 'blogs'
-  Blog.findOne({
-    user: req.session.user.id
-  }).exec (err, data) ->
-    res.render "settings",
-      title: "Asetukset - Bloggaa.fi"
-      session: req.session
-      blog: data
-      domain: domain
-
 exports.saveAccountSettings = (req, res) ->
   res.send "Hello world"
 

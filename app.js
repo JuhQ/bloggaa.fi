@@ -60,11 +60,15 @@
 
   app.post("/login", routesUsers.handleLogin);
 
+  app.get("/tag/:tag", routesBlogs.tagSearch);
+
   app.get("/like", routesBlogs.like);
 
   app.get("/dashboard", routesDashboard.index);
 
-  app.get("/dashboard/settings", routes.settings);
+  app.get("/dashboard/settings", routesDashboard.settings);
+
+  app.get("/dashboard/visits", routesDashboard.visits);
 
   app.get("/dashboard/saved", routes.settings);
 

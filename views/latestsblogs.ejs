@@ -1,9 +1,9 @@
 <%= include header.ejs %>
 
 <%
-data.forEach(function(data, i) {
+data.forEach(function(row, i) {
 %>
-  <p><a href="http://<%=data.url%>.<%=domain%>"><%=data.name%></a> - <span class="muted"><%=moment(data.added).fromNow()%></span></p>
+  <p><a href="http://<%=row.url%>.<%=domain%>"><%=row.name%></a> - <span class="muted"><%=moment(row.added).fromNow()%></span></p>
 <%
 });
 %>

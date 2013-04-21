@@ -33,6 +33,18 @@
         <p>
           <%-data.content.replace(/\n/g, "<br />")%>
         </p>
+        <%
+        if(data.tags) {
+          %><p><%
+          var tags = data.tags.split(",");
+          tags.forEach(function(tag) {
+          %>
+            <a href="http://<%=domain%>/tag/<%=encodeURIComponent(tag)%>"><%=tag%></a>
+          <%
+          });
+          %></p><%
+        }
+        %>
 
         <div class="addthis_toolbox addthis_default_style">
           <a class="addthis_button_facebook"></a>

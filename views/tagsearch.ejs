@@ -1,4 +1,5 @@
 <%= include header.ejs %>
+
 <div class="container">
   <%
   data.forEach(function(row, i) {
@@ -11,6 +12,18 @@
         </p>
       </div>
     </div>
+    <%
+    if(row.tags) {
+      %><p><%
+      var tags = row.tags.split(",");
+      tags.forEach(function(tag) {
+      %>
+        <a href="http://<%=domain%>/tag/<%=encodeURIComponent(tag)%>"><%=tag%></a>
+      <%
+      });
+      %></p><%
+    }
+    %>
   <%
   });
   %>
