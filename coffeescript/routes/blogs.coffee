@@ -64,8 +64,30 @@ exports.reblog = (req, res) ->
         session: req.session
 
 exports.like = (req, res) ->
+  res.header "Access-Control-Allow-Origin", "*"
   return res.redirect "/" unless req.session.user
-  res.send "hello"
+
+  Blog = mongoose.model 'blogposts'
+  Blog.findOne({
+    _id: req.params.id
+  }).exec (err, blog) ->
+    Likes = mongoose.model 'likes'
+    Likes.findOne({
+      blogpost: blog._id
+      user: req.session.user.id
+    }).exec (err, likeData) ->
+      # if blog post already liked, remove old like
+      if likeData
+        Likes.where('blogpost').equals(blog._id).where('user').equals(req.session.user.id).remove()
+        res.jsonp ok: 0
+      else
+        like = new Likes
+          blog: blog.blog
+          user: req.session.user.id
+          blogpost: blog._id
+          date: new Date()
+        like.save (err) ->
+          res.jsonp ok: 1
 
 exports.write = (req, res) ->
   return res.redirect "/" unless req.session.user

@@ -20,6 +20,9 @@ body.fabulous .jumbotron h2 {
 body.fabulous .jumbotron h2 {
   font-size: 35px;
 }
+.white-shadow {
+  text-shadow: 0 0 10px #fff;
+}
 .dashboard fieldset small {
   line-height: 15px;
 }

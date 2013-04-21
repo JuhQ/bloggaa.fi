@@ -4,7 +4,7 @@
   mongoose = require('mongoose');
 
   exports.config = function() {
-    var blogPostSchema, blogSchema, userSchema, visitSchema;
+    var blogPostSchema, blogSchema, likeSchema, userSchema, visitSchema;
 
     blogSchema = mongoose.Schema({
       name: 'String',
@@ -52,10 +52,17 @@
       date: 'Date',
       ip: 'String'
     });
+    likeSchema = mongoose.Schema({
+      blog: 'ObjectId',
+      user: 'ObjectId',
+      blogpost: 'ObjectId',
+      date: 'Date'
+    });
     mongoose.model('visits', visitSchema);
     mongoose.model('blogs', blogSchema);
     mongoose.model('blogposts', blogPostSchema);
     mongoose.model('users', userSchema);
+    mongoose.model('likes', likeSchema);
     return mongoose.connect('localhost', 'bloggaa');
   };
 

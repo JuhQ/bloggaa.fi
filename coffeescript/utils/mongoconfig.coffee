@@ -46,8 +46,15 @@ exports.config = () ->
     date: 'Date'
     ip: 'String'
   }
+  likeSchema = mongoose.Schema {
+    blog: 'ObjectId'
+    user: 'ObjectId'
+    blogpost: 'ObjectId'
+    date: 'Date'
+  }
   mongoose.model 'visits', visitSchema
   mongoose.model 'blogs', blogSchema
   mongoose.model 'blogposts', blogPostSchema
   mongoose.model 'users', userSchema
+  mongoose.model 'likes', likeSchema
   mongoose.connect 'localhost', 'bloggaa'

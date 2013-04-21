@@ -100,10 +100,45 @@
   };
 
   exports.like = function(req, res) {
+    var Blog;
+
+    res.header("Access-Control-Allow-Origin", "*");
     if (!req.session.user) {
       return res.redirect("/");
     }
-    return res.send("hello");
+    Blog = mongoose.model('blogposts');
+    return Blog.findOne({
+      _id: req.params.id
+    }).exec(function(err, blog) {
+      var Likes;
+
+      Likes = mongoose.model('likes');
+      return Likes.findOne({
+        blogpost: blog._id,
+        user: req.session.user.id
+      }).exec(function(err, likeData) {
+        var like;
+
+        if (likeData) {
+          Likes.where('blogpost').equals(blog._id).where('user').equals(req.session.user.id).remove();
+          return res.jsonp({
+            ok: 0
+          });
+        } else {
+          like = new Likes({
+            blog: blog.blog,
+            user: req.session.user.id,
+            blogpost: blog._id,
+            date: new Date()
+          });
+          return like.save(function(err) {
+            return res.jsonp({
+              ok: 1
+            });
+          });
+        }
+      });
+    });
   };
 
   exports.write = function(req, res) {

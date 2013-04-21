@@ -68,7 +68,7 @@
 
   app.post("/search", routesBlogs.postSearch);
 
-  app.get("/like", routesBlogs.like);
+  app.get("/like/:id", routesBlogs.like);
 
   app.get("/dashboard", routesDashboard.index);
 

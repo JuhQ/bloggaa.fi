@@ -47,7 +47,7 @@ app.get "/tag/:tag", routesBlogs.tagSearch
 app.get "/search/:tag", routesBlogs.search
 app.post "/search", routesBlogs.postSearch
 
-app.get "/like", routesBlogs.like
+app.get "/like/:id", routesBlogs.like
 app.get "/dashboard", routesDashboard.index
 app.get "/dashboard/settings", routesDashboard.settings
 app.get "/dashboard/visits", routesDashboard.visits
