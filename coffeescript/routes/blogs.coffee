@@ -18,13 +18,15 @@ visitlog = (blog, post, req) ->
   Blog = mongoose.model 'blogs'
   Blog.update { _id: blog._id }, $inc: visits: 1, () ->
 
+exports.postSearch = (req, res) ->
+  res.redirect "/search/" + req.body.query
+
 search = (req, res, field) ->
   domain = req.get('host').replace(req.subdomains[0] + ".", "")
   Blog = mongoose.model 'blogposts'
   options = {}
   options[field] = {$regex: req.params.tag}
   Blog.find(options).exec (err, data) ->
-    return res.redirect "/" unless data and data.length
     res.render "search",
       title: "Bloggaa.fi"
       session: req.session

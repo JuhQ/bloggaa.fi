@@ -21,40 +21,44 @@
   <!-- Background from http://www.flickr.com/photos/dspouliot/8559381070/sizes/l/in/photostream/ -->
 
     <div class="container">
-    <div class="row">
-      <div class="jumbotron span10 offset1">
-        <h1>Bloggaa!</h1>
-        <p class="lead">Bloggaaminen on mukavaa</p>
+      <div class="row">
+        <div class="jumbotron span10 offset1">
+          <h1>Bloggaa!</h1>
+          <p class="lead">Bloggaaminen on mukavaa</p>
 
-        <div class="row">
-          <div class="span4 offset1">
-            <form class="form-signin" method="post" action="/login">
-              <h2>Kirjaudu</h2>
-              <input type="email" name="email" class="input-block-level" placeholder="Email" />
-              <input type="password" name="password" class="input-block-level" placeholder="Salasana" />
-              
-              <div class="clearfix"></div>
-              <button class="btn btn-primary" type="submit">Kirjaudu sisään</button>
+          <div class="row">
+            <div class="span4 offset1">
+              <form class="form-signin" method="post" action="/login">
+                <h2>Kirjaudu</h2>
+                <input type="email" name="email" class="input-block-level" placeholder="Email" />
+                <input type="password" name="password" class="input-block-level" placeholder="Salasana" />
+                
+                <div class="clearfix"></div>
+                <button class="btn btn-primary" type="submit">Kirjaudu sisään</button>
+              </form>
+            </div>
+
+            <div class="span4">
+              <form class="form-signin" method="post" action="/register">
+                <h2>Luo tunnus</h2>
+                <input type="email" name="email" class="input-block-level" placeholder="Email" />
+                <input type="password" name="password" class="input-block-level" placeholder="Salasana" />
+                
+                <div class="input-append pull-left">
+                  <input class="span2" name="blogname" type="text" placeholder="Blogin osoite" />
+                  <span class="add-on">.bloggaa.fi</span>
+                </div>
+
+                <div class="clearfix"></div>
+                <button class="btn btn-primary" type="submit">Luo tunnus</button>
+              </form>
+            </div>
+
+            <form method="post" action="/search" class="form-search">
+              <input type="search" name="query" placeholder="Hae.." />
+              <button type="submit" class="btn"><i class="icon-search"></i></button>
             </form>
           </div>
-
-          <div class="span4">
-            <form class="form-signin" method="post" action="/register">
-              <h2>Luo tunnus</h2>
-              <input type="email" name="email" class="input-block-level" placeholder="Email" />
-              <input type="password" name="password" class="input-block-level" placeholder="Salasana" />
-              
-              <div class="input-append pull-left">
-                <input class="span2" name="blogname" type="text" placeholder="Blogin osoite" />
-                <span class="add-on">.bloggaa.fi</span>
-              </div>
-
-              <div class="clearfix"></div>
-              <button class="btn btn-primary" type="submit">Luo tunnus</button>
-            </form>
-          </div>
-
-        </div>
         </div>
       </div>
     </div>

@@ -45,6 +45,7 @@ app.post "/login", routesUsers.handleLogin
 
 app.get "/tag/:tag", routesBlogs.tagSearch
 app.get "/search/:tag", routesBlogs.search
+app.post "/search", routesBlogs.postSearch
 
 app.get "/like", routesBlogs.like
 app.get "/dashboard", routesDashboard.index

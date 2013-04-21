@@ -34,6 +34,10 @@
     }, function() {});
   };
 
+  exports.postSearch = function(req, res) {
+    return res.redirect("/search/" + req.body.query);
+  };
+
   search = function(req, res, field) {
     var Blog, domain, options;
 
@@ -44,9 +48,6 @@
       $regex: req.params.tag
     };
     return Blog.find(options).exec(function(err, data) {
-      if (!(data && data.length)) {
-        return res.redirect("/");
-      }
       return res.render("search", {
         title: "Bloggaa.fi",
         session: req.session,

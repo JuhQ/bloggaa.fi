@@ -2,6 +2,11 @@
 
 <div class="container">
   <%
+  if(!data.length) {
+    %>
+    <p>Ei hakutuloksia :(</p>
+    <%
+  }
   data.forEach(function(row, i) {
   %>
     <div class="row">
