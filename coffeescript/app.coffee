@@ -2,6 +2,7 @@ express = require("express")
 routes = require("./routes")
 routesUsers = require("./routes/users")
 routesBlogs = require("./routes/blogs")
+routesApi = require("./routes/api")
 routesDashboard = require("./routes/dashboard")
 mongoconfig = require("./utils/mongoconfig")
 http = require("http")
@@ -43,6 +44,7 @@ app.get "/logout", routesUsers.logout
 app.post "/login", routesUsers.handleLogin
 
 app.get "/tag/:tag", routesBlogs.tagSearch
+app.get "/search/:tag", routesBlogs.search
 
 app.get "/like", routesBlogs.like
 app.get "/dashboard", routesDashboard.index
@@ -66,10 +68,11 @@ app.get "/blog/:blog", routesBlogs.showblog
 app.get "/blog/:blog/page/:page", routesBlogs.showblog
 app.get "/blog/:blog/title/:title", routesBlogs.showpost
 
-
 app.get "/latest", routesBlogs.latestBlogs
 app.get "/latest/blogs", routesBlogs.latestBlogs
 app.get "/latest/texts", routesBlogs.latestTexts
+
+app.get "/api/statistics", routesApi.statistics
 
 
 http.createServer(app).listen app.get("port"), ->

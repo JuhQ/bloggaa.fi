@@ -8,7 +8,4 @@ define [
   Backbone
   ) ->
   Backbone.Model.extend
-    url: "/statistics/%id/json",
-    initialize: (options) ->
-      @url = @url.replace "%id", options.id
-      return
+    url: "/api/statistics"

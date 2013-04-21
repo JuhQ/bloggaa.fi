@@ -1,5 +1,5 @@
 (function() {
-  var addthis, facebookComments, moment, mongoose, visitlog;
+  var addthis, facebookComments, moment, mongoose, search, visitlog;
 
   mongoose = require('mongoose');
 
@@ -34,30 +34,34 @@
     }, function() {});
   };
 
-  exports.tagSearch = function(req, res) {
-    var Blog, domain;
+  search = function(req, res, field) {
+    var Blog, domain, options;
 
     domain = req.get('host').replace(req.subdomains[0] + ".", "");
     Blog = mongoose.model('blogposts');
-    return Blog.find({
-      tags: {
-        $regex: req.params.tag
-      }
-    }).exec(function(err, data) {
-      console.log(data);
-      if (!(data && data.length)) {
-        return res.send("nope");
-      }
+    options = {};
+    options[field] = {
+      $regex: req.params.tag
+    };
+    return Blog.find(options).exec(function(err, data) {
       if (!(data && data.length)) {
         return res.redirect("/");
       }
-      return res.render("tagsearch", {
+      return res.render("search", {
         title: "Bloggaa.fi",
         session: req.session,
         data: data,
         domain: domain
       });
     });
+  };
+
+  exports.tagSearch = function(req, res) {
+    return search(req, res, "tags");
+  };
+
+  exports.search = function(req, res) {
+    return search(req, res, "content");
   };
 
   exports.reblog = function(req, res) {

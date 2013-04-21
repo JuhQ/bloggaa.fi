@@ -1,5 +1,5 @@
 (function() {
-  var MongoStore, app, express, http, mongoconfig, mongoose, routes, routesBlogs, routesDashboard, routesUsers;
+  var MongoStore, app, express, http, mongoconfig, mongoose, routes, routesApi, routesBlogs, routesDashboard, routesUsers;
 
   express = require("express");
 
@@ -8,6 +8,8 @@
   routesUsers = require("./routes/users");
 
   routesBlogs = require("./routes/blogs");
+
+  routesApi = require("./routes/api");
 
   routesDashboard = require("./routes/dashboard");
 
@@ -62,6 +64,8 @@
 
   app.get("/tag/:tag", routesBlogs.tagSearch);
 
+  app.get("/search/:tag", routesBlogs.search);
+
   app.get("/like", routesBlogs.like);
 
   app.get("/dashboard", routesDashboard.index);
@@ -105,6 +109,8 @@
   app.get("/latest/blogs", routesBlogs.latestBlogs);
 
   app.get("/latest/texts", routesBlogs.latestTexts);
+
+  app.get("/api/statistics", routesApi.statistics);
 
   http.createServer(app).listen(app.get("port"), function() {
     return console.log("Express server listening on port " + app.get("port"));

@@ -26,6 +26,7 @@ exports.config = () ->
     added: 'Date'
     edited: 'Date'
     hidden: 'Boolean'
+    draft: 'Boolean'
     visits: 'Number'
     user: 'ObjectId'
     blog: 'ObjectId'

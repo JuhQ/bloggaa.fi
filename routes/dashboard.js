@@ -42,7 +42,10 @@
     if (!req.session.user) {
       return res.redirect("/");
     }
-    return res.render("statistics");
+    return res.render("statistics", {
+      title: "Tilastot - Bloggaa.fi",
+      session: req.session
+    });
   };
 
   exports.settings = function(req, res) {

@@ -29,7 +29,9 @@ exports.index = (req, res) ->
 
 exports.visits = (req, res) ->
   return res.redirect "/" unless req.session.user
-  res.render "statistics"
+  res.render "statistics",
+    title: "Tilastot - Bloggaa.fi"
+    session: req.session
 
 exports.settings = (req, res) ->
   return res.redirect "/" unless req.session.user
