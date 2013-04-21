@@ -6,7 +6,7 @@
       <fieldset>
         <legend>Blogin hallinta
           <small><a href="/dashboard/settings">Blogin asetukset</a> - 
-            <a href="http://<%=url%>.<%=domain%>">Oma blogi</a>
+            <a href="http://<%=blog.url%>.<%=domain%>">Oma blogi</a>
           </small>
         </legend>
           <%= include blogeditor.ejs %>
@@ -15,6 +15,9 @@
     <div class="span6">
       <fieldset>
         <legend>Kirjoitukset</legend>
+        <p>
+          Blogiasi on luettu yhteensä <%=blog.visits%> kertaa.
+        </p>
         <%
         if(data.length === 0) {
         %>
@@ -38,7 +41,8 @@
           }
           %>
           -
-          <a href="http://<%=url%>.<%=domain%>/<%=data.url%>"><%=data.title%></a>
+          <a href="http://<%=blog.url%>.<%=domain%>/<%=data.url%>"><%=data.title%></a>
+          <%=data.visits%>
         </p>
         <%
         });

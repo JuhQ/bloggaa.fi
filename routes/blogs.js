@@ -150,36 +150,45 @@
   };
 
   exports.saveBlog = function(req, res) {
-    var Blogs, blog, url;
+    var Blog, url;
 
     if (!req.session.user) {
       return res.redirect("/");
     }
     url = req.body.title.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g, '-');
-    Blogs = mongoose.model('blogposts');
-    blog = new Blogs({
-      title: req.body.title,
-      url: url,
-      content: req.body.content,
-      added: new Date(),
-      hidden: req.body.hidden === 1,
-      visits: 0,
-      user: req.session.user.id,
-      blog: req.body.blogid
-    });
-    return blog.save(function(err) {
-      var Blog;
+    Blog = mongoose.model('blogs');
+    return Blog.findOne({
+      user: req.session.user.id
+    }).exec(function(err, blogData) {
+      var Blogs, blog;
 
-      Blog = mongoose.model('blogs');
-      return Blog.update({
-        _id: req.body.blogid,
-        user: req.session.user.id
-      }, {
-        $set: {
-          lastpost: new Date()
-        }
-      }, function() {
-        return res.redirect("/dashboard");
+      if (!blogData) {
+        return res.redirect("/");
+      }
+      Blogs = mongoose.model('blogposts');
+      blog = new Blogs({
+        title: req.body.title,
+        url: url,
+        content: req.body.content,
+        subdomain: blogData.url,
+        added: new Date(),
+        hidden: req.body.hidden === 1,
+        visits: 0,
+        user: req.session.user.id,
+        blog: req.body.blogid
+      });
+      return blog.save(function(err) {
+        Blog = mongoose.model('blogs');
+        return Blog.update({
+          _id: req.body.blogid,
+          user: req.session.user.id
+        }, {
+          $set: {
+            lastpost: new Date()
+          }
+        }, function() {
+          return res.redirect("/dashboard");
+        });
       });
     });
   };
@@ -193,10 +202,10 @@
     Blog = mongoose.model('blogs');
     return Blog.findOne({
       user: req.session.user.id
-    }).exec(function(err, blog) {
+    }).exec(function(err, blogData) {
       var Blogs;
 
-      if (!blog) {
+      if (!blogData) {
         return res.redirect("/");
       }
       Blogs = mongoose.model('blogposts');
@@ -223,27 +232,38 @@
   };
 
   exports.saveEdit = function(req, res) {
-    var Blog, title, url;
+    var Blog;
 
     if (!req.session.user) {
       return res.redirect("/");
     }
-    Blog = mongoose.model('blogposts');
-    title = req.body.title;
-    url = title.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g, '-');
-    return Blog.update({
-      _id: req.body.blogid,
+    Blog = mongoose.model('blogs');
+    return Blog.findOne({
       user: req.session.user.id
-    }, {
-      $set: {
-        edited: new Date(),
-        title: title,
-        url: url,
-        content: req.body.content,
-        hidden: req.body.hidden === 1
+    }).exec(function(err, blogData) {
+      var title, url;
+
+      if (!blog) {
+        return res.redirect("/");
       }
-    }, function() {
-      return res.redirect("/dashboard");
+      Blog = mongoose.model('blogposts');
+      title = req.body.title;
+      url = title.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g, '-');
+      return Blog.update({
+        _id: req.body.blogid,
+        user: req.session.user.id
+      }, {
+        $set: {
+          edited: new Date(),
+          title: title,
+          url: url,
+          subdomain: blogData.url,
+          content: req.body.content,
+          hidden: req.body.hidden === 1
+        }
+      }, function() {
+        return res.redirect("/dashboard");
+      });
     });
   };
 
@@ -416,16 +436,12 @@
     domain = req.get('host').replace(req.subdomains[0] + ".", "");
     Blogs = mongoose.model('blogposts');
     return Blogs.find().sort('-added').exec(function(err, data) {
-      var subdomain;
-
       if (!data) {
         return res.redirect("/");
       }
-      subdomain = "juha";
       return res.render("latestsblogposts", {
         title: "Uusimmat kirjoitukset - Bloggaa.fi",
         data: data,
-        subdomain: subdomain,
         domain: domain,
         moment: moment,
         session: req.session

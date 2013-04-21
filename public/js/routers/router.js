@@ -1,12 +1,13 @@
 (function() {
-  define(["views/write", "views/settings"], function(WriteView, SettingsView) {
+  define(["views/write", "views/settings", "views/statistics"], function(WriteView, SettingsView, StatisticsView) {
     return Backbone.Router.extend({
       routes: {
         "": "index",
         "write": "write",
         "edit(/:id)": "write",
         "dashboard(/edit/:id)": "dashboard",
-        "dashboard/settings": "settings"
+        "dashboard/settings": "settings",
+        "dashboard/visits": "visits"
       },
       index: function() {},
       settings: function() {
@@ -14,6 +15,9 @@
       },
       dashboard: function() {
         return new WriteView();
+      },
+      visits: function() {
+        return new StatisticsView();
       },
       write: function() {
         return new WriteView();

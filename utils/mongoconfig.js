@@ -27,6 +27,7 @@
       title: 'String',
       url: 'String',
       content: 'String',
+      subdomain: 'String',
       tags: 'String',
       added: 'Date',
       edited: 'Date',

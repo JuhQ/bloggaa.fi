@@ -91,23 +91,31 @@ exports.show = (req, res) ->
 exports.saveBlog = (req, res) ->
   return res.redirect "/" unless req.session.user
   url = req.body.title.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g,'-')
-  Blogs = mongoose.model 'blogposts'
-  blog = new Blogs
-    title: req.body.title
-    url: url
-    content: req.body.content
-    added: new Date()
-    hidden: req.body.hidden is 1
-    visits: 0
+
+  Blog = mongoose.model 'blogs'
+  Blog.findOne({
     user: req.session.user.id
-    blog: req.body.blogid
-  blog.save (err) ->
-    Blog = mongoose.model 'blogs'
-    Blog.update { _id: req.body.blogid, user: req.session.user.id },
-      $set:
-        lastpost: new Date()
-    , () ->
-      res.redirect "/dashboard"
+  }).exec (err, blogData) ->
+    return res.redirect "/" unless blogData
+
+    Blogs = mongoose.model 'blogposts'
+    blog = new Blogs
+      title: req.body.title
+      url: url
+      content: req.body.content
+      subdomain: blogData.url
+      added: new Date()
+      hidden: req.body.hidden is 1
+      visits: 0
+      user: req.session.user.id
+      blog: req.body.blogid
+    blog.save (err) ->
+      Blog = mongoose.model 'blogs'
+      Blog.update { _id: req.body.blogid, user: req.session.user.id },
+        $set:
+          lastpost: new Date()
+      , () ->
+        res.redirect "/dashboard"
 
 exports.edit = (req, res) ->
   return res.redirect "/" unless req.session.user
@@ -115,8 +123,8 @@ exports.edit = (req, res) ->
   Blog = mongoose.model 'blogs'
   Blog.findOne({
     user: req.session.user.id
-  }).exec (err, blog) ->
-    return res.redirect "/" unless blog
+  }).exec (err, blogData) ->
+    return res.redirect "/" unless blogData
 
     Blogs = mongoose.model 'blogposts'
     Blogs.findOne({
@@ -136,20 +144,28 @@ exports.edit = (req, res) ->
 
 exports.saveEdit = (req, res) ->
   return res.redirect "/" unless req.session.user
-  Blog = mongoose.model 'blogposts'
 
-  title = req.body.title
-  url = title.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g,'-')
+  Blog = mongoose.model 'blogs'
+  Blog.findOne({
+    user: req.session.user.id
+  }).exec (err, blogData) ->
+    return res.redirect "/" unless blog
 
-  Blog.update { _id: req.body.blogid, user: req.session.user.id },
-    $set:
-      edited: new Date()
-      title: title
-      url: url
-      content: req.body.content
-      hidden: req.body.hidden is 1
-  , () ->
-    res.redirect "/dashboard"
+    Blog = mongoose.model 'blogposts'
+
+    title = req.body.title
+    url = title.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g,'-')
+
+    Blog.update { _id: req.body.blogid, user: req.session.user.id },
+      $set:
+        edited: new Date()
+        title: title
+        url: url
+        subdomain: blogData.url
+        content: req.body.content
+        hidden: req.body.hidden is 1
+    , () ->
+      res.redirect "/dashboard"
 
 exports.showblog = (req, res) ->
   limit = 5
@@ -283,12 +299,9 @@ exports.latestTexts = (req, res) ->
   Blogs.find().sort('-added').exec (err, data) ->
     return res.redirect "/" unless data
 
-    subdomain = "juha"
-
     res.render "latestsblogposts",
       title: "Uusimmat kirjoitukset - Bloggaa.fi"
       data: data
-      subdomain: subdomain
       domain: domain
       moment: moment
       session: req.session

@@ -18,9 +18,15 @@ exports.index = (req, res) ->
           title: "Bloggaa.fi"
           data: data
           session: req.session
+          domain: domain
+          blog: blog
+          # blog editor needs these
           blogTitle: ""
           blogContent: ""
           action: "saveBlog"
-          domain: domain
           url: blog.url
           blogid: blog._id
+
+exports.visits = (req, res) ->
+  return res.redirect "/" unless req.session.user
+  res.render "statistics"

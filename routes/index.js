@@ -40,12 +40,16 @@
   };
 
   exports.saveSettings = function(req, res) {
-    var Blog, url;
+    var Blog, url, urlBase;
 
     if (!req.session.user) {
       return res.redirect("/");
     }
-    url = req.body.name.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g, '-');
+    urlBase = req.body.name;
+    if (req.body.url) {
+      urlBase = req.body.url;
+    }
+    url = urlBase.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g, '-');
     Blog = mongoose.model('blogs');
     return Blog.findOne({
       user: req.session.user.id,
@@ -75,10 +79,24 @@
           user: req.session.user.id,
           _id: req.body.id
         }).exec(function(err, data) {
-          return res.render("settings", {
-            title: "Asetukset tallennettu - Bloggaa.fi",
-            session: req.session,
-            blog: data
+          var Blogposts;
+
+          Blogposts = mongoose.model('blogposts');
+          return Blogposts.update({
+            blog: data._id,
+            user: req.session.user.id
+          }, {
+            $set: {
+              subdomain: url
+            }
+          }, {
+            multi: true
+          }, function() {
+            return res.render("settings", {
+              title: "Asetukset tallennettu - Bloggaa.fi",
+              session: req.session,
+              blog: data
+            });
           });
         });
       });

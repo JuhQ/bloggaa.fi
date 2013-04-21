@@ -25,16 +25,24 @@
             title: "Bloggaa.fi",
             data: data,
             session: req.session,
+            domain: domain,
+            blog: blog,
             blogTitle: "",
             blogContent: "",
             action: "saveBlog",
-            domain: domain,
             url: blog.url,
             blogid: blog._id
           });
         });
       }
     });
+  };
+
+  exports.visits = function(req, res) {
+    if (!req.session.user) {
+      return res.redirect("/");
+    }
+    return res.render("statistics");
   };
 
 }).call(this);

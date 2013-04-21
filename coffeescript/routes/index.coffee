@@ -24,7 +24,11 @@ exports.saveAccountSettings = (req, res) ->
 
 exports.saveSettings = (req, res) ->
   return res.redirect "/" unless req.session.user
-  url = req.body.name.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g,'-')
+
+  urlBase = req.body.name
+  urlBase = req.body.url if req.body.url
+
+  url = urlBase.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g,'-')
 
   Blog = mongoose.model 'blogs'
   Blog.findOne({
@@ -35,7 +39,7 @@ exports.saveSettings = (req, res) ->
     Blog.update { _id: data._id },
       $set:
         name: req.body.name
-        url: url
+        url: url # NOTE! when url changes, all posts need to update as well
         disqus: req.body.disqus
         googleanalytics: req.body.googleanalytics
         facebookComments: req.body.facebookComments
@@ -50,7 +54,11 @@ exports.saveSettings = (req, res) ->
         user: req.session.user.id
         _id: req.body.id
       }).exec (err, data) ->
-        res.render "settings",
-          title: "Asetukset tallennettu - Bloggaa.fi"
-          session: req.session
-          blog: data
+        Blogposts = mongoose.model 'blogposts'
+        Blogposts.update { blog: data._id, user: req.session.user.id },
+          $set: subdomain: url
+        , {multi: true}, () ->
+          res.render "settings",
+            title: "Asetukset tallennettu - Bloggaa.fi"
+            session: req.session
+            blog: data

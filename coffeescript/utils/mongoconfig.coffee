@@ -21,6 +21,7 @@ exports.config = () ->
     title: 'String'
     url: 'String'
     content: 'String'
+    subdomain: 'String'
     tags: 'String' # Array does not work for some reason
     added: 'Date'
     edited: 'Date'
