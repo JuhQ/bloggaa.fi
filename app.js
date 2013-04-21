@@ -92,6 +92,8 @@
 
   app.get("/blog/:blog", routesBlogs.showblog);
 
+  app.get("/blog/:blog/page/:page", routesBlogs.showblog);
+
   app.get("/blog/:blog/title/:title", routesBlogs.showpost);
 
   app.get("/latest", routesBlogs.latestBlogs);

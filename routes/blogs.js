@@ -248,8 +248,15 @@
   };
 
   exports.showblog = function(req, res) {
-    var Blog, blogName, domain;
+    var Blog, blogName, domain, limit, offset, page;
 
+    limit = 5;
+    offset = 0;
+    page = 0;
+    if (req.params.page) {
+      page = Number(req.params.page);
+      offset = page * limit;
+    }
     domain = req.get('host').replace(req.subdomains[0] + ".", "");
     blogName = req.params.blog.toLowerCase();
     Blog = mongoose.model('blogs');
@@ -267,7 +274,7 @@
         Blogs.find({
           blog: blogData._id,
           hidden: false
-        }).sort('-added').exec(function(err, data) {
+        }).sort('-added').skip(offset).limit(limit).exec(function(err, data) {
           var title;
 
           if (data) {
@@ -285,7 +292,8 @@
               data: data,
               moment: moment,
               domain: domain,
-              session: req.session
+              session: req.session,
+              page: page
             });
           }
           if (!data) {
@@ -333,6 +341,13 @@
           url: req.params.title.toLowerCase()
         }).exec(function(err, data) {
           if (data) {
+            /*
+            # Next blog post
+            Blogs.findOne().where('added').gt(data.added).sort("added").limit(1).exec (err, data) ->
+            # Previous blog post
+            Blogs.findOne().where('added').gt(data.added).sort("-added").limit(1).exec (err, data) ->
+            */
+
             visitlog(blogData, data._id, req);
             Blogs.update({
               _id: data._id

@@ -61,6 +61,7 @@ app.post "/dashboard/saveEdit/:id", routesBlogs.saveEdit
 
 app.get "/blog", routesBlogs.latestBlogs
 app.get "/blog/:blog", routesBlogs.showblog
+app.get "/blog/:blog/page/:page", routesBlogs.showblog
 app.get "/blog/:blog/title/:title", routesBlogs.showpost
 
 

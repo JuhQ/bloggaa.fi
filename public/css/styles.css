@@ -20,6 +20,15 @@ body.fabulous .jumbotron h2 {
 body.fabulous .jumbotron h2 {
   font-size: 35px;
 }
+.like,
+.reblog {
+  font-size: 2em;
+}
+.like:hover,
+.reblog:hover {
+  text-decoration: none;
+  color: red;
+}
 .writer textarea {
   height: 200px;
 }

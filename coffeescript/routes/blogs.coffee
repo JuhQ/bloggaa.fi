@@ -152,6 +152,13 @@ exports.saveEdit = (req, res) ->
     res.redirect "/dashboard"
 
 exports.showblog = (req, res) ->
+  limit = 5
+  offset = 0
+  page = 0
+  if req.params.page
+    page = Number(req.params.page)
+    offset = page * limit
+
   domain = req.get('host').replace(req.subdomains[0] + ".", "")
   blogName = req.params.blog.toLowerCase()
   Blog = mongoose.model 'blogs'
@@ -167,7 +174,7 @@ exports.showblog = (req, res) ->
       Blogs.find({
         blog: blogData._id
         hidden: false
-      }).sort('-added').exec (err, data) ->
+      }).sort('-added').skip(offset).limit(limit).exec (err, data) ->
         if data
           visitlog(blogData, data._id, req)
           title = ""
@@ -183,6 +190,7 @@ exports.showblog = (req, res) ->
             moment: moment
             domain: domain
             session: req.session
+            page: page
         unless data
           res.render "themes/" + blogData.theme + "/nocontent",
             title: "Bloggaa.fi"
@@ -216,6 +224,13 @@ exports.showpost = (req, res) ->
         url: req.params.title.toLowerCase()
       }).exec (err, data) ->
         if data
+
+          ###
+          # Next blog post
+          Blogs.findOne().where('added').gt(data.added).sort("added").limit(1).exec (err, data) ->
+          # Previous blog post
+          Blogs.findOne().where('added').gt(data.added).sort("-added").limit(1).exec (err, data) ->
+          ###
 
           # Save visit log
           visitlog(blogData, data._id, req)

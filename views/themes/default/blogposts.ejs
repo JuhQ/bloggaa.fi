@@ -36,8 +36,9 @@
           <%-data.content.replace(/\n/g, "<br />")%>
         </p>
         <p>
-          <a href="http://<%=domain%>/like/<%=data._id%>" class="like">Tykkää</a> -
-          <a href="http://<%=domain%>/dashboard/reblog/<%=data._id%>">Rebloggaa</a>
+        <!-- icon-heart-empty -->
+          <a href="http://<%=domain%>/like/<%=data._id%>" class="like" title="Tykkää"><i class="icon-heart"></i></a>
+          <a href="http://<%=domain%>/dashboard/reblog/<%=data._id%>" class="reblog" title="Rebloggaa"><i class="icon-retweet"></i></a>
         </p>
 
         <div class="addthis_toolbox addthis_default_style">
@@ -64,11 +65,19 @@
   </div> <!-- row-fluid -->
 
   <ul class="pager">
-    <li class="previous disabled">
-      <a href="#">&larr; Tuoreemmat</a>
+    <%
+    var disabled = "disabled";
+    var prevPage = 0;
+    if(page > 0) {
+      disabled = "";
+      prevPage = page - 1;
+    }
+    %>
+    <li class="previous <%=disabled%>">
+      <a href="/page/<%=prevPage%>">&larr; Tuoreemmat</a>
     </li>
     <li class="next">
-      <a href="#">Vanhemmat &rarr;</a>
+      <a href="/page/<%=page+1||1%>">Vanhemmat &rarr;</a>
     </li>
   </ul>
 
