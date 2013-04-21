@@ -1,6 +1,6 @@
 <%= include header.ejs %>
 
-<div class="container-fluid">
+<div class="container">
   <%
   if(blog.name || blog.description) {
   %>
@@ -22,7 +22,7 @@
   }
   %>
 
-  <div class="row-fluid">
+  <div class="row">
     <div class="span8">
       <%
       data.forEach(function(data, i) {

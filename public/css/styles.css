@@ -20,6 +20,9 @@ body.fabulous .jumbotron h2 {
 body.fabulous .jumbotron h2 {
   font-size: 35px;
 }
+.dashboard fieldset small {
+  line-height: 15px;
+}
 .like,
 .reblog {
   font-size: 2em;

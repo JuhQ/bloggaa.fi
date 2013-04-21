@@ -1,22 +1,20 @@
 <%= include header.ejs %>
 
-<div class="container">
-
-  <div class="row-fluid">
+<div class="container dashboard">
+  <div class="row">
     <div class="span6">
       <fieldset>
-      <legend>Blogin hallinta
-        <small><a href="/dashboard/settings">Blogin asetukset</a> - 
-          <a href="http://<%=url%>.<%=domain%>">Oma blogi</a>
-        </small>
+        <legend>Blogin hallinta
+          <small><a href="/dashboard/settings">Blogin asetukset</a> - 
+            <a href="http://<%=url%>.<%=domain%>">Oma blogi</a>
+          </small>
         </legend>
-          <h4>Kirjoita ;)</h4>
           <%= include blogeditor.ejs %>
       </fieldset>
     </div>
     <div class="span6">
       <fieldset>
-      <legend>Kirjoitukset</legend>
+        <legend>Kirjoitukset</legend>
         <%
         if(data.length === 0) {
         %>
