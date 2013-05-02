@@ -1,10 +1,13 @@
 mongoose = require('mongoose')
+Recaptcha = require("recaptcha").Recaptcha
 
 exports.index = (req, res) ->
+  recaptcha = new Recaptcha("6LcHyuASAAAAAPt4ikPlTtHjHP-qhdBvZ02dbuOk", "6LcHyuASAAAAAKoU47lXVgzQeY6mm4M2ixABmqdS")
   return res.redirect "/dashboard" if req.session.user
   domain = req.get('host').replace(req.subdomains[0] + ".", "")
   res.render "landingpage-index",
     title: "Bloggaa.fi"
+    recaptcha_form: recaptcha.toHTML()
 
 exports.saveAccountSettings = (req, res) ->
   res.send "Hello world"

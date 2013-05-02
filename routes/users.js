@@ -1,7 +1,9 @@
 (function() {
-  var authenticate, login, mongoose;
+  var Recaptcha, authenticate, login, mongoose;
 
   mongoose = require('mongoose');
+
+  Recaptcha = require("recaptcha").Recaptcha;
 
   exports.register = function(req, res) {
     return res.render("register", {
@@ -69,7 +71,7 @@
   };
 
   exports.createAccount = function(req, res) {
-    var hash;
+    var data, hash, recaptcha;
 
     hash = require("../utils/password").hash;
     if (req.session.user) {
@@ -91,57 +93,69 @@
       return
     */
 
-    return hash(req.body.password, function(err, salt, password) {
-      var Users;
-
-      if (err) {
-        throw err;
+    data = {
+      remoteip: req.connection.remoteAddress,
+      challenge: req.body.recaptcha_challenge_field,
+      response: req.body.recaptcha_response_field
+    };
+    recaptcha = new Recaptcha("6LcHyuASAAAAAPt4ikPlTtHjHP-qhdBvZ02dbuOk", "6LcHyuASAAAAAKoU47lXVgzQeY6mm4M2ixABmqdS", data);
+    return recaptcha.verify(function(success, error_code) {
+      if (!success) {
+        res.redirect("/");
+        return;
       }
-      Users = mongoose.model('users');
-      return Users.findOne({
-        email: req.body.email.toLowerCase()
-      }).exec(function(err, data) {
-        var Blogs;
+      return hash(req.body.password, function(err, salt, password) {
+        var Users;
 
-        if (data) {
-          res.jsonp({
-            fail: "email-taken"
-          });
-          return;
+        if (err) {
+          throw err;
         }
-        Blogs = mongoose.model('blogs');
-        return Blogs.findOne({
-          url: req.body.blogname.toLowerCase()
+        Users = mongoose.model('users');
+        return Users.findOne({
+          email: req.body.email.toLowerCase()
         }).exec(function(err, data) {
-          var user;
+          var Blogs;
 
           if (data) {
             res.jsonp({
-              fail: "url-taken"
+              fail: "email-taken"
             });
             return;
           }
-          user = new Users({
-            email: req.body.email.toLowerCase(),
-            password: password,
-            salt: salt,
-            added: new Date(),
-            lastvisit: new Date()
-          });
-          return user.save(function(err) {
-            var blog, url;
+          Blogs = mongoose.model('blogs');
+          return Blogs.findOne({
+            url: req.body.blogname.toLowerCase()
+          }).exec(function(err, data) {
+            var user;
 
-            url = req.body.blogname.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g, '-');
-            Blogs = mongoose.model('blogs');
-            blog = new Blogs({
-              user: user._id,
-              name: req.body.blogname,
-              url: url,
+            if (data) {
+              res.jsonp({
+                fail: "url-taken"
+              });
+              return;
+            }
+            user = new Users({
+              email: req.body.email.toLowerCase(),
+              password: password,
+              salt: salt,
               added: new Date(),
-              theme: "default"
+              lastvisit: new Date()
             });
-            blog.save();
-            return login(req, res);
+            return user.save(function(err) {
+              var blog, url;
+
+              url = req.body.blogname.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g, '-');
+              Blogs = mongoose.model('blogs');
+              blog = new Blogs({
+                user: user._id,
+                name: req.body.blogname,
+                url: url,
+                added: new Date(),
+                theme: "default"
+              });
+              blog.save();
+              return login(req, res);
+            });
           });
         });
       });

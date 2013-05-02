@@ -1,5 +1,5 @@
 (function() {
-  define(["views/write", "views/settings", "views/statistics"], function(WriteView, SettingsView, StatisticsView) {
+  define(["views/index", "views/write", "views/settings", "views/statistics"], function(IndexView, WriteView, SettingsView, StatisticsView) {
     return Backbone.Router.extend({
       routes: {
         "": "index",
@@ -9,7 +9,9 @@
         "dashboard/settings": "settings",
         "dashboard/visits": "visits"
       },
-      index: function() {},
+      index: function() {
+        return new IndexView();
+      },
       settings: function() {
         return new SettingsView();
       },

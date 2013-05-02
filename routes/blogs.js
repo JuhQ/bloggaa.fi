@@ -226,19 +226,21 @@
     return Blog.findOne({
       user: req.session.user.id
     }).exec(function(err, blogData) {
-      var Blogs, blog;
+      var Blogs, blog, content, tags;
 
       if (!blogData) {
         return res.redirect("/");
       }
+      content = req.body.content.trim();
+      tags = req.body.tags.trim();
       Blogs = mongoose.model('blogposts');
       blog = new Blogs({
         title: req.body.title,
         url: url,
-        content: req.body.content,
+        content: content,
         subdomain: blogData.url,
         added: new Date(),
-        tags: req.body.tags,
+        tags: tags,
         hidden: req.body.hidden === 1,
         visits: 0,
         user: req.session.user.id,
@@ -308,7 +310,7 @@
     return Blog.findOne({
       user: req.session.user.id
     }).exec(function(err, blogData) {
-      var title, url;
+      var content, tags, title, url;
 
       if (!blog) {
         return res.redirect("/");
@@ -316,6 +318,8 @@
       Blog = mongoose.model('blogposts');
       title = req.body.title;
       url = title.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g, '-');
+      content = req.body.content.trim();
+      tags = req.body.tags.trim();
       return Blog.update({
         _id: req.body.blogid,
         user: req.session.user.id
@@ -325,8 +329,8 @@
           title: title,
           url: url,
           subdomain: blogData.url,
-          tags: req.body.tags,
-          content: req.body.content,
+          tags: tags,
+          content: content,
           hidden: req.body.hidden === 1
         }
       }, function() {

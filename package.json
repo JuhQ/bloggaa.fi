@@ -11,7 +11,8 @@
     "mongoose": "~3.6.0",
     "forever": "~0.10.0",
     "moment": "~2.0.0",
-    "connect-mongo": "~0.3.2"
+    "connect-mongo": "~0.3.2",
+    "recaptcha": "~1.2.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

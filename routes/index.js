@@ -1,17 +1,21 @@
 (function() {
-  var mongoose;
+  var Recaptcha, mongoose;
 
   mongoose = require('mongoose');
 
-  exports.index = function(req, res) {
-    var domain;
+  Recaptcha = require("recaptcha").Recaptcha;
 
+  exports.index = function(req, res) {
+    var domain, recaptcha;
+
+    recaptcha = new Recaptcha("6LcHyuASAAAAAPt4ikPlTtHjHP-qhdBvZ02dbuOk", "6LcHyuASAAAAAKoU47lXVgzQeY6mm4M2ixABmqdS");
     if (req.session.user) {
       return res.redirect("/dashboard");
     }
     domain = req.get('host').replace(req.subdomains[0] + ".", "");
     return res.render("landingpage-index", {
-      title: "Bloggaa.fi"
+      title: "Bloggaa.fi",
+      recaptcha_form: recaptcha.toHTML()
     });
   };
 

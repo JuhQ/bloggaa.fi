@@ -3,7 +3,7 @@
     baseUrl: "/js",
     enforceDefine: true,
     paths: {
-      jquery: "http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min",
+      jquery: ["http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min", "libs/jquery"],
       jsapi: "http://www.google.com/jsapi?callback=define",
       backbone: "libs/backbone",
       underscore: "libs/underscore",

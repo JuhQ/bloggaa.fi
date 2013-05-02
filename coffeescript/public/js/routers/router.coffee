@@ -1,8 +1,10 @@
 define [
+  "views/index"
   "views/write"
   "views/settings"
   "views/statistics"
 ], (
+  IndexView
   WriteView
   SettingsView
   StatisticsView
@@ -17,6 +19,8 @@ define [
       "dashboard/visits": "visits"
 
     index: ->
+      new IndexView()
+
     settings: ->
       new SettingsView()
 

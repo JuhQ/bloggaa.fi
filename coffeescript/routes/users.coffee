@@ -1,4 +1,5 @@
 mongoose = require('mongoose')
+Recaptcha = require("recaptcha").Recaptcha
 
 # Prints registration form
 exports.register = (req, res) ->
@@ -69,41 +70,52 @@ exports.createAccount = (req, res) ->
     return
   ###
 
-  hash req.body.password, (err, salt, password) ->
-    throw err if err
+  data =
+    remoteip: req.connection.remoteAddress
+    challenge: req.body.recaptcha_challenge_field
+    response: req.body.recaptcha_response_field
 
-    Users = mongoose.model 'users'
-    Users.findOne({
-      email: req.body.email.toLowerCase()
-    }).exec (err, data) ->
-      if data
-        res.jsonp fail: "email-taken"
-        return
+  recaptcha = new Recaptcha("6LcHyuASAAAAAPt4ikPlTtHjHP-qhdBvZ02dbuOk", "6LcHyuASAAAAAKoU47lXVgzQeY6mm4M2ixABmqdS", data)
+  recaptcha.verify (success, error_code) ->
+    unless success
+      res.redirect "/"
+      return
 
-      Blogs = mongoose.model 'blogs'
-      Blogs.findOne({
-        url: req.body.blogname.toLowerCase()
+    hash req.body.password, (err, salt, password) ->
+      throw err if err
+
+      Users = mongoose.model 'users'
+      Users.findOne({
+        email: req.body.email.toLowerCase()
       }).exec (err, data) ->
         if data
-          res.jsonp fail: "url-taken"
+          res.jsonp fail: "email-taken"
           return
 
-        user = new Users
-          email: req.body.email.toLowerCase()
-          password: password
-          salt: salt
-          added: new Date()
-          lastvisit: new Date()
+        Blogs = mongoose.model 'blogs'
+        Blogs.findOne({
+          url: req.body.blogname.toLowerCase()
+        }).exec (err, data) ->
+          if data
+            res.jsonp fail: "url-taken"
+            return
 
-        user.save (err) ->
-          url = req.body.blogname.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g,'-')
-          Blogs = mongoose.model 'blogs'
-          blog = new Blogs
-            user: user._id
-            name: req.body.blogname
-            url: url
+          user = new Users
+            email: req.body.email.toLowerCase()
+            password: password
+            salt: salt
             added: new Date()
-            theme: "default"
+            lastvisit: new Date()
 
-          blog.save()
-          login req, res
+          user.save (err) ->
+            url = req.body.blogname.trim().toLowerCase().replace(/[äåÄÅ]/g, "a").replace(/[öÖ]/g, "o").replace(/[^a-z0-9]+/g,'-')
+            Blogs = mongoose.model 'blogs'
+            blog = new Blogs
+              user: user._id
+              name: req.body.blogname
+              url: url
+              added: new Date()
+              theme: "default"
+
+            blog.save()
+            login req, res

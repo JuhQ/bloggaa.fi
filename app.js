@@ -33,7 +33,7 @@
     app.use(express.session({
       secret: 'bloggaa.fi is awesome and fun',
       cookie: {
-        maxAge: 60000 * 60 * 24 * 30
+        maxAge: 60000 * 60 * 24 * 30 * 12
       },
       store: new MongoStore({
         db: "bloggaa"

@@ -2,14 +2,17 @@ define [
   "jquery"
   "underscore"
   "backbone"
-  "text!templates/index.html"
   ], (
   $
   _
   Backbone
-  Template
   ) ->
   Backbone.View.extend
-    el: "#container"
-    initialize: ->
-      @$e.html _.template Template
+    el: ".container"
+    events:
+      "focus form[action='/register'] input": "showRepatcha"
+
+    showRepatcha: ->
+      element = $(".recaptcha")
+      element.slideDown() unless element.is(":visible")
+    

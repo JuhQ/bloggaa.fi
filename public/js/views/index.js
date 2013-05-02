@@ -1,9 +1,17 @@
 (function() {
-  define(["jquery", "underscore", "backbone", "text!templates/index.html"], function($, _, Backbone, Template) {
+  define(["jquery", "underscore", "backbone"], function($, _, Backbone) {
     return Backbone.View.extend({
-      el: "#container",
-      initialize: function() {
-        return this.$e.html(_.template(Template));
+      el: ".container",
+      events: {
+        "focus form[action='/register'] input": "showRepatcha"
+      },
+      showRepatcha: function() {
+        var element;
+
+        element = $(".recaptcha");
+        if (!element.is(":visible")) {
+          return element.slideDown();
+        }
       }
     });
   });
