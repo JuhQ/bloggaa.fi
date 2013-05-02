@@ -52,6 +52,12 @@ exports.config = () ->
     blogpost: 'ObjectId'
     date: 'Date'
   }
+  imageSchema = mongoose.Schema {
+    title: 'String'
+    added: 'Date'
+    user: 'ObjectId'
+  }
+  mongoose.model 'images', imageSchema
   mongoose.model 'visits', visitSchema
   mongoose.model 'blogs', blogSchema
   mongoose.model 'blogposts', blogPostSchema

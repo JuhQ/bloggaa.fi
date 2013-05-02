@@ -63,6 +63,8 @@ app.get "/dashboard/delete/:id", routesBlogs.remove
 app.post "/dashboard/saveBlog", routesBlogs.saveBlog
 app.post "/dashboard/saveEdit/:id", routesBlogs.saveEdit
 
+app.post "/dashboard/upload", routesBlogs.uploadImage
+
 
 app.get "/blog", routesBlogs.latestBlogs
 app.get "/blog/:blog", routesBlogs.showblog

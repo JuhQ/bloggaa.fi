@@ -5,6 +5,52 @@ moment.lang("fi")
 facebookComments = 400504446723077
 addthis = "ra-4e04fe637cc97ed4"
 
+
+exports.uploadImage = (req, res) ->
+  return res.redirect "/" unless req.session.user
+  fs = require('fs')
+
+  console.log req.files.image
+
+  
+  return if req.files.image.type isnt "image/png"
+
+  Images = mongoose.model "images"
+  image = new Images
+    user: req.session.user
+    added: new Date()
+  image.save ->
+
+    res.render "uploaded",
+      path: req.files.image.path
+
+
+    ###
+    fs.readFile req.files.image.path, (err, data) ->
+      
+      # ...
+      newPath = __dirname + "/uploads/uploadedFileName"
+      fs.writeFile newPath, data, (err) ->
+        res.redirect "back"
+
+
+    console.log "image", image
+    ###
+    ###
+      '\nuploaded %s, %s (%d Kb) to %s as %s'
+      req.files.image.type
+      req.files.image.name
+      req.files.image.size / 1024 | 0
+      req.files.image.path
+      req.body.title
+    ###
+
+    ###
+    res.render "uploaded",
+      path: req.files.image.path
+    ###
+
+
 visitlog = (blog, post, req) ->
   ip = req.headers['X-Forwarded-For'] or req.connection.remoteAddress
   Log = mongoose.model 'visits'
@@ -169,8 +215,8 @@ exports.edit = (req, res) ->
   Blog = mongoose.model 'blogs'
   Blog.findOne({
     user: req.session.user.id
-  }).exec (err, blogData) ->
-    return res.redirect "/" unless blogData
+  }).exec (err, blog) ->
+    return res.redirect "/" unless blog
 
     Blogs = mongoose.model 'blogposts'
     Blogs.findOne({

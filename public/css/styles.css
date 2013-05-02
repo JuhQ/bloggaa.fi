@@ -36,7 +36,7 @@ body.fabulous .jumbotron h2 {
   color: red;
 }
 .writer textarea {
-  height: 200px;
+  height: 500px;
 }
 .settings textarea {
   min-height: 80px;

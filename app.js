@@ -98,6 +98,8 @@
 
   app.post("/dashboard/saveEdit/:id", routesBlogs.saveEdit);
 
+  app.post("/dashboard/upload", routesBlogs.uploadImage);
+
   app.get("/blog", routesBlogs.latestBlogs);
 
   app.get("/blog/:blog", routesBlogs.showblog);

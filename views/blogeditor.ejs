@@ -1,6 +1,9 @@
 <link rel="stylesheet" href="/css/libs/select2.css" />
 <div class="writer">
-  <form class="form-signin" method="post" action="/dashboard/<%=action%>">
+  <form id="image" method="post" action="/dashboard/upload" class="hides" enctype="multipart/form-data">
+  </form>
+
+  <form class="form-signin" id="editor" method="post" action="/dashboard/<%=action%>">
     <input type="hidden" name="blogid" value="<%=blogid%>" />
     <input type="text" name="title" class="input-block-level" placeholder="Otsikko" value="<%=blogTitle%>" />
 
@@ -9,51 +12,65 @@
     </div>
 
     <div id="toolbar">
-      <div class="btn-group">
-        <a class="btn" data-wysihtml5-command="bold" title="CTRL+B"><i class="icon-bold"></i></a>
-        <a class="btn" data-wysihtml5-command="italic" title="CTRL+I"><i class="icon-italic"></i></a>
-        <a class="btn" data-wysihtml5-command="createLink"><i class="icon-link"></i></a>
-        <a class="btn" data-wysihtml5-command="insertImage"><i class="icon-picture"></i></a>
-        <a class="btn" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1">h1</a>
-        <a class="btn" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2">h2</a>
-      </div>
-      <div class="btn-group">
-        <a class="btn" data-wysihtml5-command="insertUnorderedList"><i class="icon-list-ul"></i></a>
-        <a class="btn" data-wysihtml5-command="insertOrderedList"><i class="icon-list-ol"></i></a>
-      </div>
-      <div class="btn-group">
-        <a class="btn" data-wysihtml5-command="justifyleft"><i class="icon-align-left"></i></a>
-        <a class="btn" data-wysihtml5-command="justifycenter"><i class="icon-align-center"></i></a>
-        <a class="btn" data-wysihtml5-command="justifyright"><i class="icon-align-right"></i></a>
-        <a class="btn" data-wysihtml5-command="justifyfull"><i class="icon-align-justify"></i></a>
-      </div>
-      <div class="btn-group">
-        <a class="btn" data-wysihtml5-command="undo"><i class="icon-undo"></i></a>
-        <a class="btn" data-wysihtml5-command="redo"><i class="icon-repeat"></i></a>
-        <!--<a class="btn" data-wysihtml5-command="insertSpeech">speech</a>-->
-      </div>
+      <p>
+        <div class="btn-group">
+          <a class="btn" data-wysihtml5-command="bold" title="CTRL+B"><i class="icon-bold"></i></a>
+          <a class="btn" data-wysihtml5-command="italic" title="CTRL+I"><i class="icon-italic"></i></a>
+          <a class="btn" data-wysihtml5-command="createLink"><i class="icon-link"></i></a>
+          <a class="btn" data-wysihtml5-command="insertImage"><i class="icon-picture"></i></a>
+          <a class="btn" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1">h1</a>
+          <a class="btn" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2">h2</a>
+        </div>
+        <div class="btn-group">
+          <a class="btn" data-wysihtml5-command="insertUnorderedList"><i class="icon-list-ul"></i></a>
+          <a class="btn" data-wysihtml5-command="insertOrderedList"><i class="icon-list-ol"></i></a>
+        </div>
+        <div class="btn-group">
+          <a class="btn" data-wysihtml5-command="justifyleft"><i class="icon-align-left"></i></a>
+          <a class="btn" data-wysihtml5-command="justifycenter"><i class="icon-align-center"></i></a>
+          <a class="btn" data-wysihtml5-command="justifyright"><i class="icon-align-right"></i></a>
+          <a class="btn" data-wysihtml5-command="justifyfull"><i class="icon-align-justify"></i></a>
+        </div>
+        <div class="btn-group">
+          <a class="btn" data-wysihtml5-command="undo"><i class="icon-undo"></i></a>
+          <a class="btn" data-wysihtml5-command="redo"><i class="icon-repeat"></i></a>
+          <!--<a class="btn" data-wysihtml5-command="insertSpeech">speech</a>-->
+        </div>
+      </p>
+
       <div data-wysihtml5-dialog="createLink" style="display: none;">
-        <label>
-          Link:
-          <input data-wysihtml5-dialog-field="href" value="http://">
-        </label>
-        <a data-wysihtml5-dialog-action="save">OK</a>&nbsp;<a data-wysihtml5-dialog-action="cancel">Cancel</a>
+        <p>
+          <label>
+            Link:
+            <input data-wysihtml5-dialog-field="href" value="http://" />
+          </label>
+          <a class="btn btn-success" href="#" data-wysihtml5-dialog-action="save">Lisää</a>
+          <a class="btn" href="#"  data-wysihtml5-dialog-action="cancel">Peruuta</a>
+        </p>
       </div>
 
       <div data-wysihtml5-dialog="insertImage" style="display: none;">
-        <label>
-          Image:
-          <input data-wysihtml5-dialog-field="src" value="http://">
-        </label>
-        <label>
-          Align:
-          <select data-wysihtml5-dialog-field="className">
-            <option value="">default</option>
-            <option value="wysiwyg-float-left">left</option>
-            <option value="wysiwyg-float-right">right</option>
-          </select>
-        </label>
-        <a data-wysihtml5-dialog-action="save">OK</a>&nbsp;<a data-wysihtml5-dialog-action="cancel">Cancel</a>
+        <p class="span3">
+          <p>Image: <input type="file" name="image" /></p>
+          <label>
+            Image:
+            <input data-wysihtml5-dialog-field="src" name="image_url" value="http://" />
+          </label>
+          <label>
+            Align:
+            <select data-wysihtml5-dialog-field="className">
+              <option value="">default</option>
+              <option value="wysiwyg-float-left">left</option>
+              <option value="wysiwyg-float-right">right</option>
+            </select>
+          </label>
+
+          <a class="btn btn-success" href="#" data-wysihtml5-dialog-action="save">Lisää</a>
+          <a class="btn" href="#"  data-wysihtml5-dialog-action="cancel">Peruuta</a>
+        </p>
+        <p class="span2 hide image-preview">
+        </p>
+        <div class="clearfix"></div>
       </div>
 
     </div>

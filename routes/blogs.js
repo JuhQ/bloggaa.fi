@@ -11,6 +11,55 @@
 
   addthis = "ra-4e04fe637cc97ed4";
 
+  exports.uploadImage = function(req, res) {
+    var Images, fs, image;
+
+    if (!req.session.user) {
+      return res.redirect("/");
+    }
+    fs = require('fs');
+    console.log(req.files.image);
+    if (req.files.image.type !== "image/png") {
+      return;
+    }
+    Images = mongoose.model("images");
+    image = new Images({
+      user: req.session.user,
+      added: new Date()
+    });
+    return image.save(function() {
+      return res.render("uploaded", {
+        path: req.files.image.path
+      });
+      /*
+      fs.readFile req.files.image.path, (err, data) ->
+        
+        # ...
+        newPath = __dirname + "/uploads/uploadedFileName"
+        fs.writeFile newPath, data, (err) ->
+          res.redirect "back"
+      
+      
+      console.log "image", image
+      */
+
+      /*
+        '\nuploaded %s, %s (%d Kb) to %s as %s'
+        req.files.image.type
+        req.files.image.name
+        req.files.image.size / 1024 | 0
+        req.files.image.path
+        req.body.title
+      */
+
+      /*
+      res.render "uploaded",
+        path: req.files.image.path
+      */
+
+    });
+  };
+
   visitlog = function(blog, post, req) {
     var Blog, Log, ip, log;
 
@@ -271,10 +320,10 @@
     Blog = mongoose.model('blogs');
     return Blog.findOne({
       user: req.session.user.id
-    }).exec(function(err, blogData) {
+    }).exec(function(err, blog) {
       var Blogs;
 
-      if (!blogData) {
+      if (!blog) {
         return res.redirect("/");
       }
       Blogs = mongoose.model('blogposts');
