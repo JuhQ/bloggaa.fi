@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="/css/libs/select2.css" />
 <div class="writer">
-  <form id="image" method="post" action="/dashboard/upload" class="hides" enctype="multipart/form-data">
+  <form id="image" method="post" action="/dashboard/upload" class="hide" enctype="multipart/form-data">
   </form>
 
   <form class="form-signin" id="editor" method="post" action="/dashboard/<%=action%>">
@@ -51,7 +51,9 @@
 
       <div data-wysihtml5-dialog="insertImage" style="display: none;">
         <p class="span3">
+          <!--
           <p>Image: <input type="file" name="image" /></p>
+          -->
           <label>
             Image:
             <input data-wysihtml5-dialog-field="src" name="image_url" value="http://" />
