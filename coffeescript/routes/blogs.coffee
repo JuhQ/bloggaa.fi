@@ -351,6 +351,7 @@ exports.showpost = (req, res) ->
 
           blogData.addthis = blogData.addthis or addthis
           blogData.sidebar = blogData.sidebar or ""
+          blogData.comments_disabled = blogData.comments_disabled or false
           blogData.facebookComments = blogData.facebookComments or facebookComments
           res.render "themes/" + blogData.theme + "/blogpost",
             title: data.title + " - Bloggaa.fi"

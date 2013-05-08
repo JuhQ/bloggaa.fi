@@ -11,6 +11,7 @@
       url: 'String',
       addthis: 'String',
       disqus: 'String',
+      commentsDisabled: 'Boolean',
       googleanalytics: 'String',
       facebookComments: 'String',
       sidebar: 'String',
@@ -63,12 +64,12 @@
       added: 'Date',
       user: 'ObjectId'
     });
-    mongoose.model('images', imageSchema);
-    mongoose.model('visits', visitSchema);
     mongoose.model('blogs', blogSchema);
     mongoose.model('blogposts', blogPostSchema);
     mongoose.model('users', userSchema);
+    mongoose.model('visits', visitSchema);
     mongoose.model('likes', likeSchema);
+    mongoose.model('images', imageSchema);
     return mongoose.connect('localhost', 'bloggaa');
   };
 

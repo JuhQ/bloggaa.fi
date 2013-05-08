@@ -5,6 +5,7 @@ exports.config = () ->
     url: 'String'
     addthis: 'String'
     disqus: 'String'
+    commentsDisabled: 'Boolean'
     googleanalytics: 'String'
     facebookComments: 'String'
     sidebar: 'String'
@@ -57,10 +58,10 @@ exports.config = () ->
     added: 'Date'
     user: 'ObjectId'
   }
-  mongoose.model 'images', imageSchema
-  mongoose.model 'visits', visitSchema
   mongoose.model 'blogs', blogSchema
   mongoose.model 'blogposts', blogPostSchema
   mongoose.model 'users', userSchema
+  mongoose.model 'visits', visitSchema
   mongoose.model 'likes', likeSchema
+  mongoose.model 'images', imageSchema
   mongoose.connect 'localhost', 'bloggaa'

@@ -36,6 +36,7 @@
             AddThis ID, omaa linkkiseurantaa varten
             <input type="text" name="addthis" class="input-block-level" placeholder="AddThis ID" value="<%=blog.addthis || ""%>" />
           </label>
+          <!--
           <label>
             Otsikon fontti
             <input type="text" name="titlefont" class="input-block-level" placeholder="Fontti" value="<%=blog.titlefont || ""%>" />
@@ -44,6 +45,7 @@
             Sisällön fontti
             <input type="text" name="contentfont" class="input-block-level" placeholder="Fontti" value="<%=blog.contentfont || ""%>" />
           </label>
+          -->
           
           <label>
             Blogin teema<br />
@@ -69,6 +71,16 @@
             <h3>Valitse blogin kommentointi</h3>
             <p>Mikäli haluat blogillesi kommentoinnin, valitse alla olevista kahdesta vaihtoehdosta haluamasi ja täytä omilla tiedoillasi</p>
           </div>
+
+          <label class="checkbox">
+            <%
+            var comments_disabled = "";
+            if (blog.commentsDisabled) {
+              comments_disabled = 'checked="checked"';
+            }
+            %>
+            <input type="checkbox" name="comments_disabled" value="1" <%=comments_disabled%> /> Kommentointi pois päällä
+          </label>
 
           <ul class="nav nav-tabs" id="tab">
             <li class="active"><a href="#disqus">Disqus</a></li>

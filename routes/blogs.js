@@ -499,6 +499,7 @@
             }, function() {});
             blogData.addthis = blogData.addthis || addthis;
             blogData.sidebar = blogData.sidebar || "";
+            blogData.comments_disabled = blogData.comments_disabled || false;
             blogData.facebookComments = blogData.facebookComments || facebookComments;
             res.render("themes/" + blogData.theme + "/blogpost", {
               title: data.title + " - Bloggaa.fi",

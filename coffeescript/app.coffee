@@ -15,6 +15,7 @@ app.configure ->
   app.set "views", __dirname + "/views"
   app.set "view engine", "ejs"
   app.use express.bodyParser()
+  #app.use express.logger("dev")
   app.use express.methodOverride()
   app.use express.cookieParser("bloggaa.fi is awesome")
 
