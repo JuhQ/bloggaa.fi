@@ -1,3 +1,25 @@
+
+<%
+if(blog.name || blog.description) {
+%>
+  <div class="well well-small">
+    <%
+    if(blog.name) {
+    %>
+      <h1><%=blog.name%></h1>
+    <%
+    }
+    if(blog.description) {
+    %>
+      <p><%=blog.description%></p>
+    <%
+    }
+    %>
+  </div>
+<%
+}
+%>
+
 <%-blog.sidebar.replace(/\n/g, "<br />")%>
 
 <div class="sidebar-block">
