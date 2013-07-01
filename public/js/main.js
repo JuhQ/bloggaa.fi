@@ -3,7 +3,7 @@
     baseUrl: "/js",
     enforceDefine: true,
     paths: {
-      jquery: ["http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min", "libs/jquery"],
+      jquery: ["http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min", "libs/jquery"],
       jsapi: "http://www.google.com/jsapi?callback=define",
       backbone: "libs/backbone",
       underscore: "libs/underscore",
@@ -20,9 +20,7 @@
         pushState: true,
         replace: true
       });
-      return window.addEventListener("load", function() {
-        return new FastClick(document.body);
-      }, false);
+      return new FastClick(document.body);
     });
   });
 

@@ -1,29 +1,29 @@
 <%= include header.ejs %>
 
-    <div class="container">
-      <div class="row">
-        <div class="span12">
-          Hello world!
+  <div class="container">
+    <div class="row">
+      <div class="span12">
+        Hello world!
 
-          <ul>
-          <%
-          if(!session.user) {
-          %>
-          <li><a href="/login">Kirjaudu</a></li>
-          <li><a href="/register">Rekisteröidy</a></li>
-          <%
-          } else {
-          %>
-          <li><a href="/dashboard">Dashboard</a></li>
-          <li><a href="http://<%=blogUrl%>.<%=domain%>">Oma blogi</a></li>
-          <%
-          }
-          %>
-          <li><a href="/dashboard/write">Kirjoita</a></li>
-          </ul>
+        <ul>
+        <%
+        if(!session.user) {
+        %>
+        <li><a href="/login">Kirjaudu</a></li>
+        <li><a href="/register">Rekisteröidy</a></li>
+        <%
+        } else {
+        %>
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li><a href="http://<%=blogUrl%>.<%=domain%>">Oma blogi</a></li>
+        <%
+        }
+        %>
+        <li><a href="/dashboard/write">Kirjoita</a></li>
+        </ul>
 
-        </div>
       </div>
     </div>
+  </div>
 
 <%= include footer.ejs %>

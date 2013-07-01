@@ -15,7 +15,6 @@ app.configure ->
   app.set "views", __dirname + "/views"
   app.set "view engine", "ejs"
   app.use express.bodyParser()
-  #app.use express.logger("dev")
   app.use express.methodOverride()
   app.use express.cookieParser("bloggaa.fi is awesome")
 
@@ -79,5 +78,16 @@ app.get "/latest/texts", routesBlogs.latestTexts
 app.get "/api/statistics", routesApi.statistics
 
 
-http.createServer(app).listen app.get("port"), ->
-  console.log "Express server listening on port " + app.get("port")
+cluster = require("cluster")
+numCPUs = require("os").cpus().length
+if cluster.isMaster
+  i = 0
+  while i < numCPUs
+    cluster.fork()
+    i++
+  cluster.on "exit", (worker, code, signal) ->
+    console.log "worker " + worker.process.pid + " died"
+    cluster.fork()
+else
+  http.createServer(app).listen app.get("port"), ->
+    console.log "Express server listening on port " + app.get("port")

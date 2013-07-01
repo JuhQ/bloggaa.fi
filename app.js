@@ -1,5 +1,5 @@
 (function() {
-  var MongoStore, app, express, http, mongoconfig, mongoose, routes, routesApi, routesBlogs, routesDashboard, routesUsers;
+  var MongoStore, app, cluster, express, http, i, mongoconfig, mongoose, numCPUs, routes, routesApi, routesBlogs, routesDashboard, routesUsers;
 
   express = require("express");
 
@@ -116,8 +116,24 @@
 
   app.get("/api/statistics", routesApi.statistics);
 
-  http.createServer(app).listen(app.get("port"), function() {
-    return console.log("Express server listening on port " + app.get("port"));
-  });
+  cluster = require("cluster");
+
+  numCPUs = require("os").cpus().length;
+
+  if (cluster.isMaster) {
+    i = 0;
+    while (i < numCPUs) {
+      cluster.fork();
+      i++;
+    }
+    cluster.on("exit", function(worker, code, signal) {
+      console.log("worker " + worker.process.pid + " died");
+      return cluster.fork();
+    });
+  } else {
+    http.createServer(app).listen(app.get("port"), function() {
+      return console.log("Express server listening on port " + app.get("port"));
+    });
+  }
 
 }).call(this);
