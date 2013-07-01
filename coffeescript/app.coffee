@@ -20,8 +20,7 @@ app.configure ->
 
   app.use express.session
     secret:'bloggaa.fi is awesome and fun'
-    cookie: {maxAge: 60000 * 60 * 24 * 30 * 12} # one year
-    domain: ".bloggaa.fi"
+    cookie: {maxAge: 60000 * 60 * 24 * 30 * 12, domain: ".bloggaa.fi"} # one year
     store: new MongoStore
       db: "bloggaa"
 
