@@ -3,7 +3,7 @@
 
   mongoose = require('mongoose');
 
-  exports.config = function() {
+  module.exports = function() {
     var blogPostSchema, blogSchema, imageSchema, likeSchema, userSchema, visitSchema;
 
     blogSchema = mongoose.Schema({

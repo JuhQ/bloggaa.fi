@@ -4,10 +4,10 @@ routesUsers = require("./routes/users")
 routesBlogs = require("./routes/blogs")
 routesApi = require("./routes/api")
 routesDashboard = require("./routes/dashboard")
-mongoconfig = require("./utils/mongoconfig")
 http = require("http")
 MongoStore = require('connect-mongo')(express)
 mongoose = require('mongoose')
+mongoconfig = require("./utils/mongoconfig")()
 app = express()
 
 app.configure ->
@@ -21,6 +21,7 @@ app.configure ->
   app.use express.session
     secret:'bloggaa.fi is awesome and fun'
     cookie: {maxAge: 60000 * 60 * 24 * 30 * 12} # one year
+    domain: ".bloggaa.fi"
     store: new MongoStore
       db: "bloggaa"
 
@@ -32,8 +33,6 @@ app.configure ->
 
 app.configure "development", ->
   app.use express.errorHandler()
-
-mongoconfig.config()
 
 app.get "/", routes.index
 app.get "/register", routesUsers.register

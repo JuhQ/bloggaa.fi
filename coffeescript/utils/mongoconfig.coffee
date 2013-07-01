@@ -1,5 +1,5 @@
 mongoose = require('mongoose')
-exports.config = () ->
+module.exports = () ->
   blogSchema = mongoose.Schema {
     name: 'String'
     url: 'String'

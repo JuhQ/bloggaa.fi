@@ -13,13 +13,13 @@
 
   routesDashboard = require("./routes/dashboard");
 
-  mongoconfig = require("./utils/mongoconfig");
-
   http = require("http");
 
   MongoStore = require('connect-mongo')(express);
 
   mongoose = require('mongoose');
+
+  mongoconfig = require("./utils/mongoconfig")();
 
   app = express();
 
@@ -35,6 +35,7 @@
       cookie: {
         maxAge: 60000 * 60 * 24 * 30 * 12
       },
+      domain: ".bloggaa.fi",
       store: new MongoStore({
         db: "bloggaa"
       })
@@ -45,8 +46,6 @@
   app.configure("development", function() {
     return app.use(express.errorHandler());
   });
-
-  mongoconfig.config();
 
   app.get("/", routes.index);
 
