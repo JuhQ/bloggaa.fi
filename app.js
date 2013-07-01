@@ -126,8 +126,7 @@
       i++;
     }
     cluster.on("exit", function(worker, code, signal) {
-      console.log("worker " + worker.process.pid + " died");
-      return cluster.fork();
+      return console.log("worker " + worker.process.pid + " died");
     });
   } else {
     http.createServer(app).listen(app.get("port"), function() {

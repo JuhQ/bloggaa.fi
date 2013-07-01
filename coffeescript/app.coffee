@@ -86,7 +86,8 @@ if cluster.isMaster
     i++
   cluster.on "exit", (worker, code, signal) ->
     console.log "worker " + worker.process.pid + " died"
-    cluster.fork()
+    # Might not work with forever
+    #cluster.fork()
 else
   http.createServer(app).listen app.get("port"), ->
     console.log "Express server listening on port " + app.get("port")
